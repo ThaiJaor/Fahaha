@@ -5,37 +5,49 @@ import {
   increaseCounter,
   decreaseCounter,
 } from "./action/actions.js"
+
+import { useSelector, useDispatch } from "react-redux";
 function App(props) {
+  const dispatch = useDispatch();
+  const count = useSelector((state) => {
+    return state.counter.count;
+  });
   const handleIncrease = () => {
-    props.increaseCounter();
+    // props.increaseCounter();
+    dispatch(increaseCounter());
+  }
+  const handleDecrease = () => {
+    dispatch(decreaseCounter());
   }
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <h1>Hello world with React and Hoi Dan IT!</h1>
-        <div>Count: {props.count}</div>
+        <div>Count: {count}</div>
 
         <button onClick={() => handleIncrease()}>Increase Count</button>
 
-        <button onClick={() => props.decreaseCounter()}>Decrease Count</button>
+        <button onClick={() => handleDecrease()}>Decrease Count</button>
       </header>
     </div>
   );
 }
 
-const mapStateToProps = state => {
-  return {
-    count: state.counter.count,
-  }
-}
+export default App;
+// use redux as class component
+// const mapStateToProps = state => {
+//   return {
+//     count: state.counter.count,
+//   }
+// }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    increaseCounter: () => dispatch(increaseCounter()),
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     increaseCounter: () => dispatch(increaseCounter()),
 
-    decreaseCounter: () => dispatch(decreaseCounter()),
-  }
-}
+//     decreaseCounter: () => dispatch(decreaseCounter()),
+//   }
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+// export default connect(mapStateToProps, mapDispatchToProps)(App)
