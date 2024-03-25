@@ -23,7 +23,7 @@ function App(props) {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <h1>Hello world with React and Hoi Dan IT!</h1>
+        <h1>Hello world with React!</h1>
         <div>Count: {count}</div>
 
         <button onClick={() => handleIncrease()}>Increase Count</button>
