@@ -1,15 +1,11 @@
 import "./App.scss";
 import { connect } from "react-redux";
 import React, { Fragment } from "react";
-import "bootstrap/dist/js/bootstrap.min.js";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { routes } from "./routes";
 import DefaultComponent from "./components/Default/Default";
-
-import { increaseCounter, decreaseCounter } from "./action/actions.js";
-
 import { useSelector, useDispatch } from "react-redux";
+import "bootstrap/dist/css/bootstrap.min.css";
 function App(props) {
   return (
     <>
