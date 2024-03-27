@@ -69,3 +69,15 @@
 }
 
 /*** Navbar End ***/
+
+.dropdown:hover>.dropdown-menu {
+    display: block;
+}
+
+.dropdown>.dropdown-toggle:active {
+    pointer-events: none;
+}
+
+.dropdown>.profile::after {
+    display: none;
+}

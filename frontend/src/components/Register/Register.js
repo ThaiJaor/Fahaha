@@ -1,6 +1,8 @@
 import React from "react";
 import "./Register.scss";
 import Logo from "../../assets/Logo.png";
+import Book from "../../assets/Book.png";
+
 import { useNavigate } from "react-router-dom";
 
 function Register(props) {
@@ -11,7 +13,7 @@ function Register(props) {
   return (
     <>
       <section
-        className="vh-100"
+        className="signup-form"
         style={{
           backgroundColor: "#9A616D",
           backgroundImage:
@@ -31,6 +33,12 @@ function Register(props) {
                 <div className="row g-0">
                   <div className="col-md-6 col-lg-5 d-none d-md-block">
                     <img src={Logo} className="img-fluid" alt="Logo" />
+                    <img
+                      src={Book}
+                      className="img-fluid"
+                      alt="Logo"
+                      style={{ paddingBottom: "8em", paddingTop: "2rem" }}
+                    />
                   </div>
                   <div
                     className="col-md-6 col-lg-7 d-flex align-items-center"
