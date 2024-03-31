@@ -1,0 +1,30 @@
+# Ignore compiled Python files
+*.pyc
+__pycache__/
+
+# Ignore Django development database
+db.sqlite3
+
+# Ignore IDE specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore logs and other temporary files
+*.log
+*.pot
+*.po
+*.mo
+*.bak
+*.sql
+*.gz
+*.tar
+*.zip
+*.rar
+*.pid
+*.coverage
+htmlcov/
+
+# Ignore Pipenv virtual environment
+Pipfile.lock
