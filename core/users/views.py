@@ -6,8 +6,9 @@ from django.conf import settings
 from rest_framework import response
 from rest_framework_simplejwt import tokens
 from django.contrib.auth import authenticate
-from users import serializers, models
+from users import serializers
 from users.authenticate import CustomCookieAuthentication
+from django.utils import timezone
 
 
 def get_user_tokens(user):
@@ -28,6 +29,8 @@ def login_view(request):
         user = authenticate(email=email, password=password)
 
         if user is not None:
+            user.last_login = timezone.now()
+            user.save()
             tokens = get_user_tokens(user)
             res = response.Response()
             res.set_cookie(
