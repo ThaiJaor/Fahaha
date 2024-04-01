@@ -45,9 +45,15 @@ Fahaha is a website designed for selling books, inspired by Fahasa.
     
 ### Cách tạo tài khoản admin - superuser:
 
-    ```
-    python manage.py createsuperusser
-    ```
+```
+python manage.py createsuperusser
+```
+
+### Trang Admin:
+
+Có một tài khoản superuser có sẵn: admin@gmail.com - password:123 (Nếu không vào được là do t tính sai:v)
+Để vào trang admin: chạy server backend rồi vào link http://127.0.0.1:8000/admin/ để đăng nhập.
+
 
 ### Implemented APIs
 
