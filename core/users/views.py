@@ -1,4 +1,4 @@
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,6 +7,7 @@ from rest_framework import response
 from rest_framework_simplejwt import tokens
 from django.contrib.auth import authenticate
 from users import serializers, models
+from users.authenticate import CustomCookieAuthentication
 
 
 def get_user_tokens(user):
@@ -37,7 +38,7 @@ def login_view(request):
                 httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
                 samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
             )
-            res.data = {'message': 'Login User Successfully',
+            res.data = {'detail': 'Login User Successfully',
                         'access_token': tokens['access_token']}
             res.status_code = status.HTTP_200_OK
             return res
@@ -52,10 +53,11 @@ def register_view(request):
         serializer = serializers.RegisterUserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({'message': 'Register User Successfully', 'data': serializer.data}, status=status.HTTP_200_OK)
+        return Response({'detail': 'Register User Successfully', 'data': serializer.data}, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
+@authentication_classes([CustomCookieAuthentication])
 @permission_classes([IsAuthenticated])
 def change_password_view(request):
     if request.method == 'POST':
@@ -63,29 +65,26 @@ def change_password_view(request):
             request.user, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({'message': 'Change Password Successfully'}, status=status.HTTP_200_OK)
+        return Response({'detail': 'Change Password Successfully'}, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
+@authentication_classes([CustomCookieAuthentication])
 @permission_classes([IsAuthenticated])
 def logout_view(request):
     if request.method == 'POST':
-        res = Response({'message': 'Logout User Successfully'},
+        res = Response({'detail': 'Logout User Successfully'},
                        status=status.HTTP_200_OK)
         res.delete_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'])
         return res
 
 
 @api_view(['GET', 'PUT'])
+@authentication_classes([CustomCookieAuthentication])
 @permission_classes([IsAuthenticated])
 def user_view(request):
     if request.method == 'GET':
-        # Kiểm tra lại cho chắc chắn user có trong database
-        user = models.User.objects.get(id=request.user.id)
-        if user is None:
-            return Response({'error': 'User Not Found'}, status=status.HTTP_404_NOT_FOUND)
-
-        serializer = serializers.UserSerializer(user)
+        serializer = serializers.UserSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     if request.method == 'PUT':
@@ -93,4 +92,4 @@ def user_view(request):
             request.user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({'message': 'Update User Successfully', 'data': serializer.data}, status=status.HTTP_200_OK)
+        return Response({'detail': 'Update User Successfully', 'data': serializer.data}, status=status.HTTP_200_OK)
