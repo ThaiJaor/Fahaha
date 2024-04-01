@@ -36,6 +36,12 @@ Fahaha is a website designed for selling books, inspired by Fahasa.
     python manage.py runserver
     ```
 
+6. When you dont need the backend server anymore, you can exit the pipenv virtual environment:
+
+    ```
+    exit
+    ```
+
 ### Implemented APIs
 
 - **Register**: Endpoint for user registration.
