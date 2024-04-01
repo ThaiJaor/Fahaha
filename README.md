@@ -38,8 +38,15 @@ Fahaha is a website designed for selling books, inspired by Fahasa.
 
 6. When you dont need the backend server anymore, you can exit the pipenv virtual environment:
 
+
     ```
     exit
+    ```
+    
+### Cách tạo tài khoản admin - superuser:
+
+    ```
+    python manage.py createsuperusser
     ```
 
 ### Implemented APIs
