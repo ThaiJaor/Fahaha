@@ -2,8 +2,8 @@
 *.pyc
 __pycache__/
 
-# Ignore Django development database
-db.sqlite3
+# # Ignore Django development database
+# db.sqlite3
 
 # Ignore IDE specific files
 .vscode/
