@@ -42,9 +42,13 @@ def login_view(request):
                 samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
             )
             serializer = serializers.UserSerializer(user)
-            res.data = {'detail': 'Login User Successfully',
-                        'data': {'user': serializer.data},
-                        'access_token': tokens['access_token']}
+            res.data = {
+                'detail': 'Login User Successfully',
+                'data': {
+                    'user': serializer.data,
+                    'access_token': tokens['access_token']
+                },
+            }
             res.status_code = status.HTTP_200_OK
             return res
             # return Response(response_user, status=status.HTTP_200_OK)
