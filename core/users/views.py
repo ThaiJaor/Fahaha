@@ -43,7 +43,7 @@ def login_view(request):
             )
             serializer = serializers.UserSerializer(user)
             res.data = {'detail': 'Login User Successfully',
-                        'user': serializer.data,
+                        'data': {'user': serializer.data},
                         'access_token': tokens['access_token']}
             res.status_code = status.HTTP_200_OK
             return res
