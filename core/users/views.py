@@ -39,17 +39,22 @@ def login_view(request):
                 expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
                 secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
                 httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
-                samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
+                samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
+                domain=settings.SIMPLE_JWT['AUTH_COOKIE_DOMAIN']
             )
             serializer = serializers.UserSerializer(user)
-            res.data = {'detail': 'Login User Successfully',
-                        'data': {'user': serializer.data},
-                        'access_token': tokens['access_token']}
+            res.data = {
+                'detail': 'Login User Successfully',
+                'data': {
+                    'user': serializer.data,
+                    'access_token': tokens['access_token']
+                },
+            }
             res.status_code = status.HTTP_200_OK
             return res
             # return Response(response_user, status=status.HTTP_200_OK)
         else:
-            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 @api_view(['POST'])
