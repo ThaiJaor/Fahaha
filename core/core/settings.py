@@ -193,9 +193,9 @@ SIMPLE_JWT = {
     # Cookie name. Enables cookies if value is set.
     'AUTH_COOKIE_REFRESH': 'refresh',
     # A string like "example.com", or None for standard domain cookie.
-    'AUTH_COOKIE_DOMAIN': None,
+    'AUTH_COOKIE_DOMAIN': 'http://127.0.0.1:3000',
     # Whether the auth cookies should be secure (https:// only).
-    'AUTH_COOKIE_SECURE': True,
+    'AUTH_COOKIE_SECURE': False,
     # Http only cookie flag.It's not fetch by javascript.
     'AUTH_COOKIE_HTTP_ONLY': True,
     'AUTH_COOKIE_PATH': '/',        # The path of the auth cookie.
