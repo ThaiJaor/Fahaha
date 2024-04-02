@@ -1,9 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 const initialState = {
-    users: [],
+    user: [],
     isLoading: false,
     isError: false,
+    isLoginLoading: false,
+    isLoginError: false
 
 }
 export const fetchUser = createAsyncThunk(
@@ -16,8 +18,9 @@ export const fetchUser = createAsyncThunk(
 
 export const login = createAsyncThunk(
     'user/loginStatus',
-    async (email, password) => {
-        const response = await axios.post("http://127.0.0.1:8000/api/user/login", { email: email, password: password });
+    async (loginData) => {
+        console.log(loginData);
+        const response = await axios.post("http://127.0.0.1:8000/api/user/login/", { "email": loginData.email, "password": loginData.password });
         return response.data
     },
 )
@@ -42,22 +45,37 @@ export const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
+        // builder
+        //     .addCase(fetchUser.pending, (state, action) => {
+        //         // Add user to the state array
+        //         state.isLoading = true;
+        //         state.isError = false;
+        //     })
+        //     .addCase(fetchUser.fulfilled, (state, action) => {
+        //         // Add user to the state array
+        //         state.user = action.payload;
+        //         state.isLoading = false;
+        //         state.isError = false;
+        //     })
+        //     .addCase(fetchUser.rejected, (state, action) => {
+        //         // Add user to the state array
+        //         state.isLoading = false;
+        //         state.isError = true;
+        //     })
+
         builder
-            .addCase(fetchUser.pending, (state, action) => {
-                // Add user to the state array
-                state.isLoading = true;
-                state.isError = false;
+            .addCase(login.pending, (state, action) => {
+                state.isLoginLoading = true;
+                state.isLoginError = false;
             })
-            .addCase(fetchUser.fulfilled, (state, action) => {
-                // Add user to the state array
-                state.users = action.payload;
-                state.isLoading = false;
-                state.isError = false;
+            .addCase(login.fulfilled, (state, action) => {
+                state.isLoginLoading = false;
+                state.isLoginError = false;
+                state.user = action.payload;
             })
-            .addCase(fetchUser.rejected, (state, action) => {
-                // Add user to the state array
-                state.isLoading = false;
-                state.isError = true;
+            .addCase(login.rejected, (state, action) => {
+                state.isLoginLoading = false;
+                state.isLoginError = true;
             })
     },
 })

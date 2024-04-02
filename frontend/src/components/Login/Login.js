@@ -1,15 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Login.scss";
 import Logo from "../../assets/Logo.png";
 import Book from "../../assets/Book.png";
-
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom";
-
+import { login } from "../../redux/slices/userSlices";
 function Login(props) {
+  const dispatch = useDispatch()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const navigate = useNavigate();
   const Register = () => {
     navigate("/sign_up");
   };
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    const loginData = {
+      email: email,
+      password: password
+    }
+    dispatch(login(loginData));
+  }
   return (
     <>
       <section
@@ -45,7 +57,7 @@ function Login(props) {
                     style={{ borderRadius: "1rem", backgroundColor: "white" }}
                   >
                     <div className="card-body p-4 p-lg-5 text-black">
-                      <form>
+                      <form onSubmit={(e) => { handleLogin(e) }}>
                         <div className="d-flex align-items-center justify-content-center mb-3 pb-1">
                           <i
                             className="fas fa-cubes fa-2x me-3"
@@ -79,13 +91,15 @@ function Login(props) {
                           </p>
                         </div>
                         <div className="form-outline mb-4">
-                          <label>Email or username:</label>
+                          <label>Email:</label>
                           <input
                             type="email"
                             id="email"
                             className="form-control form-control-lg"
-                            placeholder="Email address or username "
+                            placeholder="Email"
                             style={{ fontSize: "1rem" }}
+                            value={email}
+                            onChange={(e) => { setEmail(e.target.value) }}
                           />
                         </div>
                         <div className="form-outline mb-4">
@@ -96,33 +110,36 @@ function Login(props) {
                             className="form-control form-control-lg"
                             placeholder="Password"
                             style={{ fontSize: "1rem" }}
+                            value={password}
+                            onChange={(e) => { setPassword(e.target.value) }}
                           />
                         </div>
                         <div className="pt-1 mb-4 d-grid gap-2">
                           <button
-                            type="button"
-                            className="btn btn-lg btn-blockt text-light"
+                            type="submit"
+                            className="btn btn-lg btn-block text-light"
                             style={{ backgroundColor: "#FF6C6B" }}
+
                           >
                             Sign In
                           </button>
                         </div>
-                        <div class="d-flex justify-content-around align-items-center mb-4">
-                          <div class="form-check">
+                        {/* <div className="d-flex justify-content-around align-items-center mb-4">
+                          <div className="form-check">
                             <input
-                              class="form-check-input"
+                              className="form-check-input"
                               type="checkbox"
                               value=""
                               id="form1Example3"
                               checked
                             />
-                            <label class="form-check-label" for="form1Example3">
+                            <label className="form-check-label" for="form1Example3">
                               {" "}
                               Remember me{" "}
                             </label>
                           </div>
                           <a href="#!">Forgot password?</a>
-                        </div>
+                        </div> */}
                         <div className="d-grid">
                           <button
                             className="btn btn-outline-success btn-block"

@@ -6,43 +6,48 @@ Fahaha is a website designed for selling books, inspired by Fahasa.
 
 ### How to Run the Backend Server
 
-1. First, make sure you have Pipenv installed:
 
-    ```
-    pip install pipenv
-    ```
-
-2. Navigate to the core directory:
+1. Đầu tiên thì đi tới core directory:
 
     ```
     cd core
     ```
 
-3. Install dependencies using Pipenv:
+2. AE nên sử dụng môi trường ảo để khi có tải bất cứ gì về thì chỉ có trên môi trường ảo này thôi, ae FE skip tới bước 5 cũng được, còn BE bắt buộc:
+
+   ```
+   python -m venv env # Tạo môi trường ảo
+   ```
+3. Để activate môi trường ảo thì:
+
+    bash
+    ```
+    source env/Scripts/activate
+    ```
+
+    terminal
+    ```
+    .\env\Scripts\activate
+    ```
+
+4. Để rời khỏi môi trường ảo:
 
     ```
-    pipenv install
+    deactivate
     ```
 
-4. Activate the virtual environment:
+5. Tải thư viện cần thiết, xài máy ảo thì activate rồi install:
 
     ```
-    pipenv shell
+    pip install -r requirements.txt
     ```
 
-5. Now you can run the backend server:
+7. Chạy server backend:
 
     ```
     python manage.py runserver
     ```
 
-6. When you dont need the backend server anymore, you can exit the pipenv virtual environment:
-
-
-    ```
-    exit
-    ```
-    
 ### Cách tạo tài khoản admin - superuser:
 
 ```
