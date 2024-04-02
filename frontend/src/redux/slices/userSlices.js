@@ -6,10 +6,18 @@ const initialState = {
     isError: false,
 
 }
-export const fetchAllUsers = createAsyncThunk(
-    'users/fetchAllUsersStatus',
+export const fetchUser = createAsyncThunk(
+    'users/fetchUserStatus',
     async () => {
-        const response = await axios.get("http://localhost:8080/users/all");
+        const response = await axios.get("http://127.0.0.1:8000/api/user/info");
+        return response.data
+    },
+)
+
+export const login = createAsyncThunk(
+    'user/loginStatus',
+    async (email, password) => {
+        const response = await axios.post("http://127.0.0.1:8000/api/user/login", { email: email, password: password });
         return response.data
     },
 )
@@ -35,18 +43,18 @@ export const userSlice = createSlice({
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
         builder
-            .addCase(fetchAllUsers.pending, (state, action) => {
+            .addCase(fetchUser.pending, (state, action) => {
                 // Add user to the state array
                 state.isLoading = true;
                 state.isError = false;
             })
-            .addCase(fetchAllUsers.fulfilled, (state, action) => {
+            .addCase(fetchUser.fulfilled, (state, action) => {
                 // Add user to the state array
                 state.users = action.payload;
                 state.isLoading = false;
                 state.isError = false;
             })
-            .addCase(fetchAllUsers.rejected, (state, action) => {
+            .addCase(fetchUser.rejected, (state, action) => {
                 // Add user to the state array
                 state.isLoading = false;
                 state.isError = true;
