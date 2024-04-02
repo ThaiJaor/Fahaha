@@ -5,11 +5,11 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { routes } from "./routes";
 import DefaultComponent from "./components/Default/Default";
 import { useSelector, useDispatch } from "react-redux";
+import PrivateRoute from "./routes/PrivateRoutes";
 import "bootstrap/dist/css/bootstrap.min.css";
 function App(props) {
   return (
     <>
-      {/* dlsadas;d */}
       <Router>
         <Routes>
           {routes.map((route) => {
@@ -21,7 +21,7 @@ function App(props) {
                 path={route.path}
                 element={
                   <Layout>
-                    <Page />
+                    {route.requireAuth ? <PrivateRoute><Page /></PrivateRoute> : <Page />}
                   </Layout>
                 }
               />

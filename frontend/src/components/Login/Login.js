@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Login.scss";
 import Logo from "../../assets/Logo.png";
 import Book from "../../assets/Book.png";
@@ -10,6 +10,8 @@ function Login(props) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const navigate = useNavigate();
+  const isAuthenticated = useSelector(state => state.user.isAuthenticated);
+  const isLoading = useSelector(state => state.user.isLoading);
   const Register = () => {
     navigate("/sign_up");
   };
@@ -20,8 +22,18 @@ function Login(props) {
       email: email,
       password: password
     }
-    dispatch(login(loginData));
+    try {
+      dispatch(login(loginData));
+    } catch (error) {
+      console.log('Error in login', error);
+    }
   }
+  useEffect(() => {
+    // Kiểm tra nếu isAuthenticated là true thì chuyển hướng đến trang chính
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate, isLoading]);
   return (
     <>
       <section

@@ -1,8 +1,10 @@
 import "./Header.scss";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../assets/Logo.png";
+import { useSelector } from "react-redux";
 
 const Header = (props) => {
+  const isAuthenticated = useSelector(state => state.user.isAuthenticated);
   const navigate = useNavigate();
   const Home = () => {
     navigate("/");
@@ -13,6 +15,9 @@ const Header = (props) => {
   const SignUp = () => {
     navigate("/sign_up");
   };
+  const Account = () => {
+    navigate("/account")
+  }
   return (
     <>
       <div className="header d-flex">
@@ -168,33 +173,54 @@ const Header = (props) => {
                       aria-labelledby="dropdownMenuButton"
                       style={{ width: "12rem" }}
                     >
-                      <li className="d-flex justify-content-center my-3">
-                        <button
-                          type="button"
-                          className="btn btn-outline-danger fw-bold fs-4"
-                          style={{ width: "80%" }}
-                          onClick={Login}
-                        >
-                          Sign In
-                        </button>
-                      </li>
-                      <li className="d-flex justify-content-center mb-3">
-                        <button
-                          type="button"
-                          className="btn btn-outline-danger fw-bold fs-4"
-                          style={{ width: "80%" }}
-                          onClick={SignUp}
-                        >
-                          Sign Up
-                        </button>
-                      </li>
+                      {!isAuthenticated ?
+                        <>
+                          <li className="d-flex justify-content-center my-3">
+
+                            <button
+                              type="button"
+                              className="btn btn-outline-danger fw-bold fs-4"
+                              style={{ width: "80%" }}
+                              onClick={Login}
+                            >
+                              Sign In
+                            </button>
+                          </li>
+                          <li className="d-flex justify-content-center mb-3">
+                            <button
+                              type="button"
+                              className="btn btn-outline-danger fw-bold fs-4"
+                              style={{ width: "80%" }}
+                              onClick={SignUp}
+                            >
+                              Sign Up
+                            </button>
+                          </li>
+                        </>
+                        :
+                        <>
+                          <li className="d-flex justify-content-center my-3">
+                            <button
+                              type="button"
+                              className="btn btn-outline-danger fw-bold fs-4"
+                              style={{ width: "80%" }}
+                              onClick={() => { Account() }}
+                            >
+                              Account
+                            </button>
+                          </li>
+                        </>
+
+                      }
+
+
                     </ul>
                   </div>
                 </buttton>
               </div>
             </nav>
           </div>
-          <div
+          {/* <div
             className="d-none d-xl-flex justify-content-center"
             style={{ backgroundColor: "#6FD4A8" }}
           >
@@ -202,7 +228,7 @@ const Header = (props) => {
               src="https://cdn0.fahasa.com/media/wysiwyg/Thang-03-2024/NCCDinhTi_T323_BannerHeader_1263x60.jpg"
               alt=""
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </>

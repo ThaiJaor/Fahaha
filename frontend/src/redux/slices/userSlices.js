@@ -5,7 +5,9 @@ const initialState = {
     isLoading: false,
     isError: false,
     isLoginLoading: false,
-    isLoginError: false
+    isLoginError: false,
+    isAuthenticated: false,
+    access_token: ""
 
 }
 export const fetchUser = createAsyncThunk(
@@ -20,7 +22,26 @@ export const login = createAsyncThunk(
     'user/loginStatus',
     async (loginData) => {
         console.log(loginData);
-        const response = await axios.post("http://127.0.0.1:8000/api/user/login/", { "email": loginData.email, "password": loginData.password });
+        const response = await axios.post("http://127.0.0.1:8000/api/user/login/", { "email": loginData.email, "password": loginData.password }, {
+            withCredentials: true
+        });
+        return response.data
+    },
+)
+
+export const update = createAsyncThunk(
+    'user/updateStatus',
+    async (updateData) => {
+        console.log(updateData);
+        const response = await axios.post("http://127.0.0.1:8000/api/user/info/", {
+            "email": updateData.email,
+            "username": updateData.username,
+            "first_name": updateData.first_name,
+            "last_name": updateData.last_name,
+            "phone_number": updateData.phone_number
+        }, {
+            withCredentials: true
+        });
         return response.data
     },
 )
@@ -44,38 +65,45 @@ export const userSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        // Add reducers for additional action types here, and handle loading state as needed
-        // builder
-        //     .addCase(fetchUser.pending, (state, action) => {
-        //         // Add user to the state array
-        //         state.isLoading = true;
-        //         state.isError = false;
-        //     })
-        //     .addCase(fetchUser.fulfilled, (state, action) => {
-        //         // Add user to the state array
-        //         state.user = action.payload;
-        //         state.isLoading = false;
-        //         state.isError = false;
-        //     })
-        //     .addCase(fetchUser.rejected, (state, action) => {
-        //         // Add user to the state array
-        //         state.isLoading = false;
-        //         state.isError = true;
-        //     })
-
         builder
             .addCase(login.pending, (state, action) => {
                 state.isLoginLoading = true;
                 state.isLoginError = false;
+                state.isAuthenticated = false;
+                state.access_token = "";
             })
             .addCase(login.fulfilled, (state, action) => {
                 state.isLoginLoading = false;
                 state.isLoginError = false;
-                state.user = action.payload;
+                state.user = action.payload.data.user;
+                state.isAuthenticated = true;
+                state.access_token = action.payload.data.access_token;
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLoginLoading = false;
                 state.isLoginError = true;
+                state.isAuthenticated = false
+                state.access_token = "";
+            })
+
+
+        builder
+            .addCase(update.pending, (state, action) => {
+                state.isLoginLoading = true;
+                state.isLoginError = false;
+            })
+            .addCase(update.fulfilled, (state, action) => {
+                state.isLoginLoading = false;
+                state.isLoginError = false;
+                state.user = action.payload.data.user;
+                state.isAuthenticated = true;
+                state.access_token = action.payload.data.access_token;
+            })
+            .addCase(update.rejected, (state, action) => {
+                state.isLoginLoading = false;
+                state.isLoginError = true;
+                state.isAuthenticated = false;
+                state.access_token = "";
             })
     },
 })
