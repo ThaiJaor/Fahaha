@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import Cookies from 'js-cookie';
 import axios from 'axios'
 const initialState = {
     user: [],
@@ -78,6 +79,8 @@ export const userSlice = createSlice({
                 state.user = action.payload.data.user;
                 state.isAuthenticated = true;
                 state.access_token = action.payload.data.access_token;
+                Cookies.set('access', action.payload.data.access_token);
+
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLoginLoading = false;
