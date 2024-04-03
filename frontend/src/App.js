@@ -7,6 +7,8 @@ import DefaultComponent from "./components/Default/Default";
 import { useSelector, useDispatch } from "react-redux";
 import PrivateRoute from "./routes/PrivateRoutes";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.min.js";
+
 function App(props) {
   return (
     <>
@@ -21,7 +23,13 @@ function App(props) {
                 path={route.path}
                 element={
                   <Layout>
-                    {route.requireAuth ? <PrivateRoute><Page /></PrivateRoute> : <Page />}
+                    {route.requireAuth ? (
+                      <PrivateRoute>
+                        <Page />
+                      </PrivateRoute>
+                    ) : (
+                      <Page />
+                    )}
                   </Layout>
                 }
               />

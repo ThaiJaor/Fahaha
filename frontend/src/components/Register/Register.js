@@ -1,12 +1,53 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Register.scss";
 import Logo from "../../assets/Logo.png";
 import Book from "../../assets/Book.png";
 
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { register } from "../../redux/slices/userSlices";
 
 function Register(props) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [registered, setRegistered] = useState(false);
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+
+    // Kiểm tra mật khẩu nhập lại
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+    const registerData = {
+      email: email,
+      username: username,
+      password: password,
+      password2: confirmPassword,
+    };
+
+    // Gửi yêu cầu đăng ký đến backend
+    try {
+      dispatch(register(registerData)).then((response) => {
+        // Nếu đăng ký thành công, chuyển hướng sang trang đăng nhập
+        if (response.payload.detail === "Register User Successfully") {
+          setRegistered(true);
+        }
+      });
+    } catch (error) {
+      console.error("Error in register", error);
+    }
+  };
+  useEffect(() => {
+    if (registered) {
+      navigate("/sign_in");
+    }
+  }, [registered, navigate]);
   const Login = () => {
     navigate("/sign_in");
   };
@@ -45,7 +86,7 @@ function Register(props) {
                     style={{ borderRadius: "1rem", backgroundColor: "white" }}
                   >
                     <div className="card-body p-4 p-lg-5 text-black">
-                      <form>
+                      <form onSubmit={handleRegister}>
                         <div className="d-flex align-items-center justify-content-center mb-3 pb-1">
                           <i
                             className="fas fa-cubes fa-2x me-3"
@@ -58,9 +99,12 @@ function Register(props) {
                           <input
                             type="email"
                             id="email"
+                            name="email"
                             className="form-control form-control-lg"
                             placeholder="Email address"
                             style={{ fontSize: "1rem" }}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                           />
                         </div>
 
@@ -69,9 +113,12 @@ function Register(props) {
                           <input
                             type="username"
                             id="username"
+                            name="username"
                             className="form-control form-control-lg"
                             placeholder="Username"
                             style={{ fontSize: "1rem" }}
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
                           />
                         </div>
                         <div className="form-outline mb-4">
@@ -79,24 +126,30 @@ function Register(props) {
                           <input
                             type="password"
                             id="password"
+                            name="password"
                             className="form-control form-control-lg"
                             placeholder="Password"
                             style={{ fontSize: "1rem" }}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                           />
                         </div>
                         <div className="form-outline mb-4">
                           <label>Confirm Password:</label>
                           <input
                             type="password"
-                            id="form1Example23"
+                            id="password2"
+                            name="confirmPassword"
                             className="form-control form-control-lg"
                             placeholder="Confirm Password"
                             style={{ fontSize: "1rem" }}
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
                           />
                         </div>
                         <div className="pt-1 mb-4 d-grid gap-2">
                           <button
-                            type="button"
+                            type="submit"
                             className="btn btn-lg btn-blockt text-light"
                             style={{ backgroundColor: "#FF6C6B" }}
                           >

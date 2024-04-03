@@ -2,16 +2,17 @@ import React, { useState, useEffect } from "react";
 import "./Login.scss";
 import Logo from "../../assets/Logo.png";
 import Book from "../../assets/Book.png";
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../redux/slices/userSlices";
+
 function Login(props) {
-  const dispatch = useDispatch()
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const isAuthenticated = useSelector(state => state.user.isAuthenticated);
-  const isLoading = useSelector(state => state.user.isLoading);
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const isLoading = useSelector((state) => state.user.isLoading);
   const Register = () => {
     navigate("/sign_up");
   };
@@ -20,18 +21,18 @@ function Login(props) {
 
     const loginData = {
       email: email,
-      password: password
-    }
+      password: password,
+    };
     try {
       dispatch(login(loginData));
     } catch (error) {
-      console.log('Error in login', error);
+      console.log("Error in login", error);
     }
-  }
+  };
   useEffect(() => {
     // Kiểm tra nếu isAuthenticated là true thì chuyển hướng đến trang chính
     if (isAuthenticated) {
-      navigate("/");
+      navigate("/", { replace: true });
     }
   }, [isAuthenticated, navigate, isLoading]);
   return (
@@ -69,7 +70,11 @@ function Login(props) {
                     style={{ borderRadius: "1rem", backgroundColor: "white" }}
                   >
                     <div className="card-body p-4 p-lg-5 text-black">
-                      <form onSubmit={(e) => { handleLogin(e) }}>
+                      <form
+                        onSubmit={(e) => {
+                          handleLogin(e);
+                        }}
+                      >
                         <div className="d-flex align-items-center justify-content-center mb-3 pb-1">
                           <i
                             className="fas fa-cubes fa-2x me-3"
@@ -107,11 +112,14 @@ function Login(props) {
                           <input
                             type="email"
                             id="email"
+                            name="email"
                             className="form-control form-control-lg"
                             placeholder="Email"
                             style={{ fontSize: "1rem" }}
                             value={email}
-                            onChange={(e) => { setEmail(e.target.value) }}
+                            onChange={(e) => {
+                              setEmail(e.target.value);
+                            }}
                           />
                         </div>
                         <div className="form-outline mb-4">
@@ -119,11 +127,14 @@ function Login(props) {
                           <input
                             type="password"
                             id="password"
+                            name="password"
                             className="form-control form-control-lg"
                             placeholder="Password"
                             style={{ fontSize: "1rem" }}
                             value={password}
-                            onChange={(e) => { setPassword(e.target.value) }}
+                            onChange={(e) => {
+                              setPassword(e.target.value);
+                            }}
                           />
                         </div>
                         <div className="pt-1 mb-4 d-grid gap-2">
@@ -131,7 +142,6 @@ function Login(props) {
                             type="submit"
                             className="btn btn-lg btn-block text-light"
                             style={{ backgroundColor: "#FF6C6B" }}
-
                           >
                             Sign In
                           </button>
