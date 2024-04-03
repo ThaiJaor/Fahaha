@@ -85,7 +85,9 @@ def logout_view(request):
     if request.method == 'POST':
         res = Response({'detail': 'Logout User Successfully'},
                        status=status.HTTP_200_OK)
-        res.delete_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'])
+        res.delete_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'],
+                          samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
+                          domain=settings.SIMPLE_JWT['AUTH_COOKIE_DOMAIN'])
         return res
 
 
@@ -93,6 +95,8 @@ def logout_view(request):
 @authentication_classes([CustomCookieAuthentication])
 @permission_classes([IsAuthenticated])
 def user_view(request):
+    print(request.user.is_authenticated)
+    print(request.META.get('HTTP_Referrer'))
     if request.method == 'GET':
         serializer = serializers.UserSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)

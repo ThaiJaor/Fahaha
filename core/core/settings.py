@@ -178,7 +178,7 @@ SIMPLE_JWT = {
     "JTI_CLAIM": "jti",
 
     "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
-    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
+    "SLIDING_TOKEN_LIFETIME": timedelta(days=1),
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 
     "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
@@ -188,16 +188,15 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
     # custom
-    # custom
     'AUTH_COOKIE': 'access',
     # Cookie name. Enables cookies if value is set.
     'AUTH_COOKIE_REFRESH': 'refresh',
     # A string like "example.com", or None for standard domain cookie.
-    'AUTH_COOKIE_DOMAIN': '127.0.0.1',
+    'AUTH_COOKIE_DOMAIN': 'localhost',
     # Whether the auth cookies should be secure (https:// only).
     'AUTH_COOKIE_SECURE': True,
     # Http only cookie flag.It's not fetch by javascript.
-    'AUTH_COOKIE_HTTP_ONLY': True,
+    'AUTH_COOKIE_HTTP_ONLY': False,
     'AUTH_COOKIE_PATH': '/',        # The path of the auth cookie.
     # Whether to set the flag restricting cookie leaks on cross-site requests. This can be 'Lax', 'Strict', or None to disable the flag.
     'AUTH_COOKIE_SAMESITE': "None",
