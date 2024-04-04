@@ -4,11 +4,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
 from rest_framework import response
-from rest_framework_simplejwt import tokens
+from rest_framework_simplejwt import tokens, models as jwt_models
 from django.contrib.auth import authenticate
 from users import serializers
-from users.authenticate import CustomCookieAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.utils import timezone
+from rest_framework_simplejwt.tokens import AccessToken, OutstandingToken
 
 
 def get_user_tokens(user):
@@ -33,15 +34,6 @@ def login_view(request):
             user.save()
             tokens = get_user_tokens(user)
             res = response.Response()
-            res.set_cookie(
-                key=settings.SIMPLE_JWT['AUTH_COOKIE'],
-                value=tokens['access_token'],
-                expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
-                secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
-                httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
-                samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
-                domain=settings.SIMPLE_JWT['AUTH_COOKIE_DOMAIN'],
-            )
             serializer = serializers.UserSerializer(user)
             res.data = {
                 'detail': 'Login User Successfully',
@@ -67,7 +59,7 @@ def register_view(request):
 
 
 @api_view(['POST'])
-@authentication_classes([CustomCookieAuthentication])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def change_password_view(request):
     if request.method == 'POST':
@@ -79,20 +71,22 @@ def change_password_view(request):
 
 
 @api_view(['POST'])
-@authentication_classes([CustomCookieAuthentication])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def logout_view(request):
     if request.method == 'POST':
-        res = Response({'detail': 'Logout User Successfully'},
-                       status=status.HTTP_200_OK)
-        res.delete_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'],
-                          samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
-                          domain=settings.SIMPLE_JWT['AUTH_COOKIE_DOMAIN'])
-        return res
+        try:
+            res = Response({'detail': 'Logout User Successfully'},
+                           status=status.HTTP_200_OK)
+            access_token_str = request.META.get(
+                'HTTP_AUTHORIZATION').split(' ')[1]
+            return res
+        except Exception as e:
+            return Response(e, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT'])
-@authentication_classes([CustomCookieAuthentication])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def user_view(request):
     print(request.user.is_authenticated)
