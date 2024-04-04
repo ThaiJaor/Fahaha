@@ -7,19 +7,18 @@ import DefaultComponent from "./components/Default/Default";
 import { useSelector, useDispatch } from "react-redux";
 import PrivateRoute from "./routes/PrivateRoutes";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { fetchUser } from "./redux/slices/userSlices";
 function App(props) {
   const dispatch = useDispatch();
-  const nonSecurePath = ["/sign_in", "/sign_up"]
+  const nonSecurePath = ["/sign_in", "/sign_up"];
   useEffect(() => {
-    console.log(window.location.pathname)
+    console.log(window.location.pathname);
     if (!nonSecurePath.includes(window.location.pathname)) {
       dispatch(fetchUser());
     }
-
-  }, [dispatch])
+  }, [dispatch]);
   return (
     <>
       <Router>
@@ -33,7 +32,13 @@ function App(props) {
                 path={route.path}
                 element={
                   <Layout>
-                    {route.requireAuth ? <PrivateRoute><Page /></PrivateRoute> : <Page />}
+                    {route.requireAuth ? (
+                      <PrivateRoute>
+                        <Page />
+                      </PrivateRoute>
+                    ) : (
+                      <Page />
+                    )}
                   </Layout>
                 }
               />
@@ -42,14 +47,15 @@ function App(props) {
         </Routes>
         <ToastContainer
           position="top-right"
-          autoClose={3000}
+          autoClose={5000}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick
           rtl={false}
           pauseOnFocusLoss
           draggable
-          pauseOnHover// Use equals sign and provide a string value
+          theme="light"
+          pauseOnHover // Use equals sign and provide a string value
         />
       </Router>
     </>
@@ -57,4 +63,3 @@ function App(props) {
 }
 
 export default App;
-

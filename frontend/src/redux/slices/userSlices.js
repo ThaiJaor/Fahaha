@@ -1,8 +1,8 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import Cookies from 'js-cookie';
-import axios from "./../../setup/axios.js"
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
+import axios from "./../../setup/axios.js";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 const initialState = {
     user: {},
     isLoading: false,
@@ -10,66 +10,69 @@ const initialState = {
     isAuthenticated: false,
     access_token: "",
     first_access_url: window.location.pathname,
+};
+export const fetchUser = createAsyncThunk("users/fetchUserStatus", async () => {
+    const response = await axios.get("user/info/");
+    return response.data;
+});
 
-}
-export const fetchUser = createAsyncThunk(
-    'users/fetchUserStatus',
-    async () => {
-        const response = await axios.get("user/info/");
-        return response.data
-    },
-)
-
-
-export const logout = createAsyncThunk(
-    'users/logoutUserStatus',
-    async () => {
-        const response = await axios.post("user/logout/");
-        localStorage.setItem("access", null);
+export const register = createAsyncThunk(
+    "user/registerStatus",
+    async (registerData) => {
+        const response = await axios.post("user/register/", registerData, {
+            withCredentials: true,
+        });
         return response.data;
-    },
-)
+    }
+);
+export const logout = createAsyncThunk("users/logoutUserStatus", async () => {
+    const response = await axios.post("user/logout/");
+    localStorage.setItem("access", null);
+    return response.data;
+});
 
-
-export const login = createAsyncThunk(
-    'user/loginStatus',
-    async (loginData) => {
-        const response = await axios.post("user/login/", { "email": loginData.email, "password": loginData.password });
-        return response.data
-    },
-)
+export const login = createAsyncThunk("user/loginStatus", async (loginData) => {
+    const response = await axios.post("user/login/", {
+        email: loginData.email,
+        password: loginData.password,
+    });
+    return response.data;
+});
 
 export const update = createAsyncThunk(
-    'user/updateStatus',
+    "user/updateStatus",
     async (updateData) => {
         const response = await axios.put("user/info/", {
-            "email": updateData.email,
-            "username": updateData.username,
-            "first_name": updateData.first_name,
-            "last_name": updateData.last_name,
-            "phone_number": updateData.phone_number
+            email: updateData.email,
+            username: updateData.username,
+            first_name: updateData.first_name,
+            last_name: updateData.last_name,
+            phone_number: updateData.phone_number,
         });
         if (response.status !== 200) {
             toast.error(response.data.detail);
-        }
-        else {
+        } else {
             toast.success(response.data.detail);
         }
-        return response.data
-    },
-)
+        return response.data;
+    }
+);
 
 export const updatePassword = createAsyncThunk(
-    'user/updatePasswordStatus',
+    "user/updatePasswordStatus",
     async (passwordData) => {
-        const response = await axios.post("user/change-password/", { "old_password": passwordData.old_password, "new_password": passwordData.new_password, "confirm_new_password": passwordData.confirm_new_password });
+        const response = await axios.post("user/change-password/", {
+            old_password: passwordData.old_password,
+            new_password: passwordData.new_password,
+            confirm_new_password: passwordData.confirm_new_password,
+        });
         response.data.status = response.status;
-        return response.data
-    },
-)
+        return response.data;
+    }
+);
 
 export const userSlice = createSlice({
-    name: 'user',
+    name: "user",
     initialState,
     reducers: {
         increment: (state) => {
@@ -77,13 +80,13 @@ export const userSlice = createSlice({
             // doesn't actually mutate the state because it uses the Immer library,
             // which detects changes to a "draft state" and produces a brand new
             // immutable state based off those changes
-            state.value += 1
+            state.value += 1;
         },
         decrement: (state) => {
-            state.value -= 1
+            state.value -= 1;
         },
         incrementByAmount: (state, action) => {
-            state.value += action.payload
+            state.value += action.payload;
         },
     },
     extraReducers: (builder) => {
@@ -103,15 +106,13 @@ export const userSlice = createSlice({
                 window.localStorage.setItem("access", action.payload.data.access_token);
                 toast.success(action.payload.detail);
                 // Cookies.set('access', action.payload.data.access_token);
-
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
-                state.isAuthenticated = false
+                state.isAuthenticated = false;
                 state.access_token = "";
-            })
-
+            });
 
         builder
             .addCase(update.pending, (state, action) => {
@@ -129,7 +130,7 @@ export const userSlice = createSlice({
                 state.isError = true;
                 state.isAuthenticated = false;
                 state.access_token = "";
-            })
+            });
 
         builder
             .addCase(fetchUser.pending, (state, action) => {
@@ -151,7 +152,7 @@ export const userSlice = createSlice({
                 state.user = {};
                 state.isError = true;
                 state.isLoading = false;
-            })
+            });
 
         builder
             .addCase(updatePassword.pending, (state, action) => {
@@ -172,7 +173,7 @@ export const userSlice = createSlice({
                 state.isLoading = false;
                 state.isError = true;
                 toast.error("update password unsuccessfully");
-            })
+            });
         builder
             .addCase(logout.pending, (state, action) => {
                 state.isError = false;
@@ -191,13 +192,27 @@ export const userSlice = createSlice({
                 state.isError = true;
                 state.isLoading = false;
                 toast.error("logout unsuccessfully");
+            });
+        builder
+            .addCase(register.pending, (state, action) => {
+                state.isLoading = true;
+                state.isError = false;
             })
-
-        // dhafsdaksas
+            .addCase(register.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+                // Cập nhật thông tin người dùng và access token từ payload
+                state.user = action.payload.data.user;
+                state.access_token = action.payload.data.access_token;
+            })
+            .addCase(register.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            });
     },
-})
+});
 
 // Action creators are generated for each case reducer function
 // export const { increment, decrement, incrementByAmount } = userSlice.actions
 
-export default userSlice.reducer
+export default userSlice.reducer;
