@@ -34,9 +34,12 @@ instance.interceptors.response.use(function (response) {
     switch (status) {
         // authentication (token related issues)
         case 401: {
-            toast.error("Unauthorized the user, please login ...");
+            toast.error("Unauthorized the user, please login again ...");
             localStorage.setItem("access", null);
-            window.location.href = "/sign_in"; // Reload the page after logout
+            if (window.location.pathname !== "/sign_in") {
+                window.location.href = "/sign_in";
+            }
+            // Reload the page after logout
             return Promise.reject(error);
         }
         // forbidden (permission related issues)
