@@ -2,41 +2,63 @@ import React, { useState, useEffect } from "react";
 import "./Login.scss";
 import Logo from "../../assets/Logo.png";
 import Book from "../../assets/Book.png";
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import { login } from "../../redux/slices/userSlices";
+import { toast } from "react-toastify";
+
 function Login(props) {
   const location = useLocation();
-  const dispatch = useDispatch()
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const isAuthenticated = useSelector(state => state.user.isAuthenticated);
-  const isLoading = useSelector(state => state.user.isLoading);
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const isLoading = useSelector((state) => state.user.isLoading);
+  const [isValidEmail, setIsValidEmail] = useState(true);
+  const [isValidPassword, setIsValidPassword] = useState(true);
+
   const Register = () => {
     navigate("/sign_up");
   };
   const handleLogin = async (e) => {
     e.preventDefault();
+    // Kiểm tra xem email có hợp lệ không
+    if (!email) {
+      setIsValidEmail(false);
+      toast.error("Email is required");
+      return;
+    }
+    let re = /\S+@\S+\.\S+/;
+    if (!re.test(email)) {
+      setIsValidEmail(false);
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    // Kiểm tra xem password có hợp lệ không
+    if (!password) {
+      setIsValidPassword(false);
+      toast.error("Password is required");
+      return;
+    }
 
     const loginData = {
       email: email,
-      password: password
-    }
+      password: password,
+    };
     try {
       const user = await dispatch(login(loginData));
       if (user) {
-        navigate("/")
-      }
-      else {
-        navigate("/sign_in")
+        navigate("/");
+      } else {
+        navigate("/sign_in");
       }
     } catch (error) {
-      console.log('Error in login', error);
+      console.log("Error in login", error);
       navigate("/sign_in");
     }
-  }
-
+  };
   return (
     <>
       <section
@@ -72,7 +94,11 @@ function Login(props) {
                     style={{ borderRadius: "1rem", backgroundColor: "white" }}
                   >
                     <div className="card-body p-4 p-lg-5 text-black">
-                      <form onSubmit={(e) => { handleLogin(e) }}>
+                      <form
+                        onSubmit={(e) => {
+                          handleLogin(e);
+                        }}
+                      >
                         <div className="d-flex align-items-center justify-content-center mb-3 pb-1">
                           <i
                             className="fas fa-cubes fa-2x me-3"
@@ -114,7 +140,9 @@ function Login(props) {
                             placeholder="Email"
                             style={{ fontSize: "1rem" }}
                             value={email}
-                            onChange={(e) => { setEmail(e.target.value) }}
+                            onChange={(e) => {
+                              setEmail(e.target.value);
+                            }}
                           />
                         </div>
                         <div className="form-outline mb-4">
@@ -126,7 +154,9 @@ function Login(props) {
                             placeholder="Password"
                             style={{ fontSize: "1rem" }}
                             value={password}
-                            onChange={(e) => { setPassword(e.target.value) }}
+                            onChange={(e) => {
+                              setPassword(e.target.value);
+                            }}
                           />
                         </div>
                         <div className="pt-1 mb-4 d-grid gap-2">

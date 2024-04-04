@@ -1,6 +1,7 @@
 import React from "react";
 import "./HomePage.scss";
 import ImageSteper from "../ImageSlider/ImageSlider.js";
+import FlashSaleSlider from "../ImageSlider/FlashSale/FlashSaleSlider.js";
 
 const HomePage = (props) => {
   return (
@@ -54,6 +55,9 @@ const HomePage = (props) => {
               />
             </div>
           </div>
+        </div>
+        <div>
+          <FlashSaleSlider />
         </div>
       </div>
     </>
