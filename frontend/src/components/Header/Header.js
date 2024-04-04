@@ -1,11 +1,13 @@
 import "./Header.scss";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../assets/Logo.png";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import Container from "react-bootstrap/esm/Container";
+import { logout } from "../../redux/slices/userSlices";
 const Header = (props) => {
   const isAuthenticated = useSelector(state => state.user.isAuthenticated);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const Home = () => {
     navigate("/");
   };
@@ -17,6 +19,9 @@ const Header = (props) => {
   };
   const Account = () => {
     navigate("/account")
+  }
+  const Logout = async () => {
+    await dispatch(logout());
   }
   return (
     <>
@@ -70,17 +75,17 @@ const Header = (props) => {
               className="navbar navbar-light bg-white w-100 navbar-expand-xl"
               style={{ borderRadius: "10px" }}
             >
-              <a href="" className="navbar-brand">
+              <div className="navbar-brand" style={{ cursor: "pointer" }}>
                 <h1 className="text-primary display-6 ">
                   <img
                     className="ms-5 d-none d-xl-block"
                     src={Logo}
                     alt="Logo"
                     style={{ width: "80%" }}
-                    onClick={{ Home }}
+                    onClick={() => { Home() }}
                   />
                 </h1>
-              </a>
+              </div>
               <button
                 className="navbar-toggler py-2 px-3"
                 type="button"
@@ -207,6 +212,16 @@ const Header = (props) => {
                               onClick={() => { Account() }}
                             >
                               Account
+                            </button>
+                          </li>
+                          <li className="d-flex justify-content-center my-3">
+                            <button
+                              type="button"
+                              className="btn btn-outline-danger fw-bold fs-4"
+                              style={{ width: "80%" }}
+                              onClick={() => { Logout() }}
+                            >
+                              Log out
                             </button>
                           </li>
                         </>

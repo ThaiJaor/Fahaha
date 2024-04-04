@@ -3,9 +3,10 @@ import "./Login.scss";
 import Logo from "../../assets/Logo.png";
 import Book from "../../assets/Book.png";
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import { login } from "../../redux/slices/userSlices";
 function Login(props) {
+  const location = useLocation();
   const dispatch = useDispatch()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -15,7 +16,7 @@ function Login(props) {
   const Register = () => {
     navigate("/sign_up");
   };
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     const loginData = {
@@ -23,17 +24,19 @@ function Login(props) {
       password: password
     }
     try {
-      dispatch(login(loginData));
+      const user = await dispatch(login(loginData));
+      if (user) {
+        navigate("/")
+      }
+      else {
+        navigate("/sign_in")
+      }
     } catch (error) {
       console.log('Error in login', error);
+      navigate("/sign_in");
     }
   }
-  useEffect(() => {
-    // Kiểm tra nếu isAuthenticated là true thì chuyển hướng đến trang chính
-    if (isAuthenticated) {
-      navigate("/");
-    }
-  }, [isAuthenticated, navigate, isLoading]);
+
   return (
     <>
       <section
@@ -131,9 +134,9 @@ function Login(props) {
                             type="submit"
                             className="btn btn-lg btn-block text-light"
                             style={{ backgroundColor: "#FF6C6B" }}
-
+                            disabled={isLoading ? true : ""}
                           >
-                            Sign In
+                            {isLoading ? "Signing In..." : "Login"}
                           </button>
                         </div>
                         {/* <div className="d-flex justify-content-around align-items-center mb-4">

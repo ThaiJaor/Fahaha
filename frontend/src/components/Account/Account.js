@@ -9,8 +9,10 @@ import Nav from 'react-bootstrap/Nav';
 import Row from 'react-bootstrap/Row';
 import Tab from 'react-bootstrap/Tab';
 import AccountDetail from './AccountDetail/AccountDetail';
+import ChangePassword from './ChangePassword/ChangePassword';
 import "./Account.scss"
 function Account(props) {
+
     return (
         <>
             <Container >
@@ -38,7 +40,7 @@ function Account(props) {
                                     <Tab.Pane eventKey="first"><AccountDetail /></Tab.Pane>
                                     <Tab.Pane eventKey="second">Second tab content</Tab.Pane>
                                     <Tab.Pane eventKey="third">third tab content</Tab.Pane>
-                                    <Tab.Pane eventKey="fourth">fourth tab content</Tab.Pane>
+                                    <Tab.Pane eventKey="fourth"><ChangePassword /></Tab.Pane>
                                 </Tab.Content>
                             </Col>
                         </Row>

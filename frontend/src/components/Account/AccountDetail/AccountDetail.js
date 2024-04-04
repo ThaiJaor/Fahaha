@@ -6,33 +6,37 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { update } from '../../../redux/slices/userSlices';
+import { toast } from 'react-toastify';
 function AccountDetail(props) {
     const dispatch = useDispatch()
     const user = useSelector(state => state.user.user)
-    const [username, setUsername] = useState(user.username);
-    const [first_name, setFirstName] = useState(user.first_name);
-    const [last_name, setLastName] = useState(user.last_name);
-    const [phone_number, setPhoneNumber] = useState(user.phone_number);
-    const updateUser = (e) => {
+
+    const [username, setUsername] = useState(user ? user.username : "");
+    const [first_name, setFirstName] = useState(user ? user.first_name : "");
+    const [last_name, setLastName] = useState(user ? user.last_name : "");
+    const [phone_number, setPhoneNumber] = useState(user ? user.phone_number : "");
+    const [email, setEmail] = useState(user ? user.email : "")
+    const updateUser = async (e) => {
         e.preventDefault();
         const updateData = {
             username: username,
             first_name: first_name,
             last_name: last_name,
-            phone_number: phone_number
+            phone_number: phone_number,
+            email: email
         }
-        dispatch(update(updateData));
+        const res = await dispatch(update(updateData));
     }
     return (
         <Container>
-            <div>
+            <div className='mt-1'>
                 <Form>
                     <Form.Group as={Row} className="mb-3" >
                         <Form.Label column sm="2">
                             Email
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control plaintext readOnly value={user.email} />
+                            <Form.Control plaintext readOnly value={user && user.email} />
                         </Col>
                     </Form.Group>
 
