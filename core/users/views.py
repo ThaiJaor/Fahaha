@@ -4,12 +4,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
 from rest_framework import response
-from rest_framework_simplejwt import tokens, models as jwt_models
+from rest_framework_simplejwt import tokens
 from django.contrib.auth import authenticate
 from users import serializers
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.utils import timezone
-from rest_framework_simplejwt.tokens import AccessToken, OutstandingToken
 
 
 def get_user_tokens(user):
