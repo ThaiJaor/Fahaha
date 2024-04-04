@@ -1,19 +1,19 @@
 import axios from "axios";
 import { toast } from 'react-toastify';
-import { logout } from "../services/userService";
 
 const baseURL = "http://127.0.0.1:8000/api/"
 const instance = axios.create({
     baseURL: baseURL,
-
+    timeout: 5000,
 });
 
-// Add a request interceptor
 instance.interceptors.request.use(function (config) {
     // Do something before request is sent
-    const jwtToken = localStorage.getItem('jwt');
+    const jwtToken = localStorage.getItem('access') || null;
     if (jwtToken) {
         config.headers.Authorization = `Bearer ${jwtToken}`;
+        config.headers["Content-Type"] = "application/json";
+        config.headers.Accept = "application/json";
     }
     return config;
 }, function (error) {
@@ -25,7 +25,7 @@ instance.interceptors.request.use(function (config) {
 instance.interceptors.response.use(function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
-    return response.data;
+    return response;
 }, async function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
@@ -34,10 +34,9 @@ instance.interceptors.response.use(function (response) {
     switch (status) {
         // authentication (token related issues)
         case 401: {
-            console.log(status);
             toast.error("Unauthorized the user, please login ...");
-            await logout();
-            window.location.href = "/login"; // Reload the page after logout
+            localStorage.setItem("access", null);
+            window.location.href = "/sign_in"; // Reload the page after logout
             return Promise.reject(error);
         }
         // forbidden (permission related issues)

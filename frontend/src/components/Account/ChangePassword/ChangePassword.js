@@ -11,6 +11,7 @@ function ChangePassword(props) {
     const [old_password, set_old_password] = useState("");
     const [new_password, set_new_password] = useState('');
     const [confirm_new_password, set_confirm_new_password] = useState('');
+    const isLoading = useSelector(state => state.user.isLoading);
     const [validate, setValidate] = useState(false);
     const isError = useSelector(state => state.user.isError);
     const dispatch = useDispatch()
@@ -47,7 +48,8 @@ function ChangePassword(props) {
                             <Form.Control type="password" placeholder="Confirm password" value={confirm_new_password} onChange={(e) => { set_confirm_new_password(e.target.value) }} />
                         </Col>
                     </Form.Group>
-                    <Button variant="danger mb-2 " onClick={() => { handleUpdatePassword() }}>Save</Button>
+                    <Button variant="danger mb-2 " onClick={() => { handleUpdatePassword() }}
+                        disabled={isLoading ? true : ""}>{isLoading ? "Updating password ..." : "Save"}</Button>
                 </Form>
             </div>
         </Container>

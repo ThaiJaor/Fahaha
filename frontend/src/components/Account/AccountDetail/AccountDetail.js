@@ -10,7 +10,8 @@ import { toast } from 'react-toastify';
 function AccountDetail(props) {
     const dispatch = useDispatch()
     const user = useSelector(state => state.user.user)
-
+    const isLoading = useSelector(state => state.user.isLoading);
+    const isError = useSelector(state => state.user.isError);
     const [username, setUsername] = useState(user ? user.username : "");
     const [first_name, setFirstName] = useState(user ? user.first_name : "");
     const [last_name, setLastName] = useState(user ? user.last_name : "");
@@ -73,7 +74,8 @@ function AccountDetail(props) {
                         </Col>
                     </Form.Group>
 
-                    <Button variant="danger mb-2 " onClick={(e) => { updateUser(e) }}>Save</Button>
+                    <Button variant="danger mb-2 " onClick={(e) => { updateUser(e) }}
+                        disabled={isLoading ? true : ""}>{isLoading ? "Saving user information ..." : "Save"}</Button>
                 </Form>
             </div>
         </Container>

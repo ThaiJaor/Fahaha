@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import Cookies from 'js-cookie';
-import axios from 'axios'
+import axios from "./../../setup/axios.js"
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 const initialState = {
@@ -15,9 +15,7 @@ const initialState = {
 export const fetchUser = createAsyncThunk(
     'users/fetchUserStatus',
     async () => {
-        const response = await axios.get("http://127.0.0.1:8000/api/user/info/", {
-            withCredentials: true
-        });
+        const response = await axios.get("user/info/");
         return response.data
     },
 )
@@ -26,7 +24,8 @@ export const fetchUser = createAsyncThunk(
 export const logout = createAsyncThunk(
     'users/logoutUserStatus',
     async () => {
-        const response = await axios.post("http://127.0.0.1:8000/api/user/logout/", {}, { withCredentials: true });
+        const response = await axios.post("user/logout/");
+        localStorage.setItem("access", null);
         return response.data;
     },
 )
@@ -35,9 +34,7 @@ export const logout = createAsyncThunk(
 export const login = createAsyncThunk(
     'user/loginStatus',
     async (loginData) => {
-        const response = await axios.post("http://127.0.0.1:8000/api/user/login/", { "email": loginData.email, "password": loginData.password }, {
-            withCredentials: true
-        });
+        const response = await axios.post("user/login/", { "email": loginData.email, "password": loginData.password });
         return response.data
     },
 )
@@ -45,14 +42,12 @@ export const login = createAsyncThunk(
 export const update = createAsyncThunk(
     'user/updateStatus',
     async (updateData) => {
-        const response = await axios.put("http://127.0.0.1:8000/api/user/info/", {
+        const response = await axios.put("user/info/", {
             "email": updateData.email,
             "username": updateData.username,
             "first_name": updateData.first_name,
             "last_name": updateData.last_name,
             "phone_number": updateData.phone_number
-        }, {
-            withCredentials: true
         });
         if (response.status !== 200) {
             toast.error(response.data.detail);
@@ -67,10 +62,7 @@ export const update = createAsyncThunk(
 export const updatePassword = createAsyncThunk(
     'user/updatePasswordStatus',
     async (passwordData) => {
-        const response = await axios.post("http://127.0.0.1:8000/api/user/change-password/", { "old_password": passwordData.old_password, "new_password": passwordData.new_password, "confirm_new_password": passwordData.confirm_new_password }, {
-            withCredentials: true
-        });
-
+        const response = await axios.post("user/change-password/", { "old_password": passwordData.old_password, "new_password": passwordData.new_password, "confirm_new_password": passwordData.confirm_new_password });
         response.data.status = response.status;
         return response.data
     },
@@ -109,6 +101,7 @@ export const userSlice = createSlice({
                 state.isAuthenticated = true;
                 state.access_token = action.payload.data.access_token;
                 window.localStorage.setItem("access", action.payload.data.access_token);
+                toast.success(action.payload.detail);
                 // Cookies.set('access', action.payload.data.access_token);
 
             })
@@ -165,15 +158,18 @@ export const userSlice = createSlice({
                 state.user = {};
                 state.access_token = "";
                 state.isError = false;
+                state.isLoading = true;
             })
             .addCase(updatePassword.fulfilled, (state, action) => {
+                state.isLoading = false;
                 state.isAuthenticated = false;
                 state.access_token = "";
                 state.user = {};
                 state.isError = false;
-                toast.success(action.detail);
+                toast.success(action.payload.detail);
             })
             .addCase(updatePassword.rejected, (state, action) => {
+                state.isLoading = false;
                 state.isError = true;
                 toast.error("update password unsuccessfully");
             })
