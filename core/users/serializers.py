@@ -31,9 +31,13 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         return user
 
 
-class LoginUserSerializer(serializers.Serializer):
+class LoginUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
-    password = serializers.CharField()
+    password = serializers.CharField(max_length=255, write_only=True)
+
+    class Meta:
+        model = get_user_model()
+        fields = ['email', 'password']
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):
