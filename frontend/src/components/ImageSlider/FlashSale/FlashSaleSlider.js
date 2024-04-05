@@ -2,6 +2,39 @@ import "./FlashSaleSlider.scss";
 import React, { useEffect, useState } from "react";
 const $ = window.$;
 
+const saleData = [
+  {
+    image: "https://cdn0.fahasa.com/media/catalog/product/i/m/image_200752.jpg",
+    price: "120.000",
+    title: "Chìa khóa hạnh phúc",
+    sale_off: 50,
+  },
+  {
+    image: "https://cdn0.fahasa.com/media/catalog/product/i/m/image_200752.jpg",
+    price: "120.000",
+    title: "Chìa khóa hạnh phúc",
+    sale_off: 50,
+  },
+  {
+    image: "https://cdn0.fahasa.com/media/catalog/product/i/m/image_200752.jpg",
+    price: "120.000",
+    title: "Chìa khóa hạnh phúc",
+    sale_off: 50,
+  },
+  {
+    image: "https://cdn0.fahasa.com/media/catalog/product/i/m/image_200752.jpg",
+    price: "120.000",
+    title: "Chìa khóa hạnh phúc",
+    sale_off: 50,
+  },
+  {
+    image: "https://cdn0.fahasa.com/media/catalog/product/i/m/image_200752.jpg",
+    price: "120.000",
+    title: "Chìa khóa hạnh phúc",
+    sale_off: 50,
+  },
+];
+
 const FlashSaleSlider = (props) => {
   useEffect(() => {
     $(".product-carousel").owlCarousel({
@@ -57,10 +90,16 @@ const FlashSaleSlider = (props) => {
   }, []);
 
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0 });
+  const [salePrices, setSalePrices] = useState([]);
 
-  // Số lượng items hiển thị
-  const itemCount = 8;
-  const Items = new Array(itemCount).fill(null);
+  useEffect(() => {
+    const calculatedSalePrices = saleData.map((item) => {
+      const originalPrice = parseFloat(item.price);
+      const salePrice = originalPrice - (originalPrice * item.sale_off) / 100;
+      return salePrice.toFixed(2);
+    });
+    setSalePrices(calculatedSalePrices);
+  }, []);
   return (
     <>
       <div
@@ -90,32 +129,32 @@ const FlashSaleSlider = (props) => {
             </div>
           </div>
           <div className="owl-carousel product-carousel justify-content-center">
-            {Items.map((item, index) => (
+            {saleData.map((item, index) => (
               <div
                 className="border border-dark rounded-3 position-relative vesitable-item"
                 style={{ backgroundColor: "#fff" }}
               >
                 <div className="vesitable-img">
                   <img
-                    src="https://cdn0.fahasa.com/media/catalog/product/i/m/image_200752.jpg"
+                    src={item.image}
                     className="img-fluid w-100 rounded-top"
                     alt=""
                   />
                 </div>
                 <div
-                  className="sale text-white bg-danger px-3 py-1 rounded-pill position-absolute"
+                  className="sale_off text-white bg-danger px-3 py-1 rounded-pill position-absolute"
                   style={{ top: "10px", right: "10px" }}
                 >
-                  50%
+                  {item.sale_off}%
                 </div>
                 <div className="p-4 rounded-bottom">
-                  <div className="fs-5 fw-bold">Chìa khóa hạnh phúc</div>
+                  <div className="fs-5 fw-bold">{item.title}</div>
                   <div className="mt-3 d-flex">
-                    <div className="price text-danger fs-5 fw-bold me-3">
-                      $4.99
+                    <div className="price_sale text-danger fs-5 fw-bold me-3">
+                      {salePrices[index]}0đ
                     </div>
-                    <div className="cost text-secondary fs-5 text-decoration-line-through mb-0">
-                      $10
+                    <div className="cost text-secondary fs-6 text-decoration-line-through mb-0">
+                      {item.price}
                     </div>
                   </div>
                 </div>

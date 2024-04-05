@@ -2,8 +2,31 @@ import React from "react";
 import "./HomePage.scss";
 import ImageSteper from "../ImageSlider/ImageSlider.js";
 import FlashSaleSlider from "../ImageSlider/FlashSale/FlashSaleSlider.js";
+import "../../assets/css/theme.scss";
 
 const HomePage = (props) => {
+  const categoryData = [
+    {
+      image:
+        "https://cdn0.fahasa.com/media/wysiwyg/icon-menu/category/van-hoc.png",
+      title: "Văn Học",
+    },
+    {
+      image:
+        "https://cdn0.fahasa.com/media/wysiwyg/hieu_kd/2023-08-frame/TLKN.png",
+      title: "Tâm Lý Kỹ Năng",
+    },
+    {
+      image:
+        "https://cdn0.fahasa.com/media/wysiwyg/hieu_kd/2023-08-frame/output-onlinepngtools.png",
+      title: "Sách Ngoại Ngữ Học",
+    },
+    {
+      image:
+        "https://cdn0.fahasa.com/media/wysiwyg/Duy-VHDT/ngoai-van-t1-24(1).jpg",
+      title: "Ngoại Văn",
+    },
+  ];
   return (
     <>
       <div className="content" style={{ backgroundColor: "#F0F0F0" }}>
@@ -59,6 +82,38 @@ const HomePage = (props) => {
         <div>
           <FlashSaleSlider />
         </div>
+        <section className="pt-md-9 category" id="service">
+          <div className="container">
+            <div className="position-absolute z-index--1 end-0 d-none d-lg-block">
+              <img
+                src="assets/img/category/shape.svg"
+                style={{ maxWidth: "200px" }}
+                alt="service"
+              />
+            </div>
+            <div className="mb-7 text-center">
+              <h5 className="fs-5 text-secondary">CATEGORY </h5>
+            </div>
+            <div className="row">
+              {categoryData.map((item, index) => (
+                <div className="col-lg-3 col-sm-6 mb-6" style={{ zIndex: "1" }}>
+                  <div className="card service-card shadow-hover rounded-3 text-center align-items-center">
+                    <div className="card-body p-xxl-4 p-4">
+                      {" "}
+                      <img
+                        className="img-category"
+                        src={item.image}
+                        width="75"
+                        alt="Service"
+                      />
+                      <h4 className="my-3 category-title">{item.title}</h4>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
       </div>
     </>
   );
