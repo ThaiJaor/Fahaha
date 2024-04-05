@@ -19,7 +19,7 @@ class Book(models.Model):
     description = models.TextField(max_length=255, blank=True, null=True)
 
     categories = models.ManyToManyField(
-        'Category', related_name='books', blank=True, null=True)
+        'Category', related_name='books')
     publisher = models.ForeignKey(
         'Publisher', related_name='books', on_delete=models.SET_NULL, blank=True, null=True)
 
