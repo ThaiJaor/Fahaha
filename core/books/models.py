@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils import timezone
 
 
 class Book(models.Model):
@@ -12,7 +13,7 @@ class Book(models.Model):
     isbn = models.CharField(max_length=255, blank=True, null=True)
     length = models.IntegerField(blank=True, null=True)
     year = models.IntegerField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, default=timezone.now)
     city_country = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(max_length=255, blank=True, null=True)
 
