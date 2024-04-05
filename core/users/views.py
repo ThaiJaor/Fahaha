@@ -69,27 +69,10 @@ def change_password_view(request):
         return Response({'detail': 'Change Password Successfully'}, status=status.HTTP_200_OK)
 
 
-@api_view(['POST'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
-def logout_view(request):
-    if request.method == 'POST':
-        try:
-            res = Response({'detail': 'Logout User Successfully'},
-                           status=status.HTTP_200_OK)
-            access_token_str = request.META.get(
-                'HTTP_AUTHORIZATION').split(' ')[1]
-            return res
-        except Exception as e:
-            return Response(e, status=status.HTTP_400_BAD_REQUEST)
-
-
 @api_view(['GET', 'PUT'])
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def user_view(request):
-    print(request.user.is_authenticated)
-    print(request.META.get('HTTP_Referrer'))
     if request.method == 'GET':
         serializer = serializers.UserSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
