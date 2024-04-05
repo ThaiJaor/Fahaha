@@ -9,11 +9,12 @@ class Book(models.Model):
     format = models.CharField(max_length=255)
     rating = models.DecimalField(
         max_digits=5, decimal_places=2, validators=[MinValueValidator(0), MaxValueValidator(5)], blank=True, null=True)
-    price = models.DecimalField(max_digits=15, decimal_places=2)
+    price = models.DecimalField(
+        max_digits=15, decimal_places=2, blank=True, null=True)
     isbn = models.CharField(max_length=255, blank=True, null=True)
     length = models.IntegerField(blank=True, null=True)
     year = models.IntegerField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True, default=timezone.now)
+    created_at = models.DateTimeField(default=timezone.now)
     city_country = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(max_length=255, blank=True, null=True)
 
