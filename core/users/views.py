@@ -1,14 +1,14 @@
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from django.conf import settings
 from rest_framework import response
 from rest_framework_simplejwt import tokens
 from django.contrib.auth import authenticate
 from users import serializers
-from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.utils import timezone
+
+from django.contrib.auth import login, logout
 
 
 def get_user_tokens(user):
@@ -32,6 +32,7 @@ def login_view(request):
             user.last_login = timezone.now()
             user.save()
             tokens = get_user_tokens(user)
+            login(request, user)
             res = response.Response()
             serializer = serializers.UserSerializer(user)
             res.data = {
@@ -49,6 +50,13 @@ def login_view(request):
 
 
 @api_view(['POST'])
+def logout_view(request):
+    if request.method == 'POST':
+        logout(request)
+        return Response({'detail': 'Logout Successfully'}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
 def register_view(request):
     if request.method == 'POST':
         serializer = serializers.RegisterUserSerializer(data=request.data)
@@ -58,7 +66,6 @@ def register_view(request):
 
 
 @api_view(['POST'])
-@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def change_password_view(request):
     if request.method == 'POST':
@@ -70,7 +77,6 @@ def change_password_view(request):
 
 
 @api_view(['GET', 'PUT'])
-@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def user_view(request):
     if request.method == 'GET':
