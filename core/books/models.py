@@ -13,8 +13,8 @@ def custom_upload_to(instance, filename):
 
 class Book(models.Model):
     title = models.CharField(max_length=255, unique=True)
-    author = models.CharField(max_length=255)
-    format = models.CharField(max_length=255)
+    author = models.CharField(max_length=255, blank=True, null=True)
+    format = models.CharField(max_length=255, blank=True, null=True)
     rating = models.FloatField(validators=[MinValueValidator(
         0), MaxValueValidator(5)], blank=True, null=True)
     price = models.DecimalField(
