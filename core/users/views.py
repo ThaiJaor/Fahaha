@@ -8,6 +8,8 @@ from django.contrib.auth import authenticate
 from users import serializers
 from django.utils import timezone
 
+from django.contrib.auth import login
+
 
 def get_user_tokens(user):
     refresh = tokens.RefreshToken.for_user(user)
@@ -30,6 +32,7 @@ def login_view(request):
             user.last_login = timezone.now()
             user.save()
             tokens = get_user_tokens(user)
+            login(request, user)
             res = response.Response()
             serializer = serializers.UserSerializer(user)
             res.data = {
