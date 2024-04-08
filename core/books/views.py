@@ -1,5 +1,5 @@
 from .models import Book, Category, Publisher
-from .serializers import BookSerializer, BookQuerySerializer, CategorySerializer, PublisherSerializer
+from .serializers import BookSerializer, BookQuerySerializer, BookDetailSerializer, CategorySerializer, CategoryDetailSerializer, PublisherSerializer
 from rest_framework import generics
 from core.permissions import IsAdminUserOrReadOnly
 from .mixins import FilterMixin
@@ -48,7 +48,7 @@ class BookListCreateView(FilterMixin, generics.ListCreateAPIView):
 
 class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Book.objects.all()
-    serializer_class = BookSerializer
+    serializer_class = BookDetailSerializer
     lookup_field = 'pk'
     permission_classes = [IsAdminUserOrReadOnly]
 
@@ -63,7 +63,7 @@ class CategoryListCreateView(generics.ListCreateAPIView):
 
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    serializer_class = CategoryDetailSerializer
     lookup_field = 'pk'
     permission_classes = [IsAdminUserOrReadOnly]
 

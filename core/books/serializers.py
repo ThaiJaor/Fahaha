@@ -4,6 +4,15 @@ from .models import Book, Category, Publisher
 
 class CategorySerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(
+        view_name='category-detail', read_only=True)
+
+    class Meta:
+        model = Category
+        fields = ['url', 'id', 'name']
+
+
+class CategoryDetailSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
         'category-detail', read_only=True)
 
     class Meta:
@@ -20,7 +29,7 @@ class PublisherSerializer(serializers.ModelSerializer):
         fields = ['url', 'id', 'name']
 
 
-class BookSerializer(serializers.ModelSerializer):
+class BookDetailSerializer(serializers.ModelSerializer):
     categories = CategorySerializer(many=True, read_only=True)
     publisher = PublisherSerializer(read_only=True)
     url = serializers.HyperlinkedIdentityField(
@@ -30,6 +39,15 @@ class BookSerializer(serializers.ModelSerializer):
         model = Book
         fields = ['url', 'title', 'author', 'format', 'rating', 'price', 'isbn', 'length',
                   'year', 'city_country', 'description', 'image', 'categories', 'publisher']
+
+
+class BookSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='book-detail', read_only=True)
+
+    class Meta:
+        model = Book
+        fields = ['url', 'title', 'price', 'image']
 
 
 class BookQuerySerializer(serializers.ModelSerializer):

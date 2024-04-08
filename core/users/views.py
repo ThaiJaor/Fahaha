@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate
 from users import serializers
 from django.utils import timezone
 
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 
 
 def get_user_tokens(user):
@@ -47,6 +47,13 @@ def login_view(request):
             # return Response(response_user, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+@api_view(['POST'])
+def logout_view(request):
+    if request.method == 'POST':
+        logout(request)
+        return Response({'detail': 'Logout Successfully'}, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
