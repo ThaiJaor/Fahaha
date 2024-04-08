@@ -56,10 +56,6 @@ class BookListCreateView(FilterMixin, generics.ListCreateAPIView):
         queryset = queryset.filter(**serializer.validated_data)
         return queryset
 
-    def perform_create(self, serializer):
-        serializer_class = BookDetailSerializer
-        return super().perform_create(serializer)
-
 
 class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Book.objects.all()
