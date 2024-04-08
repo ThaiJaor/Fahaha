@@ -11,4 +11,8 @@ urlpatterns = [
          name='publisher-list'),
     path('publishers/<int:pk>/', views.PublisherDetailView.as_view(),
          name='publisher-detail'),
+    path('promotions/', views.PromotionListCreateView.as_view(),
+         name='promotion-list'),
+    path('promotions/<int:pk>/', views.PromotionDetailView.as_view(),
+         name='promotion-detail'),
 ]

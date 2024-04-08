@@ -1,5 +1,8 @@
-from .models import Book, Category, Publisher
-from .serializers import BookSerializer, BookQuerySerializer, BookDetailSerializer, CategorySerializer, CategoryDetailSerializer, PublisherSerializer
+from .models import Book, Category, Publisher, Promotion
+from .serializers import BookSerializer, BookQuerySerializer, BookDetailSerializer
+from .serializers import CategorySerializer, CategoryDetailSerializer
+from .serializers import PublisherSerializer
+from .serializers import PromotionSerializer, PromotionDetailSerializer
 from rest_framework import generics
 from core.permissions import IsAdminUserOrReadOnly
 from .mixins import FilterMixin
@@ -11,6 +14,11 @@ class BookListCreateView(FilterMixin, generics.ListCreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAdminUserOrReadOnly]
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':  # Create new book
+            return BookDetailSerializer
+        return super().get_serializer_class()
 
     def get_queryset(self):
         # Get the initial queryset
@@ -30,6 +38,9 @@ class BookListCreateView(FilterMixin, generics.ListCreateAPIView):
         queryset = self.apply_filter_match_some_id_foreign_field(
             queryset, query_params, 'publisher')
 
+        queryset = self.apply_filter_match_some_id_foreign_field(
+            queryset, query_params, 'promotion')
+
         # Appy filter for range fields
         queryset = self.apply_filter_range_field(
             queryset, query_params, 'price')
@@ -45,6 +56,10 @@ class BookListCreateView(FilterMixin, generics.ListCreateAPIView):
         queryset = queryset.filter(**serializer.validated_data)
         return queryset
 
+    def perform_create(self, serializer):
+        serializer_class = BookDetailSerializer
+        return super().perform_create(serializer)
+
 
 class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Book.objects.all()
@@ -59,6 +74,11 @@ class CategoryListCreateView(generics.ListCreateAPIView):
     serializer_class = CategorySerializer
     lookup_field = 'pk'
     permission_classes = [IsAdminUserOrReadOnly]
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':  # Create new category
+            return CategoryDetailSerializer
+        return super().get_serializer_class()
 
 
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -79,5 +99,24 @@ class PublisherListCreateView(generics.ListCreateAPIView):
 class PublisherDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Publisher.objects.all()
     serializer_class = PublisherSerializer
+    lookup_field = 'pk'
+    permission_classes = [IsAdminUserOrReadOnly]
+
+
+class PromotionListCreateView(generics.ListCreateAPIView):
+    queryset = Promotion.objects.all()
+    serializer_class = PromotionSerializer
+    lookup_field = 'pk'
+    permission_classes = [IsAdminUserOrReadOnly]
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':  # Create new promotion
+            return PromotionDetailSerializer
+        return super().get_serializer_class()
+
+
+class PromotionDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Promotion.objects.all()
+    serializer_class = PromotionDetailSerializer
     lookup_field = 'pk'
     permission_classes = [IsAdminUserOrReadOnly]
