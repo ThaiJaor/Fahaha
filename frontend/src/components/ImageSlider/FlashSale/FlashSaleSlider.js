@@ -113,7 +113,7 @@ const FlashSaleSlider = (props) => {
           <div className="pt-4">
             <div className="bg-light p-4 rounded d-flex">
               <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/flashsale/label-flashsale.svg?q=" />
-              <div class="countdown">
+              <div className="countdown">
                 <span className="fs-4 text-white bg-secondary ms-3 p-2 rounded ">
                   {countdown.days}
                 </span>
