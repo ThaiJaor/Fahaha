@@ -36,13 +36,13 @@ Fahaha is a website designed for selling books, inspired by Fahasa.
     deactivate
     ```
 
-5. Tải thư viện cần thiết, xài máy ảo thì activate rồi install:
+5. Tải thư viện cần thiết, xài máy ảo thì activate rồi install: (nếu thấy báo thiếu lỗi thì chạy lại)
 
     ```
     pip install -r requirements.txt
     ```
 
-6.Tạo database
+6.Tạo database (mỗi lần vào đều nên làm lại để cập nhật backend)
 
     ```
     python manage.py makemigrations
@@ -58,10 +58,30 @@ Fahaha is a website designed for selling books, inspired by Fahasa.
 
 ### Cách tạo tài khoản admin - superuser:
 
-
 ```
 python manage.py createsuperuser
 ```
+
+### Cách vào đọc trang docs API
+
+chắc chắn chạy lại bước 5,6,7 để cập nhật backend
+```
+    pip install -r requirements.txt
+    python manage.py makemigrations
+    python manage.py migrate
+    python manage.py runserver
+```
+truy cập vào link:
+
+- http://127.0.0.1:8000/api/schema/redoc/ để xem docs chi tiết về API (nên đọc cái này)
+- http://127.0.0.1:8000/api/schema/swagger-ui/ để xem API dạng swagger
+
+- Để test thử API, hãy vào http://127.0.0.1:8000/api/user/login/ để đăng nhập.
+- Để logout hãy vào http://127.0.0.1:8000/api/user/logout/ để logout. Đây là logout theo SessionID cùng server nên chỉ dùng để test API. Frontend không cần gọi.
+
+- Sau đó, muốn test API nào thì hãy cứ quăng API đó vào trình duyệt, sẽ có giao diện cho AE xem.
+
+- Lưu ý filter book nó ko có ở trễn nên t sẽ tự ghi ở cái document API dưới. [API Documentation](https://docs.google.com/spreadsheets/d/1CBAN2GIQ646wWI4Tpgqbdik6lYuNJwh0R_gq_r27MZg/edit#gid=0).
 
 ### Trang Admin:
 
@@ -69,7 +89,7 @@ Dùng tài khoản superuser ở trên để đăng nhập.
 Để vào trang admin: chạy server backend rồi vào link http://127.0.0.1:8000/admin/ để đăng nhập.
 
 
-### Implemented APIs
+### Implemented APIs for User
 
 - **Register**: Endpoint for user registration.
 - **Login**: Endpoint for user login.
