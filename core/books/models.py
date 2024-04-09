@@ -105,7 +105,7 @@ class Promotion(models.Model):
         0), MaxValueValidator(100)], blank=True, null=True)
     start_date = models.DateTimeField(default=timezone.now)
     end_date = models.DateTimeField(
-        default=timezone.now() + timezone.timedelta(days=30))
+        default=timezone.now)
     created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
