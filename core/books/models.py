@@ -50,8 +50,13 @@ class Book(models.Model):
             discounted_price = self.price - (self.price * discount_decimal)
             discounted_price = discounted_price.quantize(
                 Decimal('0.01'), rounding=ROUND_HALF_UP)
-            return str(discounted_price)
-        return str(self.price)
+            return discounted_price
+        return self.price
+
+    def is_discounted(self):
+        if self.promotion:
+            return True
+        return False
 
 
 class Category(models.Model):

@@ -27,8 +27,7 @@ class BookListCreateView(FilterMixin, generics.ListCreateAPIView):
         # rename bformat to format
         if 'bformat' in query_params:
             query_params['format'] = query_params.pop('bformat')
-
-        # Apply filters
+        # rename price to discounted_price
 
         # Apply filter for categories
         queryset = self.apply_filter_match_all_id_foreign_field(
@@ -38,9 +37,24 @@ class BookListCreateView(FilterMixin, generics.ListCreateAPIView):
         queryset = self.apply_filter_match_some_id_foreign_field(
             queryset, query_params, 'publisher')
 
+        # Apply filter for promotion
         queryset = self.apply_filter_match_some_id_foreign_field(
             queryset, query_params, 'promotion')
 
+        # Apply filter for is_discounted
+        is_discounted = query_params.pop('is_discounted', None)
+        if (is_discounted is not None):
+            if (is_discounted.lower() == 'true'):
+                queryset = queryset.filter(promotion__isnull=False)
+            elif (is_discounted.lower() == 'false'):
+                queryset = queryset.filter(promotion__isnull=True)
+
+        # Attach discounted price
+        queryset = self.attach_discounted_price(queryset)
+
+        # Apply filters for discounted price
+        queryset = self.apply_filter_range_field(
+            queryset, query_params, 'discounted_price')
         # Appy filter for range fields
         queryset = self.apply_filter_range_field(
             queryset, query_params, 'price')
@@ -50,10 +64,12 @@ class BookListCreateView(FilterMixin, generics.ListCreateAPIView):
             queryset, query_params, 'length')
         queryset = self.apply_filter_range_field(
             queryset, query_params, 'year')
+
+        # Apply filter for other fields
         serializer = BookQuerySerializer(data=query_params)
         serializer.is_valid(raise_exception=True)
-        # Apply filter for other fields
         queryset = queryset.filter(**serializer.validated_data)
+
         return queryset
 
 
