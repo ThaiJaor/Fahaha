@@ -62,6 +62,12 @@ Fahaha is a website designed for selling books, inspired by Fahasa.
 python manage.py createsuperuser
 ```
 
+### IMPORT DỮ LIỆU DATABASE
+
+```
+    python manage.py import_books media
+```
+
 ### Cách vào đọc trang docs API
 
 chắc chắn chạy lại bước 5,6,7 để cập nhật backend
