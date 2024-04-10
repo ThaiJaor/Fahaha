@@ -64,8 +64,10 @@ python manage.py createsuperuser
 
 ### IMPORT DỮ LIỆU DATABASE
 
+xong 5,6 thì sẽ làm được
+
 ```
-    python manage.py import_books init_database
+    python manage.py import_books imported_data
 ```
 
 ### Cách vào đọc trang docs API
