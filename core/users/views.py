@@ -52,7 +52,6 @@ def login_view(request):
 
 
 @api_view(['POST'])
-@authentication_classes([])
 @permission_classes([IsAuthenticated])
 def logout_view(request):
     if request.method == 'POST':
@@ -61,6 +60,7 @@ def logout_view(request):
 
 
 @api_view(['POST'])
+@authentication_classes([])
 @permission_classes([AllowAny])
 def register_view(request):
     if request.method == 'POST':
