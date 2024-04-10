@@ -1,5 +1,5 @@
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import response
@@ -20,6 +20,7 @@ def get_user_tokens(user):
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def login_view(request):
     if request.method == 'POST':
         serializer = serializers.LoginUserSerializer(data=request.data)
@@ -50,6 +51,7 @@ def login_view(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def logout_view(request):
     if request.method == 'POST':
         logout(request)
@@ -57,6 +59,7 @@ def logout_view(request):
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def register_view(request):
     if request.method == 'POST':
         serializer = serializers.RegisterUserSerializer(data=request.data)
