@@ -56,7 +56,7 @@ class ImportBookSerializer(serializers.ModelSerializer):
         categories_data = validated_data.pop('categories')
         publisher_data = validated_data.pop('publisher')
         image_path = validated_data.pop('image')
-        image_path = os.path.join(settings.MEDIA_ROOT, image_path)
+        image_path = os.path.join(settings.IMPORTED_FOLDER, image_path)
 
         book, book_created = Book.objects.get_or_create(
             title=validated_data.get('title'), defaults=validated_data)
@@ -68,6 +68,7 @@ class ImportBookSerializer(serializers.ModelSerializer):
         book.publisher = publisher
 
         if os.path.exists(image_path):
+
             with open(image_path, 'rb') as img_file:
                 # Set the image field with the opened file
                 filename = os.path.basename(image_path)
