@@ -38,7 +38,7 @@ class Command(BaseCommand):
             row['publisher'] = publisher_data
             serializer = ImportBookSerializer(data=row.to_dict())
             if serializer.is_valid(raise_exception=True):
-                serializer.save()
+                serializer.save(validated_data=serializer.validated_data)
 
     def handle(self, *args, **kwargs):
         folder_path = kwargs['folder_path']

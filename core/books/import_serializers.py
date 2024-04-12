@@ -52,7 +52,7 @@ class ImportBookSerializer(serializers.ModelSerializer):
         fields = ['title', 'author', 'format', 'rating', 'price', 'isbn', 'length',
                   'year', 'city_country', 'description', 'categories', 'publisher', 'image']
 
-    def create(self, validated_data):
+    def save(self, validated_data):
         categories_data = validated_data.pop('categories')
         publisher_data = validated_data.pop('publisher')
         image_path = validated_data.pop('image')
@@ -60,6 +60,9 @@ class ImportBookSerializer(serializers.ModelSerializer):
 
         book, book_created = Book.objects.get_or_create(
             title=validated_data.get('title'), defaults=validated_data)
+
+        if book_created is False:
+            book = super().update(book, validated_data)
 
         for category_data in categories_data:
             category, _ = Category.objects.get_or_create(**category_data)
