@@ -46,7 +46,7 @@ class PromotionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Promotion
-        fields = ['url', 'id', 'name', 'discount']
+        fields = ['url', 'id', 'name', 'discount', 'start_date', 'end_date']
 
 
 class BookDetailSerializer(serializers.ModelSerializer):
