@@ -4,9 +4,6 @@ from django.core.validators import RegexValidator
 
 
 class BookFilter(filters.FilterSet):
-    min_price = filters.NumberFilter(field_name="price", lookup_expr='gte')
-    max_price = filters.NumberFilter(field_name="price", lookup_expr='lte')
-
     min_year = filters.NumberFilter(field_name="year", lookup_expr='gte')
     max_year = filters.NumberFilter(field_name="year", lookup_expr='lte')
 
@@ -32,8 +29,7 @@ class BookFilter(filters.FilterSet):
 
     class Meta:
         model = Book
-        fields = ['min_price', 'max_price',
-                  'min_sale_price', 'max_sale_price',
+        fields = ['min_sale_price', 'max_sale_price',
                   'min_year', 'max_year',
                   'bformat', 'publisher', 'categories', 'is_discounted']
 
