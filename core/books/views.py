@@ -1,5 +1,5 @@
 from .models import Book, Category, Publisher, Promotion
-from .serializers import BookSerializer, BookQuerySerializer, BookDetailSerializer
+from .serializers import BookSerializer, BookDetailSerializer
 from .serializers import CategorySerializer, CategoryDetailSerializer
 from .serializers import PublisherSerializer
 from .serializers import PromotionSerializer, PromotionDetailSerializer
@@ -7,8 +7,8 @@ from rest_framework import generics
 from core.permissions import IsAdminUserOrReadOnly
 # from .mixins import FilterMixin
 from .filters import BookFilter
-from django_filters import rest_framework as filters
-
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 # Book views
 
 
@@ -16,8 +16,10 @@ class BookListCreateView(generics.ListCreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAdminUserOrReadOnly]
-    filter_backends = (filters.DjangoFilterBackend,)
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_class = BookFilter
+    ordering_fields = ['price', 'discounted_price',
+                       'rating', 'year']
 
     def get_serializer_class(self):
         if self.request.method == 'POST':  # Create new book
