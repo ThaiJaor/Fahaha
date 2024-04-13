@@ -22,7 +22,7 @@ class BookFilter(filters.FilterSet):
         field_name='format', lookup_expr='iexact', label='Book Format')
 
     publisher = filters.CharFilter(
-        field_name='publisher__name', lookup_expr=['iexact', 'icontains'], label='Publisher Name')
+        field_name='publisher__id', lookup_expr=['exact'], label='Publisher ID:')
 
     categories = filters.CharFilter(
         field_name='categories__id', lookup_expr='exact', method='filter_categories', label='Categories IDs: (E.g: id1_id2_id3_...) <int:id>', validators=[RegexValidator(r'^\d+(?:_\d+)*$')])
