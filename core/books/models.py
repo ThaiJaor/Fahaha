@@ -13,7 +13,7 @@ def custom_upload_to(instance, filename):
 
 
 class Book(models.Model):
-    title = models.CharField(max_length=255, unique=True)
+    title = models.CharField(max_length=255)
     author = models.CharField(max_length=255, blank=True, null=True)
     format = models.CharField(max_length=255, blank=True, null=True)
     rating = models.FloatField(validators=[MinValueValidator(
@@ -38,23 +38,23 @@ class Book(models.Model):
     promotion = models.ForeignKey(
         'Promotion', related_name='books', on_delete=models.SET_NULL, blank=True, null=True)
 
-    discounted_price = models.DecimalField(
+    sale_price = models.DecimalField(
         max_digits=15, decimal_places=2, blank=True, null=True)
 
     class Meta:
         ordering = ['title']
 
     def __str__(self):
-        return self.title
+        return f'id:{self.pk} - {self.title}'
 
     def save(self, *args, **kwargs):
         if self.promotion:
-            self.discounted_price = self.get_discounted_price()
+            self.sale_price = self.get_sale_price()
         else:
-            self.discounted_price = None
+            self.sale_price = self.price
         super().save(*args, **kwargs)
 
-    def get_discounted_price(self):
+    def get_sale_price(self):
         if self.promotion:
             discount_decimal = Decimal(self.promotion.discount) / Decimal(100)
             discounted_price = self.price - (self.price * discount_decimal)
@@ -70,7 +70,7 @@ class Book(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     description = models.TextField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
 
@@ -78,7 +78,7 @@ class Category(models.Model):
         ordering = ['name']
 
     def __str__(self):
-        return self.name
+        return f'id:{self.pk} - {self.name}'
 
     @property
     def books_count(self):
@@ -90,14 +90,14 @@ class Category(models.Model):
 
 
 class Publisher(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ['name']
 
     def __str__(self):
-        return self.name
+        return f'id:{self.pk} - {self.name}'
 
     @property
     def books_count(self):
@@ -108,21 +108,25 @@ class Publisher(models.Model):
         return self.books.all()
 
 
+def custom_end_date():
+    return timezone.now() + timezone.timedelta(days=2)
+
+
 class Promotion(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     description = models.TextField(max_length=255, blank=True, null=True)
     discount = models.FloatField(validators=[MinValueValidator(
         0), MaxValueValidator(100)], blank=True, null=True)
     start_date = models.DateTimeField(default=timezone.now)
     end_date = models.DateTimeField(
-        default=timezone.now)
+        default=custom_end_date)
     created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ['name']
 
     def __str__(self):
-        return self.name
+        return f'id:{self.pk} - {self.name}'
 
     @ property
     def books_count(self):

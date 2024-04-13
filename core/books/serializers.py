@@ -60,7 +60,7 @@ class BookDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = ['url', 'id', 'title', 'author', 'format', 'rating', 'price', 'isbn', 'length',
-                  'year', 'city_country', 'description', 'image', 'discounted_price', 'is_discounted', 'promotion', 'categories', 'publisher']
+                  'year', 'city_country', 'description', 'image', 'sale_price', 'is_discounted', 'promotion', 'categories', 'publisher']
 
     def get_is_discounted(self, obj):
         return obj.is_discounted()
@@ -75,7 +75,7 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = ['url', 'id', 'title', 'price', 'image',
-                  'discounted_price', 'is_discounted', 'promotion']
+                  'sale_price', 'is_discounted', 'promotion']
 
     def get_is_discounted(self, obj):
         return obj.is_discounted()

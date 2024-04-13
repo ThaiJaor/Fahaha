@@ -17,7 +17,7 @@ class Command(BaseCommand):
         for _, row in df.iterrows():
             serializer = ImportCategorySerializer(data=row.to_dict())
             if serializer.is_valid(raise_exception=True):
-                serializer.save(validated_data=serializer.validated_data)
+                serializer.save()
 
     def handlePublishers(self, df):
         for _, row in df.iterrows():
@@ -45,30 +45,65 @@ class Command(BaseCommand):
         csv_files = glob.glob(os.path.join(folder_path, '*.csv'))
         model_name = None
         print("-----------------------------------")
+
         for csv_file in csv_files:
-            try:
-                file_name = os.path.basename(csv_file)
-                df = pd.read_csv(csv_file)
-                print("Importing", file_name, end=' ')
-                if (file_name == 'Categories.csv'):
+            file_name = os.path.basename(csv_file)
+            if (file_name == 'Categories.csv'):
+                try:
+                    df = pd.read_csv(csv_file)
+                    print("Importing", file_name, end=' ')
                     print('to model Category')
                     model_name = 'Category'
                     self.handleCategories(df)
-                elif (file_name == 'Publishers.csv'):
+
+                    print('Fields:', list(df.columns))
+
+                    self.stdout.write(self.style.SUCCESS(
+                        f'[{model_name}] imported successfully'))
+                    print("-----------------------------------")
+                except Exception as e:
+                    self.stdout.write(self.style.ERROR(
+                        f'Error importing [{model_name}]: {e}'))
+                    # continue
+
+        for csv_file in csv_files:
+            file_name = os.path.basename(csv_file)
+            if (file_name == 'Publishers.csv'):
+                try:
+                    df = pd.read_csv(csv_file)
+                    print("Importing", file_name, end=' ')
+
                     print('to model Publisher')
                     model_name = 'Publisher'
                     self.handlePublishers(df)
-                elif (file_name == 'Books.csv'):
+
+                    print('Fields:', list(df.columns))
+
+                    self.stdout.write(self.style.SUCCESS(
+                        f'[{model_name}] imported successfully'))
+                    print("-----------------------------------")
+                except Exception as e:
+                    self.stdout.write(self.style.ERROR(
+                        f'Error importing [{model_name}]: {e}'))
+                    continue
+
+        for csv_file in csv_files:
+            file_name = os.path.basename(csv_file)
+            if (file_name == 'Books.csv'):
+                try:
+                    df = pd.read_csv(csv_file)
+                    print("Importing", file_name, end=' ')
+
                     print('to model Book')
                     model_name = 'Book'
                     self.handleBooks(df)
 
-                print('Fields:', list(df.columns))
+                    print('Fields:', list(df.columns))
 
-                self.stdout.write(self.style.SUCCESS(
-                    f'[{model_name}] imported successfully'))
-                print("-----------------------------------")
-            except Exception as e:
-                self.stdout.write(self.style.ERROR(
-                    f'Error importing [{model_name}]: {e}'))
-                continue
+                    self.stdout.write(self.style.SUCCESS(
+                        f'[{model_name}] imported successfully'))
+                    print("-----------------------------------")
+                except Exception as e:
+                    self.stdout.write(self.style.ERROR(
+                        f'Error importing [{model_name}]: {e}'))
+                    continue
