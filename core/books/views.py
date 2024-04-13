@@ -5,72 +5,24 @@ from .serializers import PublisherSerializer
 from .serializers import PromotionSerializer, PromotionDetailSerializer
 from rest_framework import generics
 from core.permissions import IsAdminUserOrReadOnly
-from .mixins import FilterMixin
+# from .mixins import FilterMixin
+from .filters import BookFilter
+from django_filters import rest_framework as filters
 
 # Book views
 
 
-class BookListCreateView(FilterMixin, generics.ListCreateAPIView):
+class BookListCreateView(generics.ListCreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAdminUserOrReadOnly]
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = BookFilter
 
     def get_serializer_class(self):
         if self.request.method == 'POST':  # Create new book
             return BookDetailSerializer
         return super().get_serializer_class()
-
-    def get_queryset(self):
-        # Get the initial queryset
-        queryset = super().get_queryset()
-        query_params = self.request.query_params.dict()
-        # rename bformat to format
-        if 'bformat' in query_params:
-            query_params['format'] = query_params.pop('bformat')
-        # rename price to discounted_price
-
-        # Apply filter for categories
-        queryset = self.apply_filter_match_all_id_foreign_field(
-            queryset, query_params, 'categories')
-
-        # Apply filter for publisher
-        queryset = self.apply_filter_match_some_id_foreign_field(
-            queryset, query_params, 'publisher')
-
-        # Apply filter for promotion
-        queryset = self.apply_filter_match_some_id_foreign_field(
-            queryset, query_params, 'promotion')
-
-        # Apply filter for is_discounted
-        is_discounted = query_params.pop('is_discounted', None)
-        if (is_discounted is not None):
-            if (is_discounted.lower() == 'true'):
-                queryset = queryset.filter(promotion__isnull=False)
-            elif (is_discounted.lower() == 'false'):
-                queryset = queryset.filter(promotion__isnull=True)
-
-        # Attach discounted price
-        queryset = self.attach_discounted_price(queryset)
-
-        # Apply filters for discounted price
-        queryset = self.apply_filter_range_field(
-            queryset, query_params, 'discounted_price')
-        # Appy filter for range fields
-        queryset = self.apply_filter_range_field(
-            queryset, query_params, 'price')
-        queryset = self.apply_filter_range_field(
-            queryset, query_params, 'rating')
-        queryset = self.apply_filter_range_field(
-            queryset, query_params, 'length')
-        queryset = self.apply_filter_range_field(
-            queryset, query_params, 'year')
-
-        # Apply filter for other fields
-        serializer = BookQuerySerializer(data=query_params)
-        serializer.is_valid(raise_exception=True)
-        queryset = queryset.filter(**serializer.validated_data)
-
-        return queryset
 
 
 class BookDetailView(generics.RetrieveUpdateDestroyAPIView):

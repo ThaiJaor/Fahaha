@@ -38,11 +38,21 @@ class Book(models.Model):
     promotion = models.ForeignKey(
         'Promotion', related_name='books', on_delete=models.SET_NULL, blank=True, null=True)
 
+    discounted_price = models.DecimalField(
+        max_digits=15, decimal_places=2, blank=True, null=True)
+
     class Meta:
         ordering = ['title']
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if self.promotion:
+            self.discounted_price = self.get_discounted_price()
+        else:
+            self.discounted_price = None
+        super().save(*args, **kwargs)
 
     def get_discounted_price(self):
         if self.promotion:
