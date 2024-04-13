@@ -4,19 +4,16 @@ from django.core.validators import RegexValidator
 
 
 class BookFilter(filters.FilterSet):
-    min_price = filters.NumberFilter(field_name="price", lookup_expr='gte')
-    max_price = filters.NumberFilter(field_name="price", lookup_expr='lte')
-
     min_year = filters.NumberFilter(field_name="year", lookup_expr='gte')
     max_year = filters.NumberFilter(field_name="year", lookup_expr='lte')
 
     min_rating = filters.NumberFilter(field_name="rating", lookup_expr='gte')
     max_rating = filters.NumberFilter(field_name="rating", lookup_expr='lte')
 
-    min_discounted_price = filters.NumberFilter(
-        field_name="discounted_price", lookup_expr='gte')
-    max_discounted_price = filters.NumberFilter(
-        field_name="discounted_price", lookup_expr='lte')
+    min_sale_price = filters.NumberFilter(
+        field_name="sale_price", lookup_expr='gte')
+    max_sale_price = filters.NumberFilter(
+        field_name="sale_price", lookup_expr='lte')
 
     is_discounted = filters.BooleanFilter(
         field_name='promotion', method='filter_is_discounted', label='Is Discounted')
@@ -25,15 +22,14 @@ class BookFilter(filters.FilterSet):
         field_name='format', lookup_expr='iexact', label='Book Format')
 
     publisher = filters.CharFilter(
-        field_name='publisher__name', lookup_expr=['iexact', 'icontains'], label='Publisher Name')
+        field_name='publisher__id', lookup_expr=['exact'], label='Publisher ID:')
 
     categories = filters.CharFilter(
-        field_name='categories__id', lookup_expr='exact', method='filter_categories', label='Categories IDs', validators=[RegexValidator(r'^\d+(?:_\d+)*$')])
+        field_name='categories__id', lookup_expr='exact', method='filter_categories', label='Categories IDs: (E.g: id1_id2_id3_...) <int:id>', validators=[RegexValidator(r'^\d+(?:_\d+)*$')])
 
     class Meta:
         model = Book
-        fields = ['min_price', 'max_price',
-                  'min_discounted_price', 'max_discounted_price',
+        fields = ['min_sale_price', 'max_sale_price',
                   'min_year', 'max_year',
                   'bformat', 'publisher', 'categories', 'is_discounted']
 
@@ -48,5 +44,4 @@ class BookFilter(filters.FilterSet):
             category_ids = [int(category_id) for category_id in values]
         except ValueError:
             return queryset.none()
-
         return queryset.filter(categories__id__in=category_ids)

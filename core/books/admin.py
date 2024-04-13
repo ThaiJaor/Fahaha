@@ -9,7 +9,7 @@ admin.site.register(Promotion)
 
 class BookAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
-        return ['discounted_price']
+        return ['sale_price']
 
 
 admin.site.register(Book, BookAdmin)

@@ -12,15 +12,14 @@ class ImportCategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['name', 'description']
 
-    def save(self, validated_data):
+    def create(self, validated_data):
         name = validated_data.get('name')
-        instance = Category.objects.filter(name=name).first()
-        if instance is not None:
+        instance, created = Category.objects.get_or_create(
+            name=name, defaults=validated_data)
+        if not created:
             instance.description = validated_data.get('description')
             instance.save()
-            return instance
-        else:
-            return super().save(validated_data)
+        return instance
 
 
 class ImportPublisherSerializer(serializers.ModelSerializer):
@@ -32,11 +31,9 @@ class ImportPublisherSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         name = validated_data.get('name')
-        instance = Publisher.objects.filter(name=name).first()
-        if instance is not None:
-            return instance
-        else:
-            return super().create(validated_data)
+        instance, _ = Publisher.objects.get_or_create(
+            name=name, defaults=validated_data)
+        return instance
 
 
 class ImportBookSerializer(serializers.ModelSerializer):
