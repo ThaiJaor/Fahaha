@@ -8,6 +8,7 @@ const Header = (props) => {
   const isAuthenticated = useSelector(state => state.user.isAuthenticated);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const cartSize = useSelector(state => state.cart.size)
   const Home = () => {
     navigate("/");
   };
@@ -20,6 +21,10 @@ const Header = (props) => {
   const Account = () => {
     navigate("/account")
   }
+  const Cart = () => {
+    navigate("/cart")
+  }
+
   const Logout = async () => {
     await dispatch(logout());
   }
@@ -152,12 +157,12 @@ const Header = (props) => {
                   <div className="">Notification</div>
                 </div>
                 <div className="position-relative mx-4 my-auto">
-                  <i className="fa-solid fa-cart-shopping fs-3 d-flex justify-content-center"></i>
+                  <i className="fa-solid fa-cart-shopping fs-3 d-flex justify-content-center" style={{ cursor: "pointer" }} onClick={() => { Cart() }}></i>
                   <span
                     className="position-absolute bg-warning rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
                     style={{ top: "-10px", right: "-5px" }}
                   >
-                    3
+                    {cartSize}
                   </span>
                   <div className="text-center">Cart</div>
                 </div>

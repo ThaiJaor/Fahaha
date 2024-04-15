@@ -19,9 +19,11 @@ export const fetchUser = createAsyncThunk("users/fetchUserStatus", async () => {
 export const register = createAsyncThunk(
     "user/registerStatus",
     async (registerData) => {
+        console.log(registerData);
         const response = await axios.post("user/register/", registerData, {
             withCredentials: true,
         });
+        console.log(response);
         return response.data;
     }
 );

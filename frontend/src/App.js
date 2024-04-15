@@ -10,6 +10,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchUser } from "./redux/slices/userSlices";
+const PageContainer = ({ children }) => {
+  return <div style={{ backgroundColor: "#f0f0f0" }}>{children}</div>;
+};
 function App(props) {
   const dispatch = useDispatch();
   const nonSecurePath = ["/sign_in", "/sign_up"];
@@ -31,13 +34,17 @@ function App(props) {
                 key={route.path}
                 path={route.path}
                 element={
-                  <Layout>
+                  <Layout >
                     {route.requireAuth ? (
                       <PrivateRoute>
-                        <Page />
+                        <PageContainer>
+                          <Page />
+                        </PageContainer>
                       </PrivateRoute>
                     ) : (
-                      <Page />
+                      <PageContainer>
+                        <Page />
+                      </PageContainer>
                     )}
                   </Layout>
                 }
@@ -47,7 +54,7 @@ function App(props) {
         </Routes>
         <ToastContainer
           position="top-right"
-          autoClose={5000}
+          autoClose={2000}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick

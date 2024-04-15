@@ -10,11 +10,14 @@ const instance = axios.create({
 instance.interceptors.request.use(function (config) {
     // Do something before request is sent
     const jwtToken = localStorage.getItem('access') || null;
-    if (jwtToken) {
+    console.log(jwtToken);
+    if (jwtToken != "null") {
         config.headers.Authorization = `Bearer ${jwtToken}`;
-        config.headers["Content-Type"] = "application/json";
-        config.headers.Accept = "application/json";
+    } else {
+        delete config.headers.Authorization;
     }
+    config.headers["Content-Type"] = "application/json";
+    config.headers.Accept = "application/json";
     return config;
 }, function (error) {
     // Do something with request error
@@ -44,7 +47,6 @@ instance.interceptors.response.use(function (response) {
         }
         // forbidden (permission related issues)
         case 403: {
-            toast.error("you don't have permission to access this resource ....");
             break;
         }
         // Other error cases can be handled similarly

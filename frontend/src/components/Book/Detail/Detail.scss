@@ -1,0 +1,43 @@
+.book-view-image{
+    max-height: 392px;
+    max-width: 100%;
+    height: auto;
+    width: 18rem;
+}
+.flashsale-product{
+    background-color: #ff5b54;
+    border-radius: 0.5rem;
+    .flashsale-banner{
+        img{
+            background-color: white;
+            border-radius: 0.5rem;
+        }
+    }
+}
+
+.price-box{
+    .special-price{
+        h1{
+            color: #C92127;
+        }
+    }
+    .old-price{
+        .price{
+            font-size: 20px;
+        }
+        .discount-percent{
+            background-color: #C92127;
+            color: white;
+            border-radius: 0.5rem;
+
+        }
+    }
+}
+.quantity-area{
+    .down-btn{
+        cursor: pointer;
+    }
+    .up-btn{
+        cursor: pointer;
+    }
+}
