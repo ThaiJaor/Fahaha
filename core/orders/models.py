@@ -12,12 +12,14 @@ class Order(models.Model):
         ('cancelled', 'Cancelled'),
     )
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.CharField(primary_key=True, default=uuid.uuid4,
+                          max_length=255, editable=False)
     user = models.ForeignKey(
         'users.User', related_name='orders', on_delete=models.SET_NULL, blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0.0)
     # processing, shipping, delivered, cancelled
     status = models.CharField(
         max_length=20, choices=STATUS_CHOICES, default='processing')
@@ -30,27 +32,10 @@ class Order(models.Model):
     shipping_address = models.CharField(max_length=255)
     note = models.TextField()
     payment_transaction_id = models.CharField(max_length=50)
+    payment_amount = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0.0)
+    payment_currency = models.CharField(max_length=3, default='VND')
+    items = models.JSONField(default=list)
 
     def __str__(self):
-        return f'Order id:{self.order_id} of {self.user}'
-
-    def get_order_items(self):
-        return self.order_item.all()
-
-    def get_total_price(self):
-        return sum([item.total_price for item in self.get_order_items()])
-
-
-class OrderItem(models.Model):
-    order = models.ForeignKey(
-        'Order', related_name='order_item', on_delete=models.CASCADE)
-    book = models.ForeignKey(
-        'books.Book', related_name='order_item', on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
-
-    @property
-    def total_price(self):
-        return self.book.price * self.quantity
-
-    def __str__(self):
-        return f'Item {self.book}, {self.order}'
+        return f'Order id:{self.id} of {self.user}'

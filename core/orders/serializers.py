@@ -1,18 +1,17 @@
 from rest_framework import serializers
-from .models import Order, OrderItem
+from .models import Order
 from books.models import Book
 import uuid
 
 
 class CheckoutOrderItemSerializer(serializers.Serializer):
-    book_id = serializers.PrimaryKeyRelatedField(queryset=Book.objects.all())
+    item_id = serializers.PrimaryKeyRelatedField(queryset=Book.objects.all())
     quantity = serializers.IntegerField()
-    total_price = serializers.DecimalField(max_digits=10, decimal_places=2)
-    discount = serializers.DecimalField(max_digits=10, decimal_places=2)
+    total_price = serializers.SerializerMethodField(read_only=True)
+    discount = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
-        fields = ['book_id', 'quantity', 'total_price', 'discount']
-        read_only_fields = ['total_price', 'discount']
+        fields = ['item_id', 'quantity', 'total_price', 'discount']
 
     def validate_quantity(self, value):
         if value <= 0:
@@ -20,32 +19,47 @@ class CheckoutOrderItemSerializer(serializers.Serializer):
                 "Quantity must be greater than zero.")
         return value
 
-    def get_total_price(self):
-        obj = Book.objects.get(id=self.validated_data['book_id'])
-        return obj.book.price * obj.quantity
+    def get_total_price(self, validated_data):
+        obj = validated_data['item_id']
+        return obj.sale_price * validated_data['quantity']
 
-    def get_discount(self):
-        obj = Book.objects.get(id=self.validated_data['book_id'])
-        return obj.book.promotion.discount
+    def get_discount(self, validated_data):
+        obj = validated_data['item_id']
+        return obj.promotion.discount if obj.promotion else 0
+
+    def to_representation(self, instance):
+        instance['total_price'] = self.get_total_price(instance)
+        instance['promotion'] = self.get_discount(instance)
+        return super().to_representation(instance)
 
 
 class CheckoutOrderSerializer(serializers.Serializer):
     items = CheckoutOrderItemSerializer(many=True)
-    order_id = serializers.UUIDField(default=uuid.uuid4())
-    total_price = serializers.DecimalField(max_digits=10, decimal_places=2)
+    order_id = serializers.SerializerMethodField(read_only=True)
+    total_price = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        fields = ['items', 'order_id', 'total_price']
+
+    def get_total_price(self, validated_data):
+        # obj is the validated data
+        # Extract items from the object
+        items = validated_data.get('items', [])
+        return sum(item['total_price'] for item in items)
+
+    def get_order_id(self, validated_data):
+        return uuid.uuid4().hex
+
+
+class VnpayOrderSerializer(serializers.ModelSerializer):
+    items = CheckoutOrderItemSerializer(many=True)
+    total_price = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Order
-        fields = ['items', 'order_id', 'total_price']
+        fields = ['recipient_name', 'phone_number',
+                  'shipping_address', 'note', 'items', 'total_price']
 
-    def get_total_price(self):
-        return sum([item.total_price for item in self.validated_data['items']])
-
-
-# class OrderItemSerializer(serializers.ModelSerializer):
-#     book_id = serializers.PrimaryKeyRelatedField(queryset=Book.objects.all())
-
-#     class Meta:
-#         model = OrderItem
-#         fields = '__all__'
-#         read_only_fields = ['order', 'book_id', 'quantity']
+    def get_total_price(self, validated_data):
+        items = validated_data.get('items', [])
+        return sum(item['total_price'] for item in items)
