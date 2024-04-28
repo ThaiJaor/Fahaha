@@ -28,6 +28,7 @@ class Book(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     city_country = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
+    sold = models.IntegerField(default=0)
 
     image = models.ImageField(
         upload_to=custom_upload_to, null=True, blank=True)

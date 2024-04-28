@@ -2,6 +2,9 @@ from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator
 import uuid
+from books.models import Book
+from django.db.models.signals import post_delete, post_save
+from django.dispatch import receiver
 
 
 class Order(models.Model):
@@ -39,3 +42,12 @@ class Order(models.Model):
 
     def __str__(self):
         return f'Order id:{self.id} of {self.user}'
+
+
+@receiver(post_save, sender=Order)
+def update_book_sold(sender, instance, created, **kwargs):
+    if created:
+        for item in instance.items:
+            book = Book.objects.get(pk=item['item_id'])
+            book.sold += item['quantity']
+            book.save()

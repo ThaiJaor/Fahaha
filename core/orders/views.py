@@ -122,7 +122,7 @@ class VnpayPaymentResponseView(generics.GenericAPIView):
 
             if vnp.validate_response(settings.VNPAY_HASH_SECRET_KEY):
                 if vnp_ResponseCode == '00':
-                    order = Order.objects.create(
+                    order, created = Order.objects.update_or_create(
                         id=order_id,
                         user=request.user,
                         payment_method='VNPAY',
