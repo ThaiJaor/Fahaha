@@ -37,7 +37,6 @@ class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
 class CategoryListCreateView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    lookup_field = 'pk'
     permission_classes = [IsAdminUserOrReadOnly]
 
     def get_serializer_class(self):
@@ -57,7 +56,6 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 class PublisherListCreateView(generics.ListCreateAPIView):
     queryset = Publisher.objects.all()
     serializer_class = PublisherSerializer
-    lookup_field = 'pk'
     permission_classes = [IsAdminUserOrReadOnly]
 
 
@@ -71,7 +69,6 @@ class PublisherDetailView(generics.RetrieveUpdateDestroyAPIView):
 class PromotionListCreateView(generics.ListCreateAPIView):
     queryset = Promotion.objects.all()
     serializer_class = PromotionSerializer
-    lookup_field = 'pk'
     permission_classes = [IsAdminUserOrReadOnly]
 
     def get_serializer_class(self):

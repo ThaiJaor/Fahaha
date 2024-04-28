@@ -14,3 +14,7 @@ class User(AbstractUser):
     username = models.CharField(max_length=255)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+
+    @property
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'
