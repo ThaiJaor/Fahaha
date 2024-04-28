@@ -76,7 +76,7 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = ['url', 'id', 'title', 'price', 'image',
-                  'sale_price', 'is_discounted', 'promotion']
+                  'sale_price', 'is_discounted', 'sold', 'promotion']
 
     def get_is_discounted(self, obj):
         return obj.is_discounted()
