@@ -107,3 +107,21 @@ Dùng tài khoản superuser ở trên để đăng nhập.
 - **Change Password**: Endpoint for changing user password.
 
 For more details, refer to the [API Documentation](https://docs.google.com/spreadsheets/d/1CBAN2GIQ646wWI4Tpgqbdik6lYuNJwh0R_gq_r27MZg/edit#gid=0).
+
+
+
+### THANH TOÁN / CHECKOUT
+
+Thẻ ngân hàng:
+
+|                |                      |
+|----------------|----------------------|
+| Ngân hàng      | NCB                  |
+| Số thẻ         | 9704198526191432198  |
+| Tên chủ thẻ    | NGUYEN VAN A         |
+| Ngày phát hành | 07/15                |
+| Mật khẩu OTP   | 123456               |
+
+
+
+
