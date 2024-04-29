@@ -81,7 +81,7 @@ chắc chắn chạy lại bước 5,6,7 để cập nhật backend
 ```
 truy cập vào link:
 
-- http://127.0.0.1:8000/api/schema/redoc/ để xem docs chi tiết về API (nên đọc cái này)
+- http://127.0.0.1:8000/api/schema/redoc/ để xem docs chi tiết về API (nên đọc cái này) 
 - http://127.0.0.1:8000/api/schema/swagger-ui/ để xem API dạng swagger
 
 - Để test thử API, hãy vào http://127.0.0.1:8000/api/user/login/ để đăng nhập.
