@@ -16,7 +16,7 @@ function Account(props) {
     return (
         <>
             <Container >
-                <div className='account-container mt-5'>
+                <div className='account-container pt-5'>
                     <Tab.Container id="left-tabs-example" defaultActiveKey="first" >
                         <Row>
                             <Col sm={3} >

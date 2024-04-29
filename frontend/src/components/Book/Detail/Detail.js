@@ -19,7 +19,6 @@ function Detail(props) {
         if (!isNaN(id)) {
             let response = await axios.get(`/books/${id}/`);
             setBook(response.data)
-            console.log("response", response);
         }
 
     }

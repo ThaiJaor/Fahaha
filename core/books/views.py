@@ -5,6 +5,7 @@ from .serializers import PublisherSerializer
 from .serializers import PromotionSerializer, PromotionDetailSerializer
 from rest_framework import generics
 from core.permissions import IsAdminUserOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 # from .mixins import FilterMixin
 from .filters import BookFilter
 from django_filters.rest_framework import DjangoFilterBackend

@@ -10,8 +10,7 @@ const instance = axios.create({
 instance.interceptors.request.use(function (config) {
     // Do something before request is sent
     const jwtToken = localStorage.getItem('access') || null;
-    console.log(jwtToken);
-    if (jwtToken != "null") {
+    if (jwtToken) {
         config.headers.Authorization = `Bearer ${jwtToken}`;
     } else {
         delete config.headers.Authorization;
