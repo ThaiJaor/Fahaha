@@ -33,7 +33,7 @@ class Order(models.Model):
             r'^\d{10,15}$', message='Phone number must be between 10 and 15 digits.')
     ])
     shipping_address = models.CharField(max_length=255)
-    note = models.TextField()
+    note = models.TextField(blank=True, null=True, default='')
     payment_transaction_id = models.CharField(max_length=50)
     payment_amount = models.DecimalField(
         max_digits=10, decimal_places=2, default=0.0)
