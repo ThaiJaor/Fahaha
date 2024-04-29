@@ -153,7 +153,7 @@ const HomePage = (props) => {
   };
   return (
     <>
-      <div className="content" style={{ backgroundColor: "#F0F0F0" }}>
+      <div className="content" style={{ backgroundColor: "#f0f0f0" }}>
         <div className="container d-block">
           <div className="d-flex p-3 justify-content-center align-items-center">
             <div className="col-11 col-xl-8 d-flex ">
@@ -263,9 +263,8 @@ const HomePage = (props) => {
                 {tabs.map((tab) => (
                   <li className="nav-item" key={tab.id}>
                     <button
-                      className={`nav-link ${
-                        activeTab === tab.id ? "active" : ""
-                      }`}
+                      className={`nav-link ${activeTab === tab.id ? "active" : ""
+                        }`}
                       onClick={() => setActiveTab(tab.id)}
                       aria-selected="true"
                       type="button"

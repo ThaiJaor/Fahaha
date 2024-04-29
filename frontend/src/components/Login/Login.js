@@ -50,7 +50,7 @@ function Login(props) {
     try {
       const response = await dispatch(login(loginData));
       const user = response.payload.data.user;
-      console.log(user);
+
       if (user) {
         navigate("/");
       } else {

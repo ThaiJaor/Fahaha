@@ -11,13 +11,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchUser } from "./redux/slices/userSlices";
 const PageContainer = ({ children }) => {
-  return <div style={{ backgroundColor: "#f0f0f0" }}>{children}</div>;
+  return <div style={{ backgroundColor: "#f0f0f0", height: "100%", }}>{children}</div>;
 };
 function App(props) {
   const dispatch = useDispatch();
   const nonSecurePath = ["/sign_in", "/sign_up"];
+  const books = useSelector((state) => state.cart.books);
   useEffect(() => {
-    console.log(window.location.pathname);
     if (!nonSecurePath.includes(window.location.pathname)) {
       dispatch(fetchUser());
     }

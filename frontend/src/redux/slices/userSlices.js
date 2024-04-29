@@ -19,17 +19,15 @@ export const fetchUser = createAsyncThunk("users/fetchUserStatus", async () => {
 export const register = createAsyncThunk(
     "user/registerStatus",
     async (registerData) => {
-        console.log(registerData);
         const response = await axios.post("user/register/", registerData, {
             withCredentials: true,
         });
-        console.log(response);
         return response.data;
     }
 );
 export const logout = createAsyncThunk("users/logoutUserStatus", async () => {
     const response = await axios.post("user/logout/");
-    localStorage.setItem("access", null);
+    localStorage.removeItem("access");
     return response.data;
 });
 
@@ -188,7 +186,7 @@ export const userSlice = createSlice({
                 state.isError = false;
                 state.isLoading = false;
                 toast.success(action.payload.detail);
-                console.log(action);
+
             })
             .addCase(logout.rejected, (state, action) => {
                 state.isError = true;

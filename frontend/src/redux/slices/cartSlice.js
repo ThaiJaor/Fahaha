@@ -3,11 +3,12 @@ import Cookies from "js-cookie";
 import axios from "./../../setup/axios.js";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import bookJsonPath from "./data.json";
 const initialState = {
-    books: [],
+    books: [...bookJsonPath],
     isLoading: false,
     isError: false,
-    size: 0
+    size: bookJsonPath.length
 };
 const findBookIndexById = (state, id) => {
     for (let index = 0; index < state.books.length; index++) {
@@ -48,7 +49,6 @@ export const cartSlice = createSlice({
         removeBookFromCart: (state, action) => {
             const { id } = action.payload
             let index = findBookIndexById(state, id);
-            console.log("check index", index);
             if (index >= 0) {
                 let currentBooks = [...state.books];
                 currentBooks.splice(index, 1);

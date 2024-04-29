@@ -31,7 +31,7 @@ const Header = (props) => {
   return (
     <>
       <div className="header d-flex">
-        <div className="container-fluid" style={{ backgroundColor: "#F0F0F0" }}>
+        <div className="container-fluid" style={{ backgroundColor: "#f0f0f0" }}>
           <div
             className="container topbar d-none d-lg-block"
             style={{ backgroundColor: "#FF6C6B" }}
@@ -166,7 +166,7 @@ const Header = (props) => {
                   </span>
                   <div className="text-center">Cart</div>
                 </div>
-                <buttton className="my-auto mx-4">
+                <div className="my-auto mx-4">
                   <div className="dropdown">
                     <div
                       className="dropdown-toggle profile"
@@ -236,7 +236,7 @@ const Header = (props) => {
 
                     </ul>
                   </div>
-                </buttton>
+                </div>
               </div>
             </nav>
           </div>
