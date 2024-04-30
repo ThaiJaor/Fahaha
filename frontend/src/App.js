@@ -7,6 +7,7 @@ import DefaultComponent from "./components/Default/Default";
 import { useSelector, useDispatch } from "react-redux";
 import PrivateRoute from "./routes/PrivateRoutes";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.min.js";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchUser } from "./redux/slices/userSlices";
