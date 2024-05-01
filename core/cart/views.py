@@ -1,16 +1,16 @@
 from .serializers import CartSerializer, CartDetailSerializer, CartItemDetailSerializer
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
-from core.permissions import IsAdminUserOrOwner, IsAdminUserOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from .permissions import IsCartOwner
 from rest_framework import mixins
 from .models import Cart, CartItem
 from django.shortcuts import get_object_or_404
 
 
-class CartListCreateView(generics.ListCreateAPIView):
+class CartListView(generics.ListCreateAPIView):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
-    permission_classes = [IsAdminUserOrReadOnly]
+    permission_classes = [IsAdminUser]
 
 
 class CartDetailView(mixins.RetrieveModelMixin,
@@ -19,18 +19,18 @@ class CartDetailView(mixins.RetrieveModelMixin,
                      generics.GenericAPIView):
     queryset = Cart.objects.all()
     serializer_class = CartDetailSerializer
-    permission_classes = [IsAdminUserOrOwner]
-    lookup_field = 'pk'
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':  # Create new CartItem
             return CartItemDetailSerializer
         return super().get_serializer_class()
 
+    # Retrieve Cart
     def get_object(self):
-        pk = self.kwargs.get('pk')
-        return get_object_or_404(Cart, pk=pk)
+        return self.request.user.cart
 
+    # Remove all CartItems in Cart
     def perform_destroy(self, instance):
         for item in instance.items.all():
             item.delete()
@@ -55,9 +55,8 @@ class CartItemDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        cart_id = self.kwargs.get('cart_id')
-        item_id = self.kwargs.get('item_id')
-        return get_object_or_404(CartItem, cart_id=cart_id, book_id=item_id)
+        cart = self.request.user.cart
+        return get_object_or_404(cart.items.all(), book_id=self.kwargs['item_id'])
 
     def get_queryset(self):
         return self.request.user.cart.items.all()

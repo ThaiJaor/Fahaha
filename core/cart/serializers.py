@@ -6,14 +6,19 @@ from django.urls import reverse
 
 
 class CartItemDetailSerializer(serializers.ModelSerializer):
-    url = serializers.SerializerMethodField(read_only=True)
+    url = serializers.HyperlinkedIdentityField(
+        view_name='cart-item-detail',
+        lookup_url_kwarg='item_id',
+        lookup_field='book_id',
+    )
+
     item_id = serializers.PrimaryKeyRelatedField(
         source='book', queryset=Book.objects.all())
 
     class Meta:
         model = CartItem
         fields = ['url', 'cart',
-                  'item_id', 'quantity', 'total_price', 'discount', 'price']
+                  'item_id', 'quantity', 'price', 'discount', 'total_price']
         read_only_fields = ['total_price', 'discount', 'price', 'cart']
 
     def validate_quantity(self, value):
@@ -22,41 +27,37 @@ class CartItemDetailSerializer(serializers.ModelSerializer):
                 "Quantity must be greater than zero.")
         return value
 
-    def get_url(self, obj):
-        kwargs = {
-            'cart_id': obj.cart_id,
-            'item_id': obj.book_id
-        }
-        return self.context['request'].build_absolute_uri(reverse('cart-item-detail', kwargs=kwargs))
-
     def create(self, validated_data):
-        book = validated_data.pop('book')
-        cart = validated_data.pop('cart')
+        print(validated_data)
+        book = validated_data.get('book')
+        cart = self.context['request'].user.cart
         if cart.items.filter(book=book).exists():
             raise serializers.ValidationError(
                 "This book is already in the cart.")
         return super().create(validated_data)
 
 
-class CartSerializer(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='cart-detail', read_only=True)
-    items = CartItemDetailSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Cart
-        fields = ['url', 'user', 'total_price', 'items']
-
-    def create(self, validated_data):
-        cart = Cart.objects.create(**validated_data)
-        return cart
-
-
 class CartDetailSerializer(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='cart-detail', read_only=True)
     items = CartItemDetailSerializer(many=True, read_only=True)
 
     class Meta:
         model = Cart
-        fields = ['url', 'user', 'total_price', 'items']
+        fields = ['user', 'total_price', 'items']
+
+
+class CartItemSerializer(serializers.ModelSerializer):
+    item_id = serializers.IntegerField(source='book.id', read_only=True)
+
+    class Meta:
+        model = CartItem
+        fields = ['item_id', 'quantity',
+                  'price', 'discount', 'total_price']
+        read_only_fields = ['total_price', 'discount', 'price', 'cart']
+
+
+class CartSerializer(serializers.ModelSerializer):
+    items = CartItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Cart
+        fields = ['user', 'total_price', 'items']
