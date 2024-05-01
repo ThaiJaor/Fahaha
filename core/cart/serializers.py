@@ -18,8 +18,9 @@ class CartItemDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
         fields = ['url', 'cart',
-                  'item_id', 'quantity', 'price', 'discount', 'total_price']
-        read_only_fields = ['total_price', 'discount', 'price', 'cart']
+                  'item_id', 'quantity', 'price', 'sale_price', 'discount', 'total_price']
+        read_only_fields = ['total_price',
+                            'discount', 'price', 'sale_price', 'cart']
 
     def validate_quantity(self, value):
         if value <= 0:
@@ -51,8 +52,9 @@ class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
         fields = ['item_id', 'quantity',
-                  'price', 'discount', 'total_price']
-        read_only_fields = ['total_price', 'discount', 'price', 'cart']
+                  'price', 'sale_price', 'discount', 'total_price']
+        read_only_fields = ['total_price',
+                            'discount', 'price', 'sale_price']
 
 
 class CartSerializer(serializers.ModelSerializer):

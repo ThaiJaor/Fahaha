@@ -30,8 +30,8 @@ class Order(models.Model):
     # processing, shipping, delivered, cancelled
     status = models.CharField(
         max_length=20, choices=STATUS_CHOICES, default='processing')
-    payment_method = models.CharField(max_length=20)
-    recipient_name = models.CharField(max_length=255)
+    payment_method = models.CharField(max_length=20, default='VNPAY')
+    recipient_name = models.CharField(max_length=255, default='')
     phone_number = models.CharField(max_length=15, default='', validators=[
         RegexValidator(
             r'^\d{10,15}$', message='Phone number must be between 10 and 15 digits.')

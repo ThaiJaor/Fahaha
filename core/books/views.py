@@ -32,9 +32,9 @@ class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = BookDetailSerializer
     lookup_field = 'pk'
     permission_classes = [IsAdminUserOrReadOnly]
-
-
 # Category views
+
+
 class CategoryListCreateView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer

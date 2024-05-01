@@ -1,9 +1,8 @@
 from .serializers import CartSerializer, CartDetailSerializer, CartItemDetailSerializer
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from .permissions import IsCartOwner
 from rest_framework import mixins
-from .models import Cart, CartItem
+from .models import Cart
 from django.shortcuts import get_object_or_404
 
 
@@ -57,6 +56,3 @@ class CartItemDetailView(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         cart = self.request.user.cart
         return get_object_or_404(cart.items.all(), book_id=self.kwargs['item_id'])
-
-    def get_queryset(self):
-        return self.request.user.cart.items.all()
