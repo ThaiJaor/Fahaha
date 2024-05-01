@@ -1,17 +1,23 @@
 from rest_framework import serializers
 from .models import Order
+from cart.models import CartItem, Cart
 from books.models import Book
-import uuid
+from django.core.validators import RegexValidator
 
 
-class CheckoutOrderItemSerializer(serializers.Serializer):
-    item_id = serializers.PrimaryKeyRelatedField(queryset=Book.objects.all())
-    quantity = serializers.IntegerField()
+class CheckoutOrderItemSerializer(serializers.ModelSerializer):
+    item_id = serializers.PrimaryKeyRelatedField(
+        source='book', queryset=Book.objects.all())
+    price = serializers.SerializerMethodField(read_only=True)
+    sale_price = serializers.SerializerMethodField(read_only=True)
     total_price = serializers.SerializerMethodField(read_only=True)
-    discount = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
-        fields = ['item_id', 'quantity', 'total_price', 'discount']
+        model = CartItem
+        fields = ['item_id', 'quantity', 'price',
+                  'sale_price', 'discount', 'total_price']
+        read_only_fields = ['total_price',
+                            'discount', 'price', 'sale_price']
 
     def validate_quantity(self, value):
         if value <= 0:
@@ -19,47 +25,37 @@ class CheckoutOrderItemSerializer(serializers.Serializer):
                 "Quantity must be greater than zero.")
         return value
 
-    def get_total_price(self, validated_data):
-        obj = validated_data['item_id']
-        return obj.sale_price * validated_data['quantity']
+    def get_total_price(self, obj):
+        return str(obj.total_price)
 
-    def get_discount(self, validated_data):
-        obj = validated_data['item_id']
-        return obj.promotion.discount if obj.promotion else 0
+    def get_sale_price(self, obj):
+        return str(obj.sale_price)
 
-    def to_representation(self, instance):
-        instance['total_price'] = self.get_total_price(instance)
-        instance['promotion'] = self.get_discount(instance)
-        return super().to_representation(instance)
+    def get_price(self, obj):
+        return str(obj.price)
 
 
 class CheckoutOrderSerializer(serializers.Serializer):
-    items = CheckoutOrderItemSerializer(many=True)
-    order_id = serializers.SerializerMethodField(read_only=True)
-    total_price = serializers.SerializerMethodField(read_only=True)
+    recipient_name = serializers.CharField(max_length=255, allow_blank=True)
+    phone_number = serializers.CharField(max_length=15, validators=[
+        RegexValidator(
+            r'^\d{10,15}$', message='Phone number must be between 10 and 15 digits.')
+    ], allow_blank=True)
+    shipping_address = serializers.CharField(max_length=255, allow_blank=True)
+    note = serializers.CharField(
+        max_length=255, required=False, allow_blank=True)
 
     class Meta:
-        fields = ['items', 'order_id', 'total_price']
-
-    def get_total_price(self, validated_data):
-        # obj is the validated data
-        # Extract items from the object
-        items = validated_data.get('items', [])
-        return sum(item['total_price'] for item in items)
-
-    def get_order_id(self, validated_data):
-        return uuid.uuid4().hex
+        fields = ['recipient_name', 'phone_number', 'shipping_address', 'note']
 
 
-class VnpayOrderSerializer(serializers.ModelSerializer):
-    items = CheckoutOrderItemSerializer(many=True)
-    total_price = serializers.SerializerMethodField(read_only=True)
+class OrderSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='order-detail', lookup_field='pk')
+
+    user = serializers.PrimaryKeyRelatedField(
+        read_only=True, default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Order
-        fields = ['recipient_name', 'phone_number',
-                  'shipping_address', 'note', 'items', 'total_price']
-
-    def get_total_price(self, validated_data):
-        items = validated_data.get('items', [])
-        return sum(item['total_price'] for item in items)
+        fields = '__all__'

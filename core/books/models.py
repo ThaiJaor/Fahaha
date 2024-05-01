@@ -71,6 +71,11 @@ class Book(models.Model):
             return True
         return False
 
+    def get_discount(self):
+        if self.promotion:
+            return self.promotion.discount
+        return 0
+
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -87,7 +92,6 @@ class Category(models.Model):
     def books_count(self):
         return self.books.count()
 
-    @property
     def get_books(self):
         return self.books.all()
 
@@ -106,7 +110,6 @@ class Publisher(models.Model):
     def books_count(self):
         return self.books.count()
 
-    @property
     def get_books(self):
         return self.books.all()
 
@@ -135,7 +138,6 @@ class Promotion(models.Model):
     def books_count(self):
         return self.books.count()
 
-    @ property
     def get_books(self):
         return self.books.all()
 

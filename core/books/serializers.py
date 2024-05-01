@@ -56,12 +56,20 @@ class BookDetailSerializer(serializers.ModelSerializer):
     is_discounted = serializers.SerializerMethodField(read_only=True)
     url = serializers.HyperlinkedIdentityField(
         view_name='book-detail', read_only=True)
+    _promotion = serializers.PrimaryKeyRelatedField(
+        queryset=Promotion.objects.all(), source='promotion', required=False, allow_null=True)
+    _categories = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all(), source='categories', many=True, required=False, allow_null=True)
+    _publisher = serializers.PrimaryKeyRelatedField(
+        queryset=Publisher.objects.all(), source='publisher', required=False, allow_null=True)
 
     class Meta:
         model = Book
         fields = ['url', 'id', 'title', 'author', 'format', 'rating', 'price', 'isbn', 'length',
-                  'year', 'city_country', 'description', 'image', 'sale_price', 'is_discounted', 'sold', 'promotion', 'categories', 'publisher']
-        read_only_fields = ['sold']
+                  'year', 'city_country', 'description', 'image', 'sale_price', 'is_discounted', 'sold', 'promotion', 'categories', 'publisher', '_promotion', '_categories', '_publisher']
+
+    def get_is_discounted(self, obj):
+        return obj.is_discounted()
 
     def get_is_discounted(self, obj):
         return obj.is_discounted()

@@ -19,7 +19,7 @@ class BookListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAdminUserOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_class = BookFilter
-    ordering_fields = ['sale_price', 'rating', 'year']
+    ordering_fields = ['sale_price', 'rating', 'year', 'sold']
 
     def get_serializer_class(self):
         if self.request.method == 'POST':  # Create new book
@@ -32,9 +32,9 @@ class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = BookDetailSerializer
     lookup_field = 'pk'
     permission_classes = [IsAdminUserOrReadOnly]
-
-
 # Category views
+
+
 class CategoryListCreateView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
