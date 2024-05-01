@@ -1,8 +1,6 @@
 from rest_framework import serializers
 from .models import Cart, CartItem
 from books.models import Book
-from users.models import User
-from django.urls import reverse
 
 
 class CartItemDetailSerializer(serializers.ModelSerializer):
