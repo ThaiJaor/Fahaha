@@ -53,11 +53,12 @@ class VnpayPaymentUrlView(generics.GenericAPIView):
         vnp.requestData['vnp_Amount'] = int(amount * 100)
         vnp.requestData['vnp_CurrCode'] = 'VND'
         vnp.requestData['vnp_TxnRef'] = order_id
-        vnp.requestData['vnp_CreateDate'] = datetime.now().strftime(
+        now = datetime.now()
+        vnp.requestData['vnp_CreateDate'] = now.strftime(
             '%Y%m%d%H%M%S')
         vnp.requestData['vnp_OrderInfo'] = 'Payment for order ' + order_id + \
             ' of user ' + request.user.email + ' at ' + \
-            vnp.requestData['vnp_CreateDate']
+            now.strftime("%Y-%m-%d %H:%M:%S")
         vnp.requestData['vnp_OrderType'] = 'billpayment'
         vnp.requestData['vnp_Locale'] = 'vn'
         # vnp.requestData['vnp_BankCode'] = 'NCB'

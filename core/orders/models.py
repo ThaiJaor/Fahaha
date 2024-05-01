@@ -7,6 +7,10 @@ from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 
+def uuid_hex():
+    return uuid.uuid4().hex
+
+
 class Order(models.Model):
     STATUS_CHOICES = (
         ('processing', 'Processing'),
@@ -15,7 +19,7 @@ class Order(models.Model):
         ('cancelled', 'Cancelled'),
     )
 
-    id = models.CharField(primary_key=True, default=uuid.uuid4,
+    id = models.CharField(primary_key=True, default=uuid_hex,
                           max_length=255, editable=False)
     user = models.ForeignKey(
         'users.User', related_name='orders', on_delete=models.SET_NULL, blank=True, null=True)
@@ -44,7 +48,7 @@ class Order(models.Model):
         return f'Order id:{self.id} of {self.user}'
 
 
-@receiver(post_save, sender=Order)
+@ receiver(post_save, sender=Order)
 def update_book_sold(sender, instance, created, **kwargs):
     if created:
         for item in instance.items:
