@@ -376,7 +376,7 @@ const HomePage = (props) => {
                 {tabs2.map((tab) => (
                   <li className="nav-item" key={tab.id}>
                     <button
-                      className={`nav-link ${activeTab === tab.id ? "active" : ""
+                      className={`nav-link ${selectedTab === tab.id ? "active" : ""
                         }`}
                       onClick={() => handleTabChange(tab.id)}
                       aria-selected="true"
@@ -392,16 +392,28 @@ const HomePage = (props) => {
             </div>
             <div className="container">
               <div className="row pb-2">
-                <div className="col-lg-4">
+                <div className="col-lg-4" style={{borderRight: "1px #d7d7d7 solid"}}>
                 {topRatedBooks.map((book, index) => (
-                      <div key={index}>
-                        {index + 1}. {book.title} - Rating: {book.rating}
+                      <div key={index} className="d-flex mt-3">
+                        <div className="col-2 d-flex justify-content-center flex-column">
+                          <div> {index + 1} </div>
+                          <div> <i className="fa-solid fa-arrow-up" style={{color: "green"}}></i> </div>
+                        </div>
+                        <div className="d-flex"> 
+                         <img className="img-small" style={{ width: "100px", height: "100px"}} src= {book.image} alt = "" />
+                          <div className="ms-3 d-flex flex-column"> 
+                            <div className="title fs-6">  {book.title} </div>
+                            <div className="title fs-6"> Lượt bán: {book.sold} </div>
+                            <div className="rating fw-bold text-danger">Đánh giá:  {book.rating} </div>
+                          </div>
+                        </div>
+
                       </div>
                     ))}
                 </div>
                 <div className="col-lg-8">
                 {selectedBook && (
-                      <div>
+                      <div className="ms-2">
                         <h3>{selectedBook.title}</h3>
                         <p>Author: {selectedBook.author}</p>
                         <p>Category: {selectedBook.categories[0].name}</p>
