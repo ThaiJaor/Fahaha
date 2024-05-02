@@ -4,12 +4,15 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import mixins
 from .models import Cart
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 
 
-class CartListView(generics.ListCreateAPIView):
+class CartListView(generics.ListAPIView):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
     permission_classes = [IsAdminUser]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['user']
 
 
 class CartDetailView(mixins.RetrieveModelMixin,

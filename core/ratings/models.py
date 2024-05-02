@@ -16,6 +16,7 @@ class Rating(models.Model):
         r'^[0-5]$', message='Rating must be between 0 and 5 stars.')])
     comment = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{self.user} rated {self.book} {self.rating} stars.'

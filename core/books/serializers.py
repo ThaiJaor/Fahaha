@@ -63,16 +63,21 @@ class BookDetailSerializer(serializers.ModelSerializer):
     _publisher = serializers.PrimaryKeyRelatedField(
         queryset=Publisher.objects.all(), source='publisher', required=False, allow_null=True)
 
+    ratings_url = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Book
-        fields = ['url', 'id', 'title', 'author', 'format', 'rating', 'rating_count', 'price', 'isbn', 'length',
-                  'year', 'city_country', 'description', 'image', 'sale_price', 'is_discounted', 'sold', 'promotion', 'categories', 'publisher', '_promotion', '_categories', '_publisher']
+        fields = ['url', 'id', 'title', 'author', 'format', 'rating', 'rating_count', 'ratings_url', 'price', 'isbn', 'length',
+                  'year', 'city_country', 'description', 'image', 'sale_price', 'is_discounted', 'sold',
+                  'promotion', 'categories', 'publisher', '_promotion', '_categories', '_publisher']
 
     def get_is_discounted(self, obj):
         return obj.is_discounted()
 
-    def get_is_discounted(self, obj):
-        return obj.is_discounted()
+    def get_ratings_url(self, obj):
+        url = obj.get_ratings_url()
+        url = self.context['request'].build_absolute_uri(url)
+        return url
 
 
 class BookSerializer(serializers.ModelSerializer):

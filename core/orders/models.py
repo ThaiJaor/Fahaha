@@ -18,6 +18,9 @@ class Order(models.Model):
         ('delivered', 'Delivered'),
         ('cancelled', 'Cancelled'),
     )
+    PAYMENT_METHOD_CHOICES = (
+        ('VNPAY', 'VNPAY'),
+    )
 
     id = models.CharField(primary_key=True, default=uuid_hex,
                           max_length=255, editable=False)
@@ -30,7 +33,8 @@ class Order(models.Model):
     # processing, shipping, delivered, cancelled
     status = models.CharField(
         max_length=20, choices=STATUS_CHOICES, default='processing')
-    payment_method = models.CharField(max_length=20, default='VNPAY')
+    payment_method = models.CharField(
+        max_length=20, choices=PAYMENT_METHOD_CHOICES, default='VNPAY')
     recipient_name = models.CharField(max_length=255, default='')
     phone_number = models.CharField(max_length=15, default='', validators=[
         RegexValidator(
