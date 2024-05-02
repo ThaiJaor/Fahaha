@@ -1,10 +1,8 @@
 import "./FlashSaleSlider.scss";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const $ = window.$;
-
-
 
 const FlashSaleSlider = ({ saleBooks }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -55,7 +53,9 @@ const FlashSaleSlider = ({ saleBooks }) => {
         const now = new Date().getTime();
         const distance = endDate - now;
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const hours = Math.floor(
+          (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         setCountdown({ days, hours, minutes });
 
@@ -68,7 +68,6 @@ const FlashSaleSlider = ({ saleBooks }) => {
     }
   }, [saleBooks]);
 
-
   const handleClick = (id) => {
     navigate(`/books/${id}`);
   };
@@ -76,10 +75,14 @@ const FlashSaleSlider = ({ saleBooks }) => {
     <>
       {!dataLoaded && (
         <div className="container d-flex justify-content-center ">
-          <div className="spinner-border text-danger text-center mt-3" role="status">
+          <div
+            className="spinner-border text-danger text-center mt-3"
+            role="status"
+          >
             <span className="visually-hidden">Loading...</span>
           </div>
-        </div>)}
+        </div>
+      )}
       {dataLoaded && (
         <div
           className="container-fluid vesitable my-5"
@@ -92,15 +95,21 @@ const FlashSaleSlider = ({ saleBooks }) => {
             <div className="pt-4">
               <div className="bg-light p-4 rounded d-flex">
                 <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/flashsale/label-flashsale.svg?q=" />
-                <div className="countdown">
-                  <span className="fs-4 text-white bg-secondary ms-3 p-2 rounded "> {countdown.days}
-                  </span>
-                  <span className="fs-4 mx-2">:</span>
-                  <span className="fs-4 text-white bg-secondary p-2 rounded"> {countdown.hours}
-                  </span>
-                  <span className="fs-4 mx-2">:</span>
-                  <span className="fs-4 text-white bg-danger p-2 rounded"> {countdown.minutes}
-                  </span>
+                <div className="countdown d-flex">
+                  <div className="fs-4 text-white bg-secondary ms-3 p-2 rounded ">
+                    {" "}
+                    {countdown.days}
+                  </div>
+                  <div className="fs-4 mx-2">:</div>
+                  <div className="fs-4 text-white bg-secondary p-2 rounded">
+                    {" "}
+                    {countdown.hours}
+                  </div>
+                  <div className="fs-4 mx-2">:</div>
+                  <div className="fs-4 text-white bg-danger p-2 rounded">
+                    {" "}
+                    {countdown.minutes}
+                  </div>
                 </div>
               </div>
             </div>
@@ -126,7 +135,9 @@ const FlashSaleSlider = ({ saleBooks }) => {
                     {item.promotion.discount}%
                   </div>
                   <div className="p-4 rounded-bottom">
-                    <div className="fw-bold" style={{ fontSize: "0.85rem" }}>{item.title}</div>
+                    <div className="fw-bold" style={{ fontSize: "0.85rem" }}>
+                      {item.title}
+                    </div>
                     <div className="mt-3 d-flex">
                       <div className="price_sale text-danger fs-5 fw-bold me-3">
                         {item.sale_price}0đ
@@ -140,7 +151,6 @@ const FlashSaleSlider = ({ saleBooks }) => {
               ))}
             </div>
           </div>
-
         </div>
       )}
     </>

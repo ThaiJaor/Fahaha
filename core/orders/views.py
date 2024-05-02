@@ -19,7 +19,7 @@ class AllOrdersListView(generics.ListAPIView):
     serializer_class = OrderSerializer
     permission_classes = [IsAdminUser]
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    filterset_fields = ['status', 'payment_method']
+    filterset_fields = ['status', 'payment_method', 'user']
     ordering_fields = ['created_at', 'total_price']
     ordering = ['-created_at']
 
@@ -37,7 +37,7 @@ class OrderListView(generics.ListAPIView):
         return Order.objects.filter(user=self.request.user)
 
 
-class OrderDetailView(generics.RetrieveDestroyAPIView):
+class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAdminUser, IsOrderOwner]
