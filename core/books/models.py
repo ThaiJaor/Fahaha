@@ -20,6 +20,7 @@ class Book(models.Model):
     format = models.CharField(max_length=255, blank=True, null=True)
     rating = models.FloatField(validators=[MinValueValidator(
         0), MaxValueValidator(5)], blank=True, null=True)
+    rating_count = models.PositiveIntegerField(default=1)
     price = models.DecimalField(
         max_digits=15, decimal_places=2, blank=True, null=True)
     isbn = models.CharField(max_length=255, blank=True, null=True)
