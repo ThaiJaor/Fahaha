@@ -123,5 +123,8 @@ Thẻ ngân hàng:
 | Mật khẩu OTP   | 123456               |
 
 
+###UPDATE
 
+Đã tạo CART, ORDER, VNPAY CHECKOUT
+Book đã có thuộc tính sold có thể ordering, là thuộc tính số lượng đã bán, update theo mỗi lẫn order hoặc vào admin gán tay/update trực tiếp.
 

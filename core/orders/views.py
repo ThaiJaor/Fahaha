@@ -1,31 +1,47 @@
 from .models import Order
 from rest_framework import generics
-from core.permissions import IsAdminUserOrReadOnly
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from .permissions import IsOrderOwner
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-from .serializers import CheckoutOrderSerializer, VnpayOrderSerializer
+from .serializers import CheckoutOrderSerializer, CheckoutOrderItemSerializer, OrderSerializer
 from rest_framework import status
 from rest_framework.response import Response
 import uuid
 from .vnpay import vnpay
 from django.conf import settings
 from datetime import datetime
-# class OrderView(generics.GenericAPIView):
-#     queryset = Order.objects.all()
-#     serializer_class = OrderSerializer
-#     permission_classes = [IsAdminUserOrReadOnly]
-#     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-#     ordering_fields = ['created_at', 'total_price']
+import json
 
-#     def get_queryset(self):
-#         return super().get_queryset().filter(user=self.request.user)
 
-#     def post(self, request):
-#         serializer = self.get_serializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save(user=request.user)
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+class AllOrdersListView(generics.ListAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [IsAdminUser]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_fields = ['status', 'payment_method']
+    ordering_fields = ['created_at', 'total_price']
+    ordering = ['-created_at']
+
+
+class OrderListView(generics.ListAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_fields = ['status', 'payment_method']
+    ordering_fields = ['created_at', 'total_price']
+    ordering = ['-created_at']
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
+
+
+class OrderDetailView(generics.RetrieveDestroyAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [IsAdminUser, IsOrderOwner]
+    lookup_field = 'pk'
 
 
 def get_client_ip(request):
@@ -42,8 +58,13 @@ def usd_to_vnd(usd):
 
 
 class VnpayPaymentUrlView(generics.GenericAPIView):
-    serializer_class = CheckoutOrderSerializer
     permission_classes = [IsAuthenticated]
+
+    def generate_order_id(self):
+        return uuid.uuid4().hex
+
+    def get_cart(self, request):
+        return request.user.cart
 
     def payment_url(self, request, order_id, amount):
         vnp = vnpay()
@@ -53,11 +74,12 @@ class VnpayPaymentUrlView(generics.GenericAPIView):
         vnp.requestData['vnp_Amount'] = int(amount * 100)
         vnp.requestData['vnp_CurrCode'] = 'VND'
         vnp.requestData['vnp_TxnRef'] = order_id
-        vnp.requestData['vnp_CreateDate'] = datetime.now().strftime(
+        now = datetime.now()
+        vnp.requestData['vnp_CreateDate'] = now.strftime(
             '%Y%m%d%H%M%S')
         vnp.requestData['vnp_OrderInfo'] = 'Payment for order ' + order_id + \
             ' of user ' + request.user.email + ' at ' + \
-            vnp.requestData['vnp_CreateDate']
+            now.strftime("%Y-%m-%d %H:%M:%S")
         vnp.requestData['vnp_OrderType'] = 'billpayment'
         vnp.requestData['vnp_Locale'] = 'vn'
         # vnp.requestData['vnp_BankCode'] = 'NCB'
@@ -71,14 +93,14 @@ class VnpayPaymentUrlView(generics.GenericAPIView):
         return vnpay_payment_url
 
     # payment url of vnpay
-    def post(self, request):
+    def get(self, request):
         try:
-            serializer = self.get_serializer_class()(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            order_id = serializer.data['order_id']
-            amount = serializer.data['total_price']
+            order_id = self.generate_order_id()
+            cart = self.get_cart(request)
+            amount = cart.total_price
             amount = usd_to_vnd(amount)
-            print(order_id, amount)
+            print("Generated Order ID:", order_id)
+            print("Amount:", amount)
             # create vnpay payment url
             vnpay_payment_url = self.payment_url(request, order_id, amount)
             print(vnpay_payment_url)
@@ -88,18 +110,23 @@ class VnpayPaymentUrlView(generics.GenericAPIView):
 
 
 class VnpayPaymentResponseView(generics.GenericAPIView):
-    serializer_class = VnpayOrderSerializer
+    serializer_class = CheckoutOrderSerializer
     permission_classes = [IsAuthenticated]
 
     # Check response from vnpay and create order
     def post(self, request):
         try:
-
             vnp = vnpay()
             vnp.responseData = request.GET.dict()
-            # recipent_name, phone_number, shipping_address, note, items
+            # recipent_name, phone_number, shipping_address, note
+            cart = request.user.cart
+            items = cart.items.all()
+            total_price = cart.total_price
+
             serializer = self.get_serializer_class()(data=request.data)
             serializer.is_valid(raise_exception=True)
+            print(serializer.data)
+
             data = serializer.data
 
             vnp_ResponseCode = vnp.responseData['vnp_ResponseCode']
@@ -113,16 +140,35 @@ class VnpayPaymentResponseView(generics.GenericAPIView):
             note = data['note'] or ''
             order_id = vnp.responseData['vnp_TxnRef']
 
-            print(data['items'], data['total_price'])
+            data['items'] = CheckoutOrderItemSerializer(items, many=True).data
 
-            for item in data['items']:
-                item['total_price'] = str(item['total_price'])
+            data['items'] = json.dumps(data['items'])
 
-            print(data['items'], data['total_price'])
+            data['total_price'] = str(total_price)
 
             if vnp.validate_response(settings.VNPAY_HASH_SECRET_KEY):
+                print('='*60)
+                print(vnp_ResponseCode)
                 if vnp_ResponseCode == '00':
-                    order, created = Order.objects.update_or_create(
+                    order = Order.objects.get(id=order_id)
+                    if order:
+                        return Response({'detail': 'Order already exists',
+                                         'order_id': order.id,
+                                         'payment_amount': order.payment_amount,
+                                         'payment_method': order.payment_method,
+                                         'payment_currency': order.payment_currency,
+                                         'total_price': order.total_price,
+                                         'price_currency': 'USD',
+                                         'order_desc': order_desc,
+                                         'vnp_TransactionNo': vnp.responseData['vnp_TransactionNo'],
+                                         'vnp_ResponseCode': vnp_ResponseCode,
+                                         'recipient_name': order.recipient_name,
+                                         'phone_number': order.phone_number,
+                                         'shipping_address': order.shipping_address,
+                                         'note': order.note
+                                         }, status=status.HTTP_400_BAD_REQUEST)
+
+                    order = Order.objects.create(
                         id=order_id,
                         user=request.user,
                         payment_method='VNPAY',
@@ -137,7 +183,7 @@ class VnpayPaymentResponseView(generics.GenericAPIView):
                         total_price=data['total_price'],
                         status='processing'
                     )
-
+                    print('='*60)
                     return Response({'detail': 'Transaction succeeds and Create order successfully',
                                     'order_id': order_id,
                                      'payment_amount': amount,
@@ -155,7 +201,7 @@ class VnpayPaymentResponseView(generics.GenericAPIView):
                                      }, status=status.HTTP_200_OK)
                 else:
                     return Response({'detail': 'Transaction failed with response code: ' + vnp_ResponseCode,
-                                     'order_id': order_id,
+                                    'order_id': order_id,
                                      'payment_amount': amount,
                                      'payment_method': 'VNPAY',
                                      'payment_currency': 'VND',
@@ -169,7 +215,7 @@ class VnpayPaymentResponseView(generics.GenericAPIView):
                                      }, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({'detail': 'Invalid response from VNPAY, Wrong checksum',
-                                 'order_id': order_id,
+                                'order_id': order_id,
                                  'payment_amount': amount,
                                  'payment_method': 'VNPAY',
                                  'payment_currency': 'VND',
@@ -181,5 +227,6 @@ class VnpayPaymentResponseView(generics.GenericAPIView):
                                  'shipping_address': shipping_address,
                                  'note': note
                                  }, status=status.HTTP_400_BAD_REQUEST)
+
         except Exception as e:
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
