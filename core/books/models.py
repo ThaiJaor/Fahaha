@@ -5,6 +5,7 @@ from django.utils.text import slugify
 from decimal import Decimal, ROUND_HALF_UP
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
+from django.urls import reverse
 
 
 def custom_upload_to(instance, filename):
@@ -20,6 +21,7 @@ class Book(models.Model):
     format = models.CharField(max_length=255, blank=True, null=True)
     rating = models.FloatField(validators=[MinValueValidator(
         0), MaxValueValidator(5)], blank=True, null=True)
+    rating_count = models.PositiveIntegerField(default=1)
     price = models.DecimalField(
         max_digits=15, decimal_places=2, blank=True, null=True)
     isbn = models.CharField(max_length=255, blank=True, null=True)
@@ -76,6 +78,11 @@ class Book(models.Model):
             return self.promotion.discount
         return 0
 
+    def get_ratings_url(self):
+        url = reverse('rating-list')
+        url += f'?book={self.pk}'
+        return url
+
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -88,7 +95,7 @@ class Category(models.Model):
     def __str__(self):
         return f'id:{self.pk} - {self.name}'
 
-    @property
+    @ property
     def books_count(self):
         return self.books.count()
 
@@ -106,7 +113,7 @@ class Publisher(models.Model):
     def __str__(self):
         return f'id:{self.pk} - {self.name}'
 
-    @property
+    @ property
     def books_count(self):
         return self.books.count()
 
@@ -145,7 +152,7 @@ class Promotion(models.Model):
         return timezone.now() > self.end_date
 
 
-@receiver(post_delete, sender=Promotion)
+@ receiver(post_delete, sender=Promotion)
 def reset_books_price(sender, instance, **kwargs):
     books = instance.books.all()
     for book in books:
@@ -153,7 +160,7 @@ def reset_books_price(sender, instance, **kwargs):
         book.save()
 
 
-@receiver(post_save, sender=Promotion)
+@ receiver(post_save, sender=Promotion)
 def update_books_price(sender, instance, **kwargs):
     books = instance.books.all()
     for book in books:
