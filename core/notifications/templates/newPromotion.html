@@ -1,70 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
+New Promotion in Fahaha!
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Promotion in Fahaha!</title>
-</head>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        line-height: 1.6;
-    }
+Dear {{ user.username }},
 
-    .container {
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-    }
+We are excited to announce a new promotion named {{promotion.name}} in Fahaha!
+For a limited time, you can get {{promotion.discount}}% off from {{promotion.start_date}} to {{promotion.end_date}}.
+Don't miss out on this great opportunity!
 
-    h1 {
-        color: #333;
-        text-align: center;
-    }
+Feel free to contact us with any questions. Happy shopping!
 
-    p {
-        margin-bottom: 20px;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-    }
-
-    th,
-    td {
-        padding: 8px;
-        border-bottom: 1px solid #ddd;
-    }
-
-    th {
-        background-color: #f2f2f2;
-    }
-
-    .signature {
-        margin-top: 40px;
-        text-align: center;
-    }
-</style>
-
-<body>
-    <div class="container">
-        <h1>New Promotion in Fahaha!</h1>
-        <p>Dear {{ user.username }},</p>
-        <p>We are excited to announce a new promotion in Fahaha! For a limited time, you can get
-            {{promotion.discount}}%
-            off from {{promotion.start_date}} to {{promotion.end_date}}. Don't miss out on this great opportunity!</p>
-        <p>Feel free to contact us with any questions. Happy shopping!</p>
-
-        <div class="signature">
-            <p>Best regards,</p>
-            <p>The Fahaha Team</p>
-        </div>
-</body>
-
-</html>
+Best regards,
+The Fahaha Team

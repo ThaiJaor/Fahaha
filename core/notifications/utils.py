@@ -20,7 +20,8 @@ class Notification:
     def new_user_notification(user):
         subject = 'Welcome to FAHAHA!'
         message = render_to_string(
-            'notifications/templates/newUser.html', {'user': user})
+            'newUser.html', {'user': user})
+
         to_email = user.email
         send_email(subject, message, to_email)
 
@@ -28,14 +29,14 @@ class Notification:
     def new_order_notification(order):
         subject = 'You have a new order at FAHAHA!'
         message = render_to_string(
-            'notifications/templates/newOrder.html', {'order': order})
+            'newOrder.html', {'order': order})
         to_email = order.user.email
         send_email(subject, message, to_email)
 
     @staticmethod
     def new_promotion_notification(promotion, user):
         subject = 'New promotion at FAHAHA!'
-        message = render_to_string('notifications/templates/newPromotion.html', {
+        message = render_to_string('newPromotion.html', {
                                    'promotion': promotion, 'user': user})
         to_email = user.email
         send_email(subject, message, to_email)
