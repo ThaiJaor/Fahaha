@@ -141,19 +141,17 @@ class VnpayPaymentResponseView(generics.GenericAPIView):
             order_id = vnp.responseData['vnp_TxnRef']
 
             data['items'] = CheckoutOrderItemSerializer(items, many=True).data
-
-            data['items'] = json.dumps(data['items'])
-
-            data['total_price'] = str(total_price)
-
+            print(data['items'])
+            data['total_price'] = total_price
             if vnp.validate_response(settings.VNPAY_HASH_SECRET_KEY):
                 print('='*60)
                 print(vnp_ResponseCode)
                 if vnp_ResponseCode == '00':
-                    order = Order.objects.get(id=order_id)
+                    orders = Order.objects.filter(id=order_id)
+                    order = orders.first() if orders.exists() else None
                     if order:
                         return Response({'detail': 'Order already exists',
-                                         'order_id': order.id,
+                                        'order_id': order.id,
                                          'payment_amount': order.payment_amount,
                                          'payment_method': order.payment_method,
                                          'payment_currency': order.payment_currency,
@@ -184,6 +182,8 @@ class VnpayPaymentResponseView(generics.GenericAPIView):
                         status='processing'
                     )
                     print('='*60)
+                    # Reset Cart
+                    cart.items.all().delete()
                     return Response({'detail': 'Transaction succeeds and Create order successfully',
                                     'order_id': order_id,
                                      'payment_amount': amount,
