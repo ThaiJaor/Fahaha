@@ -73,3 +73,46 @@
 #chat1 .form-outline .form-control~.form-label {
     color: #bfbfbf;
 }
+
+.chatbot-btn {
+    position: fixed;
+    background: none transparent;
+    z-index: 999999999;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition-property: bottom, transform;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    bottom: 0px;
+    overflow: hidden;
+    width: 60px;
+    height: 60px;
+    right: 0px;
+    left: auto;
+    margin: 20px;
+    max-height: calc(100% - 80px);
+    display: block;
+}
+
+
+.chatbot-info2 {
+    position: fixed;
+    background: none transparent;
+    z-index: 999999999;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition-property: bottom, transform;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    bottom: 5.5rem;
+    /* overflow: hidden; */
+    width: 350px;
+    height: 450px;
+    right: 1.5rem;
+    left: auto;
+    margin: 20px;
+    max-height: calc(100% - 80px);
+    display: block;
+}

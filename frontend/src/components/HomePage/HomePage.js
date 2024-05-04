@@ -12,6 +12,7 @@ import {
 } from "../../redux/slices/bookSlice.js";
 import "../../assets/css/theme.scss";
 import Card from "../Card/Card.js";
+import Chatbot from "../Chatbot/Chatbot.js";
 
 const HomePage = (props) => {
   const dispatch = useDispatch();
@@ -402,13 +403,13 @@ const HomePage = (props) => {
             <div className="container">
               <div className="row pb-2">
                 <div
-                  className="col-lg-4"
+                  className="col-lg-5"
                   style={{ borderRight: "1px #d7d7d7 solid" }}
                 >
                   {topRatedBooks.map((book, index) => (
                     <div
                       key={index}
-                      className="d-flex mt-3"
+                      className="d-flex mt-3 showbook"
                       onMouseEnter={() => handleBookHover(book)}
                     >
                       <div className="col-2 d-flex justify-content-center flex-column">
@@ -442,12 +443,38 @@ const HomePage = (props) => {
                     </div>
                   ))}
                 </div>
-                <div className="col-lg-8">
+                <div className="col-lg-7">
                   {selectedBook && (
                     <div className="ms-2">
-                      <h3>{selectedBook.title}</h3>
-                      <p>Author: {selectedBook.author}</p>
-                      <p>Category: {selectedBook.categories[0].name}</p>
+                      <div className="d-flex">
+                        <img
+                          className="ms-3"
+                          src={selectedBook.image}
+                          style={{ width: "30%", height: "30%" }}
+                        />
+                        <div className="m-3">
+                          <div className="fs-3 fw-bold">
+                            {selectedBook.title}
+                          </div>
+                          <div className="fs-6">
+                            Tác giả: {selectedBook.author}
+                          </div>
+                          <div>Nhà xuất bản: {selectedBook.publisher.name}</div>
+
+                          <div className="text-danger fw-bold my-3">
+                            {" "}
+                            {selectedBook.sale_price}$
+                          </div>
+                          <div className="fs-4 fw-bold">
+                            {selectedBook.title}
+                          </div>
+                          <div className="fs-6">
+                            {" "}
+                            {selectedBook.description}
+                          </div>
+                        </div>
+                      </div>
+
                       {/* Add other details as needed */}
                     </div>
                   )}
@@ -466,6 +493,8 @@ const HomePage = (props) => {
           </div>
         </div>
         {/* Phần publishers*/}
+
+        <Chatbot />
       </div>
     </>
   );
