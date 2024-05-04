@@ -13,7 +13,6 @@ import {
 import "../../assets/css/theme.scss";
 import Card from "../Card/Card.js";
 
-
 const HomePage = (props) => {
   const dispatch = useDispatch();
   const books = useSelector((state) => state.books.books);
@@ -42,7 +41,7 @@ const HomePage = (props) => {
             // Sau khi fetchAllBookDetails hoàn thành, gọi fetchPromotions
             dispatch(fetchPromotions());
             dispatch(fetchPublishers());
-          })
+          }),
         ]);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -56,7 +55,8 @@ const HomePage = (props) => {
     // Chỉ chạy khi promotions thay đổi
     if (promotions && promotions.length > 0) {
       // Chọn ngẫu nhiên một promotion
-      const randomPromotion = promotions[Math.floor(Math.random() * promotions.length)];
+      const randomPromotion =
+        promotions[Math.floor(Math.random() * promotions.length)];
       setSelectedPromotion(randomPromotion);
       console.log(randomPromotion);
 
@@ -69,12 +69,15 @@ const HomePage = (props) => {
     }
   }, [promotions]);
   useEffect(() => {
-    const randomCategories = [...categories].sort(() => 0.5 - Math.random()).slice(0, 4);
-    const randomPublishers = [...publishers].sort(() => 0.5 - Math.random()).slice(0, 4);
+    const randomCategories = [...categories]
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 4);
+    const randomPublishers = [...publishers]
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 4);
     setRandomCategories(randomCategories);
     setRandomPublishers(randomPublishers);
-
-  }, [ categories, publishers]);
+  }, [categories, publishers]);
 
   //Lấy ảnh ngẫu nhiên theo cate
   const getRandomBookImage = (categoryId) => {
@@ -126,7 +129,6 @@ const HomePage = (props) => {
     return shuffled.slice(0, 8); // Chọn 8 phần tử đầu tiên
   };
 
-
   useEffect(() => {
     const updateRandomData = () => {
       const filteredData = filterDataByTab(activeTab);
@@ -134,15 +136,14 @@ const HomePage = (props) => {
       setFilteredData(filteredData);
       setRandomBooks(randomBooksData);
     };
-  
+
     updateRandomData();
   }, [activeTab, bookDetails]);
-  
+
   // Function để set activeTab mới khi chọn tab
   const handleActiveTab = (tabId) => {
     setActiveTab(tabId);
   };
-
 
   const [topRatedBooks, setTopRatedBooks] = useState([]);
   const [selectedBook, setSelectedBook] = useState(null);
@@ -168,7 +169,9 @@ const HomePage = (props) => {
       setSelectedBook(top5Books[0]);
     }
   }, [selectedTab, bookDetails]);
-
+  const handleBookHover = (book) => {
+    setSelectedBook(book);
+  };
   const handleTabChange = (tabId) => {
     setSelectedTab(tabId);
   };
@@ -243,7 +246,10 @@ const HomePage = (props) => {
                   style={{ zIndex: "1" }}
                   key={index}
                 >
-                  <div className="card service-card shadow-hover rounded-3 text-center align-items-center" style={{ height: "15rem" }}>
+                  <div
+                    className="card service-card shadow-hover rounded-3 text-center align-items-center"
+                    style={{ height: "15rem" }}
+                  >
                     <div className="card-body p-xxl-4 p-4">
                       <img
                         className="img-category"
@@ -284,8 +290,9 @@ const HomePage = (props) => {
                 {tabs.map((tab) => (
                   <li className="nav-item" key={tab.id}>
                     <button
-                      className={`nav-link ${activeTab === tab.id ? "active" : ""
-                        }`}
+                      className={`nav-link ${
+                        activeTab === tab.id ? "active" : ""
+                      }`}
                       onClick={() => handleActiveTab(tab.id)}
                       aria-selected="true"
                       type="button"
@@ -323,7 +330,6 @@ const HomePage = (props) => {
         </div>
         {/* Kết thúc phần categories*/}
 
-
         {/* Phần publishers*/}
 
         <section className="pt-md-9 category" id="service">
@@ -338,7 +344,10 @@ const HomePage = (props) => {
                   style={{ zIndex: "1" }}
                   key={index}
                 >
-                  <div className="card service-card shadow-hover rounded-3 text-center align-items-center" style={{ height: "15rem" }}>
+                  <div
+                    className="card service-card shadow-hover rounded-3 text-center align-items-center"
+                    style={{ height: "15rem" }}
+                  >
                     <div className="card-body p-xxl-4 p-4">
                       <img
                         className="img-category"
@@ -362,7 +371,6 @@ const HomePage = (props) => {
             className="title p-3 d-flex"
             style={{ backgroundColor: "#333333", borderRadius: "8px 8px 0 0" }}
           >
-
             <div className="ms-2 fs-4 fw-bold text-white align-items-center">
               Đánh giá cao
             </div>
@@ -376,8 +384,9 @@ const HomePage = (props) => {
                 {tabs2.map((tab) => (
                   <li className="nav-item" key={tab.id}>
                     <button
-                      className={`nav-link ${selectedTab === tab.id ? "active" : ""
-                        }`}
+                      className={`nav-link ${
+                        selectedTab === tab.id ? "active" : ""
+                      }`}
                       onClick={() => handleTabChange(tab.id)}
                       aria-selected="true"
                       type="button"
@@ -392,34 +401,56 @@ const HomePage = (props) => {
             </div>
             <div className="container">
               <div className="row pb-2">
-                <div className="col-lg-4" style={{borderRight: "1px #d7d7d7 solid"}}>
-                {topRatedBooks.map((book, index) => (
-                      <div key={index} className="d-flex mt-3">
-                        <div className="col-2 d-flex justify-content-center flex-column">
-                          <div> {index + 1} </div>
-                          <div> <i className="fa-solid fa-arrow-up" style={{color: "green"}}></i> </div>
+                <div
+                  className="col-lg-4"
+                  style={{ borderRight: "1px #d7d7d7 solid" }}
+                >
+                  {topRatedBooks.map((book, index) => (
+                    <div
+                      key={index}
+                      className="d-flex mt-3"
+                      onMouseEnter={() => handleBookHover(book)}
+                    >
+                      <div className="col-2 d-flex justify-content-center flex-column">
+                        <div> {index + 1} </div>
+                        <div>
+                          {" "}
+                          <i
+                            className="fa-solid fa-arrow-up"
+                            style={{ color: "green" }}
+                          ></i>{" "}
                         </div>
-                        <div className="d-flex"> 
-                         <img className="img-small" style={{ width: "100px", height: "100px"}} src= {book.image} alt = "" />
-                          <div className="ms-3 d-flex flex-column"> 
-                            <div className="title fs-6">  {book.title} </div>
-                            <div className="title fs-6"> Lượt bán: {book.sold} </div>
-                            <div className="rating fw-bold text-danger">Đánh giá:  {book.rating} </div>
+                      </div>
+                      <div className="d-flex">
+                        <img
+                          className="img-small"
+                          style={{ width: "100px", height: "100px" }}
+                          src={book.image}
+                          alt=""
+                        />
+                        <div className="ms-3 d-flex flex-column">
+                          <div className="title fs-6"> {book.title} </div>
+                          <div className="title fs-6">
+                            {" "}
+                            Lượt bán: {book.sold}{" "}
+                          </div>
+                          <div className="rating fw-bold text-danger">
+                            Đánh giá: {book.rating}{" "}
                           </div>
                         </div>
-
                       </div>
-                    ))}
+                    </div>
+                  ))}
                 </div>
                 <div className="col-lg-8">
-                {selectedBook && (
-                      <div className="ms-2">
-                        <h3>{selectedBook.title}</h3>
-                        <p>Author: {selectedBook.author}</p>
-                        <p>Category: {selectedBook.categories[0].name}</p>
-                        {/* Add other details as needed */}
-                      </div>
-                    )}
+                  {selectedBook && (
+                    <div className="ms-2">
+                      <h3>{selectedBook.title}</h3>
+                      <p>Author: {selectedBook.author}</p>
+                      <p>Category: {selectedBook.categories[0].name}</p>
+                      {/* Add other details as needed */}
+                    </div>
+                  )}
                 </div>
               </div>
               <div class="btn d-flex justify-content-center pb-4">
@@ -435,7 +466,6 @@ const HomePage = (props) => {
           </div>
         </div>
         {/* Phần publishers*/}
-
       </div>
     </>
   );
