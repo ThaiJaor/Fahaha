@@ -11,36 +11,38 @@ const FlashSaleSlider = ({ saleBooks }) => {
 
   useEffect(() => {
     if (saleBooks.length > 0) {
-      $(".product-carousel").owlCarousel({
-        autoplay: true,
-        smartSpeed: 1500,
-        center: false,
-        dots: true,
-        loop: true,
-        margin: 25,
-        nav: true,
-        navText: [
-          '<i class="fa-solid fa-arrow-right"></i>',
-          '<i class="fa-solid fa-arrow-left"></i>',
-        ],
-        responsiveClass: true,
-        responsive: {
-          0: {
-            items: 1,
+      $(document).ready(function () {
+        $(" .product-carousel").owlCarousel({
+          autoplay: true,
+          smartSpeed: 1500,
+          center: false,
+          dots: true,
+          loop: true,
+          margin: 25,
+          nav: true,
+          navText: [
+            '<i class="fa-solid fa-arrow-right"></i>',
+            '<i class="fa-solid fa-arrow-left"></i>',
+          ],
+          responsiveClass: true,
+          responsive: {
+            0: {
+              items: 1,
+            },
+            576: {
+              items: 1,
+            },
+            768: {
+              items: 2,
+            },
+            992: {
+              items: 3,
+            },
+            1200: {
+              items: 4,
+            },
           },
-          576: {
-            items: 1,
-          },
-          768: {
-            items: 2,
-          },
-          992: {
-            items: 3,
-          },
-          1200: {
-            items: 4,
-          },
-        },
+        });
       });
       setDataLoaded(true);
     }
@@ -97,23 +99,20 @@ const FlashSaleSlider = ({ saleBooks }) => {
                 <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/flashsale/label-flashsale.svg?q=" />
                 <div className="countdown d-flex">
                   <div className="fs-4 text-white bg-secondary ms-3 p-2 rounded ">
-                    {" "}
                     {countdown.days}
                   </div>
                   <div className="fs-4 mx-2">:</div>
                   <div className="fs-4 text-white bg-secondary p-2 rounded">
-                    {" "}
                     {countdown.hours}
                   </div>
                   <div className="fs-4 mx-2">:</div>
                   <div className="fs-4 text-white bg-danger p-2 rounded">
-                    {" "}
                     {countdown.minutes}
                   </div>
                 </div>
               </div>
             </div>
-            <div className="owl-carousel product-carousel justify-content-center">
+            <div className="owl-carousel owl-theme product-carousel justify-content-center">
               {saleBooks.map((item, index) => (
                 <div
                   className="border border-dark rounded-3 position-relative vesitable-item"
