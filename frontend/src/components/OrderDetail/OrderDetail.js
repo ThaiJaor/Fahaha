@@ -10,6 +10,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import Tab from 'react-bootstrap/Tab';
+import { Button } from 'bootstrap';
 function OrderDetail(props) {
     const { id } = useParams();
     const [order, setOrder] = useState({})
@@ -17,7 +18,7 @@ function OrderDetail(props) {
     const navigate = useNavigate();
     const fetchOrder = async (id) => {
         try {
-            const response = await axios.get(`order/${id}/`)
+            const response = await axios.get(`orders/${id}/`)
             const orderData = response.data;
             if (orderData) {
                 setOrder(orderData);
@@ -69,6 +70,9 @@ function OrderDetail(props) {
                             </Nav.Item>
                             <Nav.Item>
                                 <Nav.Link eventKey="second">Orders</Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link eventKey="third" onClick={() => { navigate("/account") }} >Back</Nav.Link>
                             </Nav.Item>
                         </Nav>
                     </Col>
