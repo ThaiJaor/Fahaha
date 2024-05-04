@@ -60,13 +60,11 @@ const HomePage = (props) => {
         promotions[Math.floor(Math.random() * promotions.length)];
       setSelectedPromotion(randomPromotion);
 
-
       // Lọc ra những cuốn sách có promotion tương ứng
       const saleBooks = bookDetails.filter((book) => {
         return book.promotion && book.promotion.id === randomPromotion.id;
       });
       setSaleBooks(saleBooks);
-
     }
   }, [promotions]);
   useEffect(() => {
@@ -78,10 +76,6 @@ const HomePage = (props) => {
       .slice(0, 4);
     setRandomCategories(randomCategories);
     setRandomPublishers(randomPublishers);
-<<<<<<< HEAD
-=======
-
->>>>>>> 3647c270b9c34e0d730f17e2327ae7215a597015
   }, [categories, publishers]);
 
   //Lấy ảnh ngẫu nhiên theo cate
@@ -406,22 +400,40 @@ const HomePage = (props) => {
             </div>
             <div className="container">
               <div className="row pb-2">
-                <div className="col-lg-4" style={{ borderRight: "1px #d7d7d7 solid" }}>
+                <div
+                  className="col-lg-4"
+                  style={{ borderRight: "1px #d7d7d7 solid" }}
+                >
                   {topRatedBooks.map((book, index) => (
                     <div key={index} className="d-flex mt-3">
                       <div className="col-2 d-flex justify-content-center flex-column">
                         <div> {index + 1} </div>
-                        <div> <i className="fa-solid fa-arrow-up" style={{ color: "green" }}></i> </div>
-                      </div>
-                      <div className="d-flex">
-                        <img className="img-small" style={{ width: "100px", height: "100px" }} src={book.image} alt="" />
-                        <div className="ms-3 d-flex flex-column">
-                          <div className="title fs-6">  {book.title} </div>
-                          <div className="title fs-6"> Lượt bán: {book.sold} </div>
-                          <div className="rating fw-bold text-danger">Đánh giá:  {book.rating} </div>
+                        <div>
+                          {" "}
+                          <i
+                            className="fa-solid fa-arrow-up"
+                            style={{ color: "green" }}
+                          ></i>{" "}
                         </div>
                       </div>
-
+                      <div className="d-flex">
+                        <img
+                          className="img-small"
+                          style={{ width: "100px", height: "100px" }}
+                          src={book.image}
+                          alt=""
+                        />
+                        <div className="ms-3 d-flex flex-column">
+                          <div className="title fs-6"> {book.title} </div>
+                          <div className="title fs-6">
+                            {" "}
+                            Lượt bán: {book.sold}{" "}
+                          </div>
+                          <div className="rating fw-bold text-danger">
+                            Đánh giá: {book.rating}{" "}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
