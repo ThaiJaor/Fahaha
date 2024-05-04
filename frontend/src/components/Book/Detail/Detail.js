@@ -7,7 +7,7 @@ import { faPlus, faMinus, faCartShopping } from '@fortawesome/free-solid-svg-ico
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { addBookToCart, removeBookFromCart, reduceBookQuantity, updateBookQuantity } from "./../../../redux/slices/cartSlice.js"
+import { addBookToCart, removeBookFromCart, reduceBookQuantity, updateBookQuantity, createCart, fetchCartData } from "./../../../redux/slices/cartSlice.js"
 import "./Detail.scss"
 function Detail(props) {
     const [book, setBook] = useState([]);
@@ -26,11 +26,13 @@ function Detail(props) {
         getBookData();
     }, [])
 
-    const handleAddToCart = () => {
-        dispatch(addBookToCart({ id: book.id, quantity: quantity }));
+    const handleAddToCart = async () => {
+        await dispatch(createCart({ item_id: book.id, quantity: quantity }));
+        await dispatch(fetchCartData());
     }
-    const handleBuyNow = () => {
-        dispatch(addBookToCart({ id: book.id, quantity: 1 }));
+    const handleBuyNow = async () => {
+        await dispatch(createCart({ item_id: book.id, quantity: quantity || 1 }));
+        await dispatch(fetchCartData());
         navigate("/cart")
     }
     return (

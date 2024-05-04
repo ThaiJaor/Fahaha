@@ -3,7 +3,7 @@ import Container from 'react-bootstrap/esm/Container';
 import { useDispatch, useSelector } from 'react-redux';
 import { faTrashCan, faPlus, faMinus, } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { addBookToCart, removeBookFromCart, reduceBookQuantity, updateBookQuantity } from '../../redux/slices/cartSlice';
+import { fetchCartData, createCart, updateCart, deleteCart } from '../../redux/slices/cartSlice';
 import axios from './../../setup/axios.js';
 import "./Cart.scss"
 import { useNavigate } from 'react-router-dom';
@@ -23,34 +23,32 @@ function Cart(props) {
         }
         return -1;
     }
-    const addBookQuantityByOne = (id) => {
-        dispatch(addBookToCart({ id: id, quantity: 1 }))
+    const addBookQuantityByOne = async (item_id, quantity) => {
+        await dispatch(updateCart({ item_id: item_id, quantity: quantity + 1 }))
+        await dispatch(fetchCartData());
     }
-    const reduceBookQuantityByOne = (id) => {
-        dispatch(reduceBookQuantity({ id: id, quantity: 1 }));
+    const reduceBookQuantityByOne = (item_id, quantity) => {
+        dispatch(updateCart({ item_id: item_id, quantity: quantity > 1 ? quantity - 1 : quantity }))
+        dispatch(fetchCartData());
     }
     const changeBookQuantity = (id, quantity) => {
-        dispatch(updateBookQuantity({ id: id, quantity: quantity }))
+        // dispatch(updateBookQuantity({ id: id, quantity: quantity }))
     }
 
-    const deleteBookFromCart = async (id) => {
-        let bookIndex = checkExistBook(id);
-        if (bookIndex >= 0) {
-            let currentBooks = [...books];
-            currentBooks.splice(bookIndex, 1);
-            setBooks(currentBooks)
-            dispatch(removeBookFromCart({ id: id }));
-        }
+    const deleteBookFromCart = async (item_id) => {
+        await dispatch(deleteCart({ item_id: item_id }))
+        await dispatch(fetchCartData());
 
 
     }
     const getBooks = async () => {
-
+        console.log("check carts", carts);
         const promises = carts.map(async (item) => {
             try {
-                const data = await axios.get(`/books/${item.id}/`);
+                const data = await axios.get(`/books/${item.item_id}/`);
                 let bookData = await data.data;
                 bookData.quantity = item.quantity;
+                bookData.item_id = bookData.id;
                 return bookData;
             } catch (error) {
                 console.log(error);
@@ -59,7 +57,6 @@ function Cart(props) {
 
         try {
             const resolvedBooks = await Promise.all(promises);
-            console.table(resolvedBooks)
             setBooks(resolvedBooks.filter(Boolean));
         } catch (error) {
             console.log(error);
@@ -71,8 +68,8 @@ function Cart(props) {
     }
 
     useEffect(() => {
-        if (carts.length > 0)
-            getBooks();
+        // dispatch(fetchCartData());
+        getBooks();
     }, [carts])
 
     useEffect(() => {
@@ -108,10 +105,10 @@ function Cart(props) {
                             books && books.length > 0 && books.map((book, index) => {
                                 return (
                                     <>
-                                        <div className='row' key={`book-${book.id}`}>
+                                        <div className='row' key={`book-${book.item_id}`}>
                                             <div className='col-7 d-flex p-3 ' >
                                                 <div>
-                                                    <img src={book.image} />
+                                                    <img src={book.image} style={{ maxWidth: "9rem" }} />
                                                 </div>
                                                 <div className='d-flex flex-column justify-content-between mx-3'>
                                                     <p>{book.title}</p>
@@ -133,19 +130,19 @@ function Cart(props) {
                                             </div>
                                             <div className='col-2 p-3 d-flex align-items-center quantity-area user-select-none'>
 
-                                                <span className='down-btn ' onClick={() => { reduceBookQuantityByOne(book.id) }}><FontAwesomeIcon icon={faMinus} /></span>
+                                                <span className='down-btn ' onClick={() => { reduceBookQuantityByOne(book.item_id, +book.quantity) }}><FontAwesomeIcon icon={faMinus} /></span>
                                                 <input type='number'
                                                     min="1"
                                                     max="999"
                                                     value={carts[index]?.quantity}
-                                                    onChange={(e) => { changeBookQuantity(book.id, e.target.value) }}
+                                                    onChange={(e) => { changeBookQuantity(book.item_id, e.target.value) }}
                                                     className='text-center w-auto mx-2 border-0 '
                                                 />
-                                                <span className='up-btn ' onClick={() => { addBookQuantityByOne(book.id) }} ><FontAwesomeIcon icon={faPlus} /></span>
+                                                <span className='up-btn ' onClick={() => { addBookQuantityByOne(book.item_id, +book.quantity) }} ><FontAwesomeIcon icon={faPlus} /></span>
 
                                             </div>
                                             <div className='col-2 p-3 d-flex align-items-center'>{(book.sale_price ? book.sale_price * carts[index]?.quantity : book.price * carts[index]?.quantity).toFixed(2)} $</div>
-                                            <div className='col-1 p-3 d-flex align-items-center delete-btn' onClick={() => { deleteBookFromCart(book.id) }}><FontAwesomeIcon icon={faTrashCan} /></div>
+                                            <div className='col-1 p-3 d-flex align-items-center delete-btn' onClick={() => { deleteBookFromCart(book.item_id) }}><FontAwesomeIcon icon={faTrashCan} /></div>
 
                                         </div>
                                         <hr />

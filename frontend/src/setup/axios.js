@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 const baseURL = "http://127.0.0.1:8000/api/"
 const instance = axios.create({
     baseURL: baseURL,
-    timeout: 5000,
+    timeout: 10000,
 });
 
 instance.interceptors.request.use(function (config) {
