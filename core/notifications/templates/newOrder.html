@@ -1,130 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
+Thank You for Your Purchase!
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You for Your Purchase!</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-        }
+Dear {{ order.user.username }},
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
+We want to express our sincere gratitude for choosing to shop with us. Your order details are as follows:
 
-        h1 {
-            color: #333;
-            text-align: center;
-        }
+Order ID: {{ order.id }}
+Created At: {{ order.created_at }}
+Total Price: {{ order.total_price }} $
+Payment Method: {{ order.payment_method }}
+Note: {{ order.note }}
+Phone Number: {{ order.phone_number }}
+Recipient Name: {{ order.recipient_name }}
+Shipping Address: {{ order.shipping_address }}
 
-        p {
-            margin-bottom: 20px;
-        }
+We hope you are satisfied with your purchase. If you have any questions or concerns, feel free to contact us.
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
+Thank you once again for your trust and support. We look forward to serving you again in the future!
 
-        th,
-        td {
-            padding: 8px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        .signature {
-            margin-top: 40px;
-            text-align: center;
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="container">
-        <h1>Thank You for Your Purchase!</h1>
-
-        <p>Dear {{ order.user.username }},</p>
-
-        <p>We want to express our sincere gratitude for choosing to shop with us. Your order details are as follows:</p>
-
-        <table>
-            <tr>
-                <th>Order ID</th>
-                <td>{{ order.id }}</td>
-            </tr>
-            <tr>
-                <th>Created At</th>
-                <td>{{ order.created_at }}</td>
-            </tr>
-            <tr>
-                <th>Total Price</th>
-                <td>{{ order.total_price }}</td>
-            </tr>
-            <tr>
-                <th>Payment Method</th>
-                <td>{{ order.payment_method }}</td>
-            </tr>
-            <tr>
-                <th>Note</th>
-                <td>{{ order.note }}</td>
-            </tr>
-            <tr>
-                <th>Phone Number</th>
-                <td>{{ order.phone_number }}</td>
-            </tr>
-            <tr>
-                <th>Recipient Name</th>
-                <td>{{ order.recipient_name }}</td>
-            </tr>
-
-        </table>
-
-        <h2>Items Ordered:</h2>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Item Name</th>
-                    <th>Quantity</th>
-                    <th>Total Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in items %}
-                <tr>
-                    <td>{{ item.item_name }}</td>
-                    <td>{{ item.quantity }}</td>
-                    <td>{{ item.total_price }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <p>We hope you are satisfied with your purchase. If you have any questions or concerns, feel free to contact us.
-        </p>
-
-        <p>Thank you once again for your trust and support. We look forward to serving you again in the future!</p>
-
-        <div class="signature">
-            <p>Best regards,</p>
-            <p>Fahaha Team</p>
-        </div>
-    </div>
-
-</body>
-
-</html>
+Best regards,
+Fahaha Team
