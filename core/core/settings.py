@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'orders',
     'cart',
     'ratings',
+    'notifications',
 ]
 
 REST_FRAMEWORK = {
@@ -233,3 +234,12 @@ VNPAY_API_URL = 'https://sandbox.vnpayment.vn/merchant_webapi/api/transaction'
 VNPAY_TMN_CODE = 'DF6TOSBH'  # Website ID in VNPAY System, get from config
 # Secret key for create checksum,get from config
 VNPAY_HASH_SECRET_KEY = 'YEGLXHOWBVAFWZOQHVQVUWOYXOYAFTMN'
+
+
+# SMTP CONFIG
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'nhthai21@clc.fitus.edu.vn'
+EMAIL_HOST_PASSWORD = 'bkxeckamhgmdjpep'

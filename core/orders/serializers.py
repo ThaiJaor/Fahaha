@@ -11,10 +11,11 @@ class CheckoutOrderItemSerializer(serializers.ModelSerializer):
     price = serializers.SerializerMethodField(read_only=True)
     sale_price = serializers.SerializerMethodField(read_only=True)
     total_price = serializers.SerializerMethodField(read_only=True)
+    title = serializers.CharField(source='book.title', read_only=True)
 
     class Meta:
         model = CartItem
-        fields = ['item_id', 'quantity', 'price',
+        fields = ['item_id', 'title', 'quantity', 'price',
                   'sale_price', 'discount', 'total_price']
         read_only_fields = ['total_price',
                             'discount', 'price', 'sale_price']
@@ -49,12 +50,32 @@ class CheckoutOrderSerializer(serializers.Serializer):
         fields = ['recipient_name', 'phone_number', 'shipping_address', 'note']
 
 
+class ItemsOrderSerializer(serializers.Serializer):
+    item_id = serializers.CharField(max_length=255, read_only=True)
+    # title = serializers.CharField(max_length=255, read_only=True)
+    price = serializers.DecimalField(
+        max_digits=10, decimal_places=2, read_only=True)
+    sale_price = serializers.DecimalField(
+        max_digits=10, decimal_places=2, read_only=True)
+    quantity = serializers.IntegerField()
+    discount = serializers.DecimalField(
+        max_digits=10, decimal_places=2, read_only=True)
+    total_price = serializers.DecimalField(
+        max_digits=10, decimal_places=2, read_only=True)
+
+    class Meta:
+        fields = ['item_id', 'quantity', 'price',
+                  'sale_price', 'discount', 'total_price']
+
+
 class OrderSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(
         view_name='order-detail', lookup_field='pk')
 
     user = serializers.PrimaryKeyRelatedField(
         read_only=True, default=serializers.CurrentUserDefault())
+
+    # items = ItemsOrderSerializer(many=True)
 
     class Meta:
         model = Order
