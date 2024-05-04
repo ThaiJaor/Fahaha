@@ -11,7 +11,6 @@ import uuid
 from .vnpay import vnpay
 from django.conf import settings
 from datetime import datetime
-import json
 
 
 class AllOrdersListView(generics.ListAPIView):
