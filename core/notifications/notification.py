@@ -45,17 +45,21 @@ class Notification:
 @receiver(post_save, sender=User)
 def new_user_handler(sender, instance, created, **kwargs):
     if created:
+        print('new user')
         Notification.new_user_notification(instance)
 
 
 @receiver(post_save, sender=Order)
 def new_order_handler(sender, instance, created, **kwargs):
     if created:
+        print('new order')
         Notification.new_order_notification(instance)
 
 
 @receiver(post_save, sender=Promotion)
 def new_promotion_handler(sender, instance, created, **kwargs):
-    users = User.objects.all()
-    for user in users:
-        Notification.new_promotion_notification(instance, user)
+    if created:
+        print('new promotion')
+        users = User.objects.all()
+        for user in users:
+            Notification.new_promotion_notification(instance, user)
