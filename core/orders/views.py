@@ -1,7 +1,7 @@
 from .models import Order
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from .permissions import IsOrderOwner
+from core.permissions import IsAdminUserOrReadOnly, IsOwnerOrAdmin
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from .serializers import CheckoutOrderSerializer, CheckoutOrderItemSerializer, OrderSerializer
@@ -40,7 +40,7 @@ class OrderListView(generics.ListAPIView):
 class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [IsAdminUser, IsOrderOwner]
+    permission_classes = [IsAdminUserOrReadOnly, IsOwnerOrAdmin]
     lookup_field = 'pk'
 
 
