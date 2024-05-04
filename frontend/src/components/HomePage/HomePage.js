@@ -58,14 +58,14 @@ const HomePage = (props) => {
       // Chọn ngẫu nhiên một promotion
       const randomPromotion = promotions[Math.floor(Math.random() * promotions.length)];
       setSelectedPromotion(randomPromotion);
-      console.log(randomPromotion);
+
 
       // Lọc ra những cuốn sách có promotion tương ứng
       const saleBooks = bookDetails.filter((book) => {
         return book.promotion && book.promotion.id === randomPromotion.id;
       });
       setSaleBooks(saleBooks);
-      console.log(saleBooks);
+
     }
   }, [promotions]);
   useEffect(() => {
@@ -74,7 +74,7 @@ const HomePage = (props) => {
     setRandomCategories(randomCategories);
     setRandomPublishers(randomPublishers);
 
-  }, [ categories, publishers]);
+  }, [categories, publishers]);
 
   //Lấy ảnh ngẫu nhiên theo cate
   const getRandomBookImage = (categoryId) => {
@@ -134,10 +134,10 @@ const HomePage = (props) => {
       setFilteredData(filteredData);
       setRandomBooks(randomBooksData);
     };
-  
+
     updateRandomData();
   }, [activeTab, bookDetails]);
-  
+
   // Function để set activeTab mới khi chọn tab
   const handleActiveTab = (tabId) => {
     setActiveTab(tabId);
@@ -392,34 +392,34 @@ const HomePage = (props) => {
             </div>
             <div className="container">
               <div className="row pb-2">
-                <div className="col-lg-4" style={{borderRight: "1px #d7d7d7 solid"}}>
-                {topRatedBooks.map((book, index) => (
-                      <div key={index} className="d-flex mt-3">
-                        <div className="col-2 d-flex justify-content-center flex-column">
-                          <div> {index + 1} </div>
-                          <div> <i className="fa-solid fa-arrow-up" style={{color: "green"}}></i> </div>
-                        </div>
-                        <div className="d-flex"> 
-                         <img className="img-small" style={{ width: "100px", height: "100px"}} src= {book.image} alt = "" />
-                          <div className="ms-3 d-flex flex-column"> 
-                            <div className="title fs-6">  {book.title} </div>
-                            <div className="title fs-6"> Lượt bán: {book.sold} </div>
-                            <div className="rating fw-bold text-danger">Đánh giá:  {book.rating} </div>
-                          </div>
-                        </div>
-
+                <div className="col-lg-4" style={{ borderRight: "1px #d7d7d7 solid" }}>
+                  {topRatedBooks.map((book, index) => (
+                    <div key={index} className="d-flex mt-3">
+                      <div className="col-2 d-flex justify-content-center flex-column">
+                        <div> {index + 1} </div>
+                        <div> <i className="fa-solid fa-arrow-up" style={{ color: "green" }}></i> </div>
                       </div>
-                    ))}
+                      <div className="d-flex">
+                        <img className="img-small" style={{ width: "100px", height: "100px" }} src={book.image} alt="" />
+                        <div className="ms-3 d-flex flex-column">
+                          <div className="title fs-6">  {book.title} </div>
+                          <div className="title fs-6"> Lượt bán: {book.sold} </div>
+                          <div className="rating fw-bold text-danger">Đánh giá:  {book.rating} </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  ))}
                 </div>
                 <div className="col-lg-8">
-                {selectedBook && (
-                      <div className="ms-2">
-                        <h3>{selectedBook.title}</h3>
-                        <p>Author: {selectedBook.author}</p>
-                        <p>Category: {selectedBook.categories[0].name}</p>
-                        {/* Add other details as needed */}
-                      </div>
-                    )}
+                  {selectedBook && (
+                    <div className="ms-2">
+                      <h3>{selectedBook.title}</h3>
+                      <p>Author: {selectedBook.author}</p>
+                      <p>Category: {selectedBook.categories[0].name}</p>
+                      {/* Add other details as needed */}
+                    </div>
+                  )}
                 </div>
               </div>
               <div class="btn d-flex justify-content-center pb-4">

@@ -3,12 +3,70 @@ import Cookies from "js-cookie";
 import axios from "./../../setup/axios.js";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import bookJsonPath from "./data.json";
+export const fetchCartData = createAsyncThunk(
+    'cart/fetchCartData',
+    async () => {
+        try {
+            // Thực hiện gọi API và nhận data trả về
+            const response = await axios.get('cart/');
+            // Trả về data nhận được để được tự động gán vào state bởi Redux Toolkit
+
+            return response.data;
+        } catch (error) {
+            // Xử lý lỗi nếu có
+            throw error;
+        }
+    }
+);
+
+export const createCart = createAsyncThunk(
+    'cart/create',
+    async (bookData) => {
+        try {
+            const response = await axios.post('cart/', { item_id: bookData.item_id, quantity: bookData.quantity });
+            return response.data;
+        } catch (error) {
+            // Xử lý lỗi nếu có
+            toast.error(error);
+            throw error;
+        }
+    }
+)
+
+
+
+export const updateCart = createAsyncThunk(
+    'cart/update',
+    async (bookData) => {
+        console.log("bookData", bookData)
+        try {
+            const response = await axios.put(`cart/${bookData.item_id}/`, { item_id: bookData.item_id, quantity: +bookData.quantity });
+            return response.data;
+        } catch (error) {
+            toast.error(error);
+            throw error;
+        }
+    }
+)
+export const deleteCart = createAsyncThunk(
+    'cart/delete',
+    async (bookData) => {
+        console.log("bookData", bookData)
+        try {
+            const response = await axios.delete(`cart/${bookData.item_id}/`);
+            return response.data;
+        } catch (error) {
+            toast.error(error);
+            throw error;
+        }
+    }
+)
+
 const initialState = {
-    books: [...bookJsonPath],
+    books: [],
     isLoading: false,
     isError: false,
-    size: bookJsonPath.length
+    size: 0
 };
 const findBookIndexById = (state, id) => {
     for (let index = 0; index < state.books.length; index++) {
@@ -22,76 +80,60 @@ export const cartSlice = createSlice({
     name: "cart",
     initialState,
     reducers: {
-        addBookToCart: (state, action) => {
-
-            const { id, quantity } = action.payload;
-            if (id && quantity) {
-                let data = { id: id, quantity: quantity };
-                let index = findBookIndexById(state, id);
-                if (index >= 0) {
-                    let newQuantity = state.books[index].quantity + quantity;
-                    state.books[index] = { ...state.books[index], quantity: newQuantity };
-                    // state.books[index].quantity += quantity;
-                }
-                else {
-                    let newBook = { id: id, quantity: quantity };
-                    state.books.push(newBook);
-                    state.size += 1;
-
-                }
-                // toast.success("add book successfully")
-
-            }
-            else {
-                toast.error("fail to add book")
-            }
-        },
-        removeBookFromCart: (state, action) => {
-            const { id } = action.payload
-            let index = findBookIndexById(state, id);
-            if (index >= 0) {
-                let currentBooks = [...state.books];
-                currentBooks.splice(index, 1);
-                state.books = currentBooks;
-                state.size -= 1;
-            } else {
-                toast.error("fail to remove book from cart")
-            }
-        },
-        reduceBookQuantity: (state, action) => {
-            const { id, quantity } = action.payload
-            let index = findBookIndexById(state, id);
-            if (index >= 0) {
-                let bookItem = state.books[index];
-                if (bookItem.quantity > quantity && bookItem.quantity > 1) {
-                    bookItem.quantity -= quantity;
-                    state.books[index] = { ...bookItem };
-                }
-            } else {
-                toast.error("book not found")
-            }
-        },
-        updateBookQuantity: (state, action) => {
-            const { id, quantity } = action.payload;
-            let index = findBookIndexById(state, id);
-
-            if (index >= 0) {
-                if (quantity > 1) {
-                    state.books[index] = { ...state.books[index], quantity };
-                }
-                else {
-                    toast.warning('the minimum number of this book is 1')
-                }
-
-            } else {
-                toast.error('The Book is not in the Cart');
-            }
-        }
-
     },
     extraReducers: (builder) => {
+        builder
+            .addCase(fetchCartData.fulfilled, (state, action) => {
+                // Cập nhật state với data nhận được từ API
+                state.books = action.payload.items;
+                state.isLoading = false;
+                state.isError = false;
+                state.size = action.payload.items.length;
+            })
+            .addCase(fetchCartData.pending, (state, action) => {
+                // Đánh dấu là đang loading
+                state.isLoading = true;
+                state.isError = false;
+            })
+            .addCase(fetchCartData.rejected, (state, action) => {
+                // Đánh dấu là có lỗi xảy ra
+                state.isLoading = false;
+                state.isError = true;
+            });
+
+        builder
+            .addCase(createCart.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(createCart.pending, (state, action) => {
+                // Đánh dấu là đang loading
+                state.isLoading = true;
+                state.isError = false;
+            })
+            .addCase(createCart.rejected, (state, action) => {
+                // Đánh dấu là có lỗi xảy ra
+                state.isLoading = false;
+                state.isError = true;
+            });
+        builder
+            .addCase(deleteCart.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(deleteCart.pending, (state, action) => {
+                // Đánh dấu là đang loading
+                state.isLoading = true;
+                state.isError = false;
+            })
+            .addCase(deleteCart.rejected, (state, action) => {
+                // Đánh dấu là có lỗi xảy ra
+                state.isLoading = false;
+                state.isError = true;
+            });
 
     },
+
 });
-export const { addBookToCart, removeBookFromCart, reduceBookQuantity, updateBookQuantity } = cartSlice.actions;
+export const { addBookToCart, removeBookFromCart, reduceBookQuantity } = cartSlice.actions;
 export default cartSlice.reducer;

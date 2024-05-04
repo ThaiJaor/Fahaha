@@ -6,6 +6,7 @@ import BookDetail from "./../components/Book/Detail/Detail.js"
 import Cart from "../components/Cart/Cart.js";
 import OneStepCheckOut from "../components/Checkout/OneStepCheckOut/OneStepCheckOut.js";
 import CheckoutResult from "../components/CheckoutResult/CheckoutResult.js";
+import OrderDetail from "../components/OrderDetail/OrderDetail.js";
 export const routes = [
   {
     path: "/",
@@ -46,6 +47,12 @@ export const routes = [
   {
     path: "/checkout-result",
     page: CheckoutResult,
+    requireAuth: true,
+    isShowHeader: true,
+  },
+  {
+    path: "/order/detail/:id",
+    page: OrderDetail,
     requireAuth: true,
     isShowHeader: true,
   },

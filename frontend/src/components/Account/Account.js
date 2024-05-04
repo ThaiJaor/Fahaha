@@ -10,17 +10,18 @@ import Row from 'react-bootstrap/Row';
 import Tab from 'react-bootstrap/Tab';
 import AccountDetail from './AccountDetail/AccountDetail';
 import ChangePassword from './ChangePassword/ChangePassword';
+import OrderHistory from './OrderHistory/OrderHistory';
 import "./Account.scss"
 function Account(props) {
 
     return (
         <>
-            <Container >
+            <Container className='vh-100'>
                 <div className='account-container pt-5'>
                     <Tab.Container id="left-tabs-example" defaultActiveKey="first" >
                         <Row>
                             <Col sm={3} >
-                                <Nav variant="pills" className="flex-column border border-3 rounded-3">
+                                <Nav variant="pills" className="flex-column border border-3 rounded-3" style={{ backgroundColor: "white" }}>
                                     <Nav.Item>
                                         <Nav.Link eventKey="first">Account detail</Nav.Link>
                                     </Nav.Item>
@@ -36,9 +37,9 @@ function Account(props) {
                                 </Nav>
                             </Col>
                             <Col sm={9} >
-                                <Tab.Content className='border border-3 rounded-3'>
-                                    <Tab.Pane eventKey="first"><AccountDetail /></Tab.Pane>
-                                    <Tab.Pane eventKey="second">Second tab content</Tab.Pane>
+                                <Tab.Content className='border border-3 rounded-3' style={{ backgroundColor: "white" }}>
+                                    <Tab.Pane eventKey="first" ><AccountDetail /></Tab.Pane>
+                                    <Tab.Pane eventKey="second"><OrderHistory /></Tab.Pane>
                                     <Tab.Pane eventKey="third">third tab content</Tab.Pane>
                                     <Tab.Pane eventKey="fourth"><ChangePassword /></Tab.Pane>
                                 </Tab.Content>

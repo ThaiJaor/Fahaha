@@ -27,6 +27,7 @@ const Header = (props) => {
 
   const Logout = async () => {
     await dispatch(logout());
+    navigate("/sign_in");
   }
   return (
     <>

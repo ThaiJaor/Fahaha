@@ -21,16 +21,12 @@ function OneStepCheckOut(props) {
         phone_number: "",
         shipping_address: "",
         note: "",
-        bank: "",
-        items: [...cart],
-        total_price: 0
     })
     const [validate, setValidate] = useState({
         recipient_name: false,
         phone_number: false,
         shipping_address: false,
         items: false,
-        bank: false
     })
     const [validated, setValidated] = useState(false);
     const backToCart = () => {
@@ -50,31 +46,31 @@ function OneStepCheckOut(props) {
         if (
             orderDetail.recipient_name.trim() === "" ||
             !isValidPhoneNumber(orderDetail.phone_number) ||
-            orderDetail.shipping_address.trim() === "" ||
-            orderDetail.bank.trim() === ""
+            orderDetail.shipping_address.trim() === ""
         ) {
             // Nếu có bất kỳ điều kiện nào không đúng, đặt validated thành false
             setValidated(false);
             alert("Please fill in all required fields correctly!");
         } else {
             // Nếu tất cả các điều kiện đều đúng, có thể gửi form
-            console.log(orderDetail.items);
 
             try {
-                const data = [...orderDetail.items]
-                const res = await axios.post("/vnpay-payment-url/", { items: [...orderDetail.items] });
+                // const data = [...orderDetail.items]
+                const res = await axios.get("/vnpay-payment-url/");
+                console.log(res);
                 const vnpay_payment_url = res.data.vnpay_payment_url;
+
                 if (vnpay_payment_url) {
                     if (!orderDetail.note || orderDetail.note === "") {
                         setOrderDetail({ ...orderDetail, note: "no note" })
                     }
-                    document.cookie = `order=${JSON.stringify(orderDetail)}`;
+                    // document.cookie = `order=${JSON.stringify(orderDetail)}`;
+                    localStorage.setItem('order', JSON.stringify(orderDetail));
                     window.location.href = vnpay_payment_url;
                 }
-                console.log(vnpay_payment_url);
             } catch (error) {
                 console.log(error);
-                toast.error("some thins is wrong")
+                toast.error("some things is wrong")
             }
 
 
@@ -83,13 +79,13 @@ function OneStepCheckOut(props) {
         }
     };
     const getBooks = async () => {
-        const total_price = 0;
+        console.log("check carts", cart);
         const promises = cart.map(async (item) => {
             try {
-                const data = await axios.get(`/books/${item.id}/`);
+                const data = await axios.get(`/books/${item.item_id}/`);
                 let bookData = await data.data;
-                bookData.quantity = +item.quantity;
-                console.log(bookData);
+                bookData.quantity = item.quantity;
+                bookData.item_id = bookData.id;
                 return bookData;
             } catch (error) {
                 console.log(error);
@@ -98,18 +94,7 @@ function OneStepCheckOut(props) {
 
         try {
             const resolvedBooks = await Promise.all(promises);
-            console.log(resolvedBooks);
             setBooks(resolvedBooks.filter(Boolean));
-            setOrderDetail(prevOrderDetail => ({
-                ...prevOrderDetail,
-                items: resolvedBooks.filter(Boolean).map(book => ({
-                    item_id: book.id,
-                    quantity: book.quantity,
-                    total_price: book.sale_price * book.quantity,
-                    discount: book.promotion ? book.promotion.discount : 0
-                })),
-                total_price: resolvedBooks.reduce((acc, curr) => acc + curr.sale_price * curr.quantity, 0)
-            }))
         } catch (error) {
             console.log(error);
         }
@@ -211,7 +196,7 @@ function OneStepCheckOut(props) {
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
-                            <Form.Group as={Col} md="6" controlId="validationCustom03" className='mb-2'>
+                            {/* <Form.Group as={Col} md="6" controlId="validationCustom03" className='mb-2'>
                                 <Form.Label>Bank</Form.Label>
                                 <InputGroup hasValidation>
                                     <Form.Select aria-label="Default select example" required
@@ -237,7 +222,7 @@ function OneStepCheckOut(props) {
                                     </Form.Control.Feedback>
                                 </InputGroup>
 
-                            </Form.Group>
+                            </Form.Group> */}
                         </Row>
                         <Row>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
@@ -281,7 +266,7 @@ function OneStepCheckOut(props) {
                                     <div className='row' >
                                         <div className='col-2 d-flex p-3 ' >
                                             <div>
-                                                <img src={book.image} />
+                                                <img src={book.image} style={{ maxWidth: "8rem" }} />
                                             </div>
                                         </div>
                                         <div className='col-4 d-flex align-items-center'>

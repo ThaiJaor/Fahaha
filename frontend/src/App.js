@@ -11,6 +11,7 @@ import "bootstrap/dist/js/bootstrap.min.js";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchUser } from "./redux/slices/userSlices";
+import { fetchCartData } from "./redux/slices/cartSlice";
 const PageContainer = ({ children }) => {
   return <div style={{ backgroundColor: "#f0f0f0", height: "100%", }}>{children}</div>;
 };
@@ -21,6 +22,7 @@ function App(props) {
   useEffect(() => {
     if (!nonSecurePath.includes(window.location.pathname)) {
       dispatch(fetchUser());
+      dispatch(fetchCartData());
     }
   }, [dispatch]);
   return (
