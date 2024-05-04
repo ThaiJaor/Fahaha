@@ -21,7 +21,8 @@ class Book(models.Model):
     format = models.CharField(max_length=255, blank=True, null=True)
     rating = models.FloatField(validators=[MinValueValidator(
         0), MaxValueValidator(5)], blank=True, null=True)
-    rating_count = models.PositiveIntegerField(default=1)
+    rating_count = models.PositiveIntegerField(
+        default=1, blank=True, null=True)
     price = models.DecimalField(
         max_digits=15, decimal_places=2, blank=True, null=True)
     isbn = models.CharField(max_length=255, blank=True, null=True)
@@ -30,7 +31,7 @@ class Book(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     city_country = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
-    sold = models.IntegerField(default=0)
+    sold = models.IntegerField(default=0, blank=True, null=True)
 
     image = models.ImageField(
         upload_to=custom_upload_to, null=True, blank=True)
