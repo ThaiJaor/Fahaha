@@ -3,7 +3,7 @@ from .models import Rating
 # Register your models here.
 
 
-class CustomRatingAdmin(admin.ModelAdmin):
+class RatingAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'book', 'rating', 'created_at']
     list_filter = ['created_at']
     search_fields = ['user__email', 'user__username', 'book__title', 'rating']
@@ -39,4 +39,4 @@ class CustomRatingAdmin(admin.ModelAdmin):
     set_rating_5.short_description = 'Set selected ratings to 5'
 
 
-admin.site.register(Rating, CustomRatingAdmin)
+admin.site.register(Rating, RatingAdmin)

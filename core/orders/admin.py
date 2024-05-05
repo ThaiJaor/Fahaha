@@ -3,7 +3,7 @@ from .models import Order
 from django.utils.safestring import mark_safe
 
 
-class CustomOrderAdmin(admin.ModelAdmin):
+class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'created_at',
                     'status', 'total_price', 'payment_method']
     list_filter = ['created_at', 'status', 'payment_method']
@@ -75,4 +75,4 @@ class CustomOrderAdmin(admin.ModelAdmin):
     display_items.short_description = 'Items'
 
 
-admin.site.register(Order, CustomOrderAdmin)
+admin.site.register(Order, OrderAdmin)

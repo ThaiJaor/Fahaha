@@ -5,14 +5,15 @@ from .models import User
 
 
 class CustomUserAdmin(UserAdmin):
-    # Define custom admin settings here
-    list_display = ['email', 'id', 'username', 'is_admin', 'date_joined',
-                    'last_login']
 
     # Define is_admin
     def is_admin(self, obj):
         return obj.is_superuser
     is_admin.boolean = True
+
+    # Define list_display
+    list_display = ['email', 'id', 'username', 'is_admin', 'date_joined',
+                    'last_login']
 
     # Define fieldsets
     fieldsets = (
