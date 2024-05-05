@@ -123,8 +123,25 @@ Thẻ ngân hàng:
 | Mật khẩu OTP   | 123456               |
 
 
-###UPDATE
+### UPDATE
 
 Đã tạo CART, ORDER, VNPAY CHECKOUT
 Book đã có thuộc tính sold có thể ordering, là thuộc tính số lượng đã bán, update theo mỗi lẫn order hoặc vào admin gán tay/update trực tiếp.
 
+
+### UPDATE 2 - RECOMMENDATION
+
+Tải lại thư viện
+```
+pip install -r requirements.txt
+```
+
+Nếu lỗi, khả năng là liên quan đến thư viện scikit-surprise, hãy chạy lần lượt lệnh sau
+
+```
+pip install --upgrade setuptools wheel
+
+cache purge
+
+pip install scikit-surprise --no-build-isolation
+```
