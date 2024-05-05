@@ -11,25 +11,17 @@ class CartInline(admin.TabularInline):
     extra = 0
     verbose_name = 'Cart'
     verbose_name_plural = 'Carts'
-    readonly_fields = ['created_at', 'updated_at']
-    can_delete = False  # Prevents deletion of MainModel instance
+    # readonly_fields = ['created_at', 'updated_at']
+    # can_delete = False  # Prevents deletion of MainModel instance
     show_change_link = True  # Add link to the change view of MainModel instance
 
     def has_delete_permission(self, request, obj=None):
         return False
 
 
-class OrderInline(admin.TabularInline):
-    model = Order
-    extra = 0
-    verbose_name = 'Order'
-    verbose_name_plural = 'Orders'
-    readonly_fields = ['created_at', 'updated_at']
-
-
 class CustomUserAdmin(UserAdmin):
     # Define inlines
-    inlines = [CartInline, OrderInline]
+    inlines = [CartInline]
 
     # Define is_admin
     def is_admin(self, obj):

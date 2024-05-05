@@ -10,7 +10,7 @@ from django.core.exceptions import ValidationError
 class Cart(models.Model):
     user = models.OneToOneField(User, related_name='cart',
                                 on_delete=models.CASCADE)
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -41,7 +41,7 @@ class CartItem(models.Model):
     book = models.ForeignKey(Book, related_name='cart_items',
                              on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:

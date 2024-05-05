@@ -88,7 +88,8 @@ class Book(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=255, blank=True, null=True)
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['name']
@@ -106,7 +107,8 @@ class Category(models.Model):
 
 class Publisher(models.Model):
     name = models.CharField(max_length=255)
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['name']
@@ -134,7 +136,7 @@ class Promotion(models.Model):
     start_date = models.DateTimeField(default=timezone.now)
     end_date = models.DateTimeField(
         default=custom_end_date)
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['name']
