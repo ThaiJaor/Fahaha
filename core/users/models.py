@@ -10,7 +10,7 @@ class User(AbstractUser):
     phone_number = models.CharField(max_length=15, default='', validators=[
         RegexValidator(
             r'^\d{10,15}$', message='Phone number must be between 10 and 15 digits.')
-    ])
+    ], blank=True, null=True)
     username = models.CharField(max_length=255)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
