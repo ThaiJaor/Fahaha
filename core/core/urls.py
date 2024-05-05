@@ -19,6 +19,14 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from django.contrib.auth.models import Group
+
+admin.site.site_header = 'Fahaha Admininstration'
+admin.site.site_title = 'Fahaha Admininstration'
+
+# Unregister the Group model
+admin.site.unregister(Group)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/user/', include('users.urls')),
@@ -26,6 +34,7 @@ urlpatterns = [
     path('api/', include('orders.urls')),
     path('api/', include('cart.urls')),
     path('api/', include('ratings.urls')),
+    path('api/', include('recommendations.urls')),
     # YOUR PATTERNS
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:
