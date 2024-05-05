@@ -1,5 +1,5 @@
 from surprise import Dataset, Reader
-from surprise import SVD, KNNBasic
+from surprise import SVD
 from ratings.models import Rating
 from books.models import Book
 import pandas as pd
