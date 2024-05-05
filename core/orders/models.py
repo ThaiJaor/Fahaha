@@ -26,7 +26,7 @@ class Order(models.Model):
                           max_length=255, editable=False)
     user = models.ForeignKey(
         'users.User', related_name='orders', on_delete=models.SET_NULL, blank=True, null=True)
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     total_price = models.DecimalField(
         max_digits=10, decimal_places=2, default=0.0)
@@ -40,7 +40,8 @@ class Order(models.Model):
         RegexValidator(
             r'^\d{10,15}$', message='Phone number must be between 10 and 15 digits.')
     ])
-    shipping_address = models.CharField(max_length=255)
+    shipping_address = models.CharField(
+        max_length=255, default='')
     note = models.TextField(blank=True, null=True, default='')
     payment_transaction_id = models.CharField(max_length=50)
     payment_amount = models.DecimalField(

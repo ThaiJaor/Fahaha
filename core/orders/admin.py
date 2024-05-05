@@ -6,7 +6,7 @@ from django.utils.safestring import mark_safe
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'created_at',
                     'status', 'total_price', 'payment_method']
-    list_filter = ['created_at', 'status', 'payment_method']
+    list_filter = ['created_at', 'status', 'payment_method', 'user']
     search_fields = ['user__email', 'user__username',
                      'id', 'status', 'payment_method']
     ordering = ['created_at', 'status', 'total_price']
@@ -32,7 +32,8 @@ class OrderAdmin(admin.ModelAdmin):
         self.message_user(request, 'Selected orders are now cancelled')
     mark_as_cancelled.short_description = 'Mark selected orders as cancelled'
 
-    readonly_fields = ['total_price', 'display_items']
+    readonly_fields = ['total_price',
+                       'display_items', 'created_at', 'updated_at']
 
     def display_items(self, obj):
         items_data = obj.items
