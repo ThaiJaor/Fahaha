@@ -41,6 +41,8 @@ class CartItem(models.Model):
     book = models.ForeignKey(Book, related_name='cart_items',
                              on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ['cart', 'book']

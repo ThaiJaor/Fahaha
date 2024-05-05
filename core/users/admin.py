@@ -2,9 +2,34 @@ from django.contrib.auth.models import Group
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import User
+from cart.models import Cart
+from orders.models import Order
+
+
+class CartInline(admin.TabularInline):
+    model = Cart
+    extra = 0
+    verbose_name = 'Cart'
+    verbose_name_plural = 'Carts'
+    readonly_fields = ['created_at', 'updated_at']
+    can_delete = False  # Prevents deletion of MainModel instance
+    show_change_link = True  # Add link to the change view of MainModel instance
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+class OrderInline(admin.TabularInline):
+    model = Order
+    extra = 0
+    verbose_name = 'Order'
+    verbose_name_plural = 'Orders'
+    readonly_fields = ['created_at', 'updated_at']
 
 
 class CustomUserAdmin(UserAdmin):
+    # Define inlines
+    inlines = [CartInline, OrderInline]
 
     # Define is_admin
     def is_admin(self, obj):
@@ -39,6 +64,9 @@ class CustomUserAdmin(UserAdmin):
 
     # Define search_fields
     search_fields = ['email', 'username']
+
+    # Define readonly_fields
+    readonly_fields = ['date_joined', 'last_login']
 
     # Define actions
     actions = ['make_admin', 'make_normal']
