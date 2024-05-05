@@ -37,6 +37,8 @@ class CustomOrderAdmin(admin.ModelAdmin):
     def display_items(self, obj):
         items_data = obj.items
         total_price = obj.total_price
+        payment_amount = obj.payment_amount
+        payment_currency = obj.payment_currency
         formatted_items = "<table border='1'><tr>\
                                 <th>ID</th>\
                                 <th>Title</th>\
@@ -59,8 +61,12 @@ class CustomOrderAdmin(admin.ModelAdmin):
             formatted_items += formatted_item
             # total_price += float(item['total_price'])  # Calculate total price
         formatted_items += (
-            f"<tr><td colspan='6' align='right'><b>Total:</b></td>"
-            f"<td>{total_price:.2f}</td></tr>"
+            f"<tr><td colspan='6' align='right'><b>Total Price:</b></td>"
+            f"<td>{total_price:.2f} $</td></tr>"
+        )
+        formatted_items += (
+            f"<tr><td colspan='6' align='right'><b>Payment amount:</b></td>"
+            f"<td>{payment_amount:.2f} {payment_currency}</td></tr>"
         )
         formatted_items += "</table>"
         # Mark the string as safe for HTML rendering

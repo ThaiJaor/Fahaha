@@ -1,3 +1,4 @@
+from django.contrib.auth.models import Group
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import User
@@ -53,3 +54,7 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(User, CustomUserAdmin)
+
+
+# Unregister the Group model
+admin.site.unregister(Group)
