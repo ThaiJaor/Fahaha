@@ -6,7 +6,7 @@ from .models import User
 
 class CustomUserAdmin(UserAdmin):
     # Define custom admin settings here
-    list_display = ['email', 'username', 'is_admin', 'date_joined',
+    list_display = ['email', 'id', 'username', 'is_admin', 'date_joined',
                     'last_login']
 
     # Define is_admin
