@@ -25,6 +25,13 @@ class BookInline(admin.TabularInline):
     extra = 0
     verbose_name = 'Book'
     verbose_name_plural = 'Books'
+    show_change_link = True
+    fields = ['id', 'title']
+    readonly_fields = ['id', 'title']
+
+    # prevent adding new books
+    def has_add_permission(self, request, obj):
+        return False
 
 
 class PublisherAdmin(admin.ModelAdmin):
@@ -33,6 +40,7 @@ class PublisherAdmin(admin.ModelAdmin):
     list_filter = ['created_at']
     search_fields = ['name']
     ordering = ['created_at']
+    readonly_fields = ['created_at', 'updated_at']
 
 
 class PromotionAdmin(admin.ModelAdmin):
@@ -41,6 +49,7 @@ class PromotionAdmin(admin.ModelAdmin):
     list_filter = ['created_at']
     search_fields = ['name']
     ordering = ['created_at', 'discount']
+    readonly_fields = ['created_at', 'updated_at']
 
 
 class BookInlineForCategory(admin.TabularInline):
@@ -48,6 +57,7 @@ class BookInlineForCategory(admin.TabularInline):
     extra = 0
     verbose_name = 'Book'
     verbose_name_plural = 'Books'
+    show_change_link = True
 
 
 class CategoryAdmin(admin.ModelAdmin):

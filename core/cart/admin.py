@@ -48,10 +48,6 @@ class CartAdmin(admin.ModelAdmin):
         if not obj.user:
             obj.delete()
 
-    def has_delete_permission(self, request, obj=None):
-        # Disable delete permission for the Cart model
-        return False
-
 
 admin.site.register(Cart, CartAdmin)
 admin.site.register(CartItem, CartItemAdmin)

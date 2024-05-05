@@ -28,14 +28,15 @@ class Book(models.Model):
     isbn = models.CharField(max_length=255, blank=True, null=True)
     length = models.IntegerField(blank=True, null=True)
     year = models.IntegerField(blank=True, null=True)
-    created_at = models.DateTimeField(default=timezone.now)
+
     city_country = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     sold = models.IntegerField(default=0, blank=True, null=True)
 
     image = models.ImageField(
         upload_to=custom_upload_to, null=True, blank=True)
-
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     categories = models.ManyToManyField(
         'Category', related_name='books', blank=True)
     publisher = models.ForeignKey(
@@ -137,6 +138,7 @@ class Promotion(models.Model):
     end_date = models.DateTimeField(
         default=custom_end_date)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['name']
