@@ -5,10 +5,10 @@ from .models import Rating
 
 class RatingAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'book', 'rating', 'created_at']
-    list_filter = ['created_at']
+    list_filter = ['created_at', 'user']
     search_fields = ['user__email', 'user__username', 'book__title', 'rating']
     ordering = ['created_at', 'rating']
-    readonly_fields = ['created_at']
+    readonly_fields = ['created_at', 'updated_at']
 
     actions = ['set_rating_1', 'set_rating_2',
                'set_rating_3', 'set_rating_4', 'set_rating_5']
