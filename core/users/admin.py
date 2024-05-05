@@ -1,17 +1,33 @@
+from django.contrib.auth.models import Group
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import User
+from cart.models import Cart
+from orders.models import Order
+
+
+class CartInline(admin.TabularInline):
+    model = Cart
+    extra = 0
+    verbose_name = 'Cart'
+    verbose_name_plural = 'Carts'
+    # readonly_fields = ['created_at', 'updated_at']
+    can_delete = False  # Prevents deletion of MainModel instance
+    show_change_link = True  # Add link to the change view of MainModel instance
 
 
 class CustomUserAdmin(UserAdmin):
-    # Define custom admin settings here
-    list_display = ['email', 'username', 'is_admin', 'date_joined',
-                    'last_login']
+    # Define inlines
+    inlines = [CartInline]
 
     # Define is_admin
     def is_admin(self, obj):
         return obj.is_superuser
     is_admin.boolean = True
+
+    # Define list_display
+    list_display = ['email', 'id', 'username', 'is_admin', 'date_joined',
+                    'last_login']
 
     # Define fieldsets
     fieldsets = (
@@ -38,6 +54,9 @@ class CustomUserAdmin(UserAdmin):
     # Define search_fields
     search_fields = ['email', 'username']
 
+    # Define readonly_fields
+    readonly_fields = ['date_joined', 'last_login']
+
     # Define actions
     actions = ['make_admin', 'make_normal']
 
@@ -53,3 +72,7 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(User, CustomUserAdmin)
+
+
+# Unregister the Group model
+admin.site.unregister(Group)

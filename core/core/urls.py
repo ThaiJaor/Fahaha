@@ -24,8 +24,6 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 admin.site.site_header = 'Fahaha Admininstration'
 admin.site.site_title = 'Fahaha Admininstration'
 
-# Unregister the Group model
-# admin.site.unregister(Group)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
