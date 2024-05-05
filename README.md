@@ -141,7 +141,7 @@ Nếu lỗi, khả năng là liên quan đến thư viện scikit-surprise, hãy
 ```
 pip install --upgrade setuptools wheel
 
-cache purge
+pip cache purge
 
 pip install scikit-surprise --no-build-isolation
 ```
