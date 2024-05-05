@@ -7,7 +7,7 @@ class BookAdmin(admin.ModelAdmin):
     list_display = ['title', 'id', 'author', 'publisher_name', 'price', 'sale_price',
                     'created_at', 'promotion']
 
-    list_filter = ['created_at', 'promotion']
+    list_filter = ['created_at', 'promotion', 'categories']
     search_fields = ['title', 'author', 'publisher_name']
     ordering = ['created_at', 'price', 'sale_price']
 
@@ -22,16 +22,13 @@ class BookAdmin(admin.ModelAdmin):
 
 class BookInline(admin.TabularInline):
     model = Book
-    extra = 1
-
-
-class BookStackedInline(admin.StackedInline):
-    model = Book
-    extra = 1
+    extra = 0
+    verbose_name = 'Book'
+    verbose_name_plural = 'Books'
 
 
 class PublisherAdmin(admin.ModelAdmin):
-    # inlines = [BookStackedInline]
+    inlines = [BookInline]
     list_display = ['name', 'id', 'created_at']
     list_filter = ['created_at']
     search_fields = ['name']
@@ -39,20 +36,26 @@ class PublisherAdmin(admin.ModelAdmin):
 
 
 class PromotionAdmin(admin.ModelAdmin):
-    # inlines = [BookStackedInline]
+    inlines = [BookInline]
     list_display = ['name', 'id',  'discount', 'created_at']
     list_filter = ['created_at']
     search_fields = ['name']
     ordering = ['created_at', 'discount']
 
 
+class BookInlineForCategory(admin.TabularInline):
+    model = Book.categories.through
+    extra = 0
+    verbose_name = 'Book'
+    verbose_name_plural = 'Books'
+
+
 class CategoryAdmin(admin.ModelAdmin):
-    # inlines = [BookStackedInline]
+    inlines = [BookInlineForCategory]
     list_display = ['name', 'id', 'created_at']
     list_filter = ['created_at']
     search_fields = ['name']
     ordering = ['created_at']
-    # filter_horizontal = ['books']
 
 
 admin.site.register(Book, BookAdmin)
