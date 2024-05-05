@@ -25,7 +25,7 @@ admin.site.site_header = 'Fahaha Admininstration'
 admin.site.site_title = 'Fahaha Admininstration'
 
 # Unregister the Group model
-admin.site.unregister(Group)
+# admin.site.unregister(Group)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,7 +34,7 @@ urlpatterns = [
     path('api/', include('orders.urls')),
     path('api/', include('cart.urls')),
     path('api/', include('ratings.urls')),
-    path('api/', include('recommendations.urls')),
+    # path('api/', include('recommendations.urls')),
     # YOUR PATTERNS
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:
