@@ -28,3 +28,18 @@ class RecommendationForUserView(generics.GenericAPIView):
         serializer = self.serializer_class(
             top_books, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class RecommendationForBookView(generics.GenericAPIView):
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'pk'
+    queryset = Book.objects.all()
+
+    def get(self, request, pk):
+        book = Book.objects.get(id=pk)
+        related_books = Book.objects.filter(
+            categories__in=book.categories.all()).exclude(id=pk)[:10]
+        serializer = self.serializer_class(
+            related_books, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
