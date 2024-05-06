@@ -29,10 +29,7 @@ function Account(props) {
                                         <Nav.Link eventKey="second">Orders</Nav.Link>
                                     </Nav.Item>
                                     <Nav.Item>
-                                        <Nav.Link eventKey="third">Vouchers</Nav.Link>
-                                    </Nav.Item>
-                                    <Nav.Item>
-                                        <Nav.Link eventKey="fourth">Change password</Nav.Link>
+                                        <Nav.Link eventKey="third">Change password</Nav.Link>
                                     </Nav.Item>
                                 </Nav>
                             </Col>
@@ -40,8 +37,7 @@ function Account(props) {
                                 <Tab.Content className='border border-3 rounded-3' style={{ backgroundColor: "white" }}>
                                     <Tab.Pane eventKey="first" ><AccountDetail /></Tab.Pane>
                                     <Tab.Pane eventKey="second"><OrderHistory /></Tab.Pane>
-                                    <Tab.Pane eventKey="third">third tab content</Tab.Pane>
-                                    <Tab.Pane eventKey="fourth"><ChangePassword /></Tab.Pane>
+                                    <Tab.Pane eventKey="third"><ChangePassword /></Tab.Pane>
                                 </Tab.Content>
                             </Col>
                         </Row>

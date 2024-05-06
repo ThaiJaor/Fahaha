@@ -124,7 +124,7 @@ class VnpayPaymentResponseView(generics.GenericAPIView):
 
             serializer = self.get_serializer_class()(data=request.data)
             serializer.is_valid(raise_exception=True)
-            print(serializer.data)
+            # print(serializer.data)
 
             data = serializer.data
 
