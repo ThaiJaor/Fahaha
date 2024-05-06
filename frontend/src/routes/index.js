@@ -7,6 +7,9 @@ import Cart from "../components/Cart/Cart.js";
 import OneStepCheckOut from "../components/Checkout/OneStepCheckOut/OneStepCheckOut.js";
 import CheckoutResult from "../components/CheckoutResult/CheckoutResult.js";
 import OrderDetail from "../components/OrderDetail/OrderDetail.js";
+import BooksFilter from "../components/BooksFilter/BooksFilter.js";
+
+
 export const routes = [
   {
     path: "/",
@@ -54,6 +57,11 @@ export const routes = [
     path: "/order/detail/:id",
     page: OrderDetail,
     requireAuth: true,
+    isShowHeader: true,
+  },
+  {
+    path: "/filter/:filterType/:id",
+    page: BooksFilter,
     isShowHeader: true,
   },
   {
