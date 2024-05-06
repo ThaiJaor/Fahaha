@@ -5,11 +5,14 @@ from .serializers import PublisherSerializer
 from .serializers import PromotionSerializer, PromotionDetailSerializer
 from rest_framework import generics
 from core.permissions import IsAdminUserOrReadOnly
-from rest_framework.permissions import IsAuthenticated
 # from .mixins import FilterMixin
 from .filters import BookFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
 # Book views
 
 
@@ -24,6 +27,8 @@ class BookListCreateView(generics.ListCreateAPIView):
     search_fields = ['title', 'author', 'description', 'city_country',
                      'categories__name', 'publisher__name', 'promotion__name']
 
+    @method_decorator(cache_page(60))
+    @method_decorator(vary_on_cookie)
     def get_serializer_class(self):
         if self.request.method == 'POST':  # Create new book
             return BookDetailSerializer
