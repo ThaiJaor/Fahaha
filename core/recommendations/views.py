@@ -7,7 +7,6 @@ from books.models import Book
 from ratings.models import Rating
 from books.serializers import BookSerializer
 
-
 class RecommendationForUserView(generics.GenericAPIView):
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]
