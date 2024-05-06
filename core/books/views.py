@@ -27,12 +27,14 @@ class BookListCreateView(generics.ListCreateAPIView):
     search_fields = ['title', 'author', 'description', 'city_country',
                      'categories__name', 'publisher__name', 'promotion__name']
 
-    @method_decorator(cache_page(60))
-    @method_decorator(vary_on_cookie)
     def get_serializer_class(self):
         if self.request.method == 'POST':  # Create new book
             return BookDetailSerializer
         return super().get_serializer_class()
+    
+    @method_decorator(cache_page(60 * 60))  # Cache GET requests for 60 minutes
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 
 class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -40,6 +42,10 @@ class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = BookDetailSerializer
     lookup_field = 'pk'
     permission_classes = [IsAdminUserOrReadOnly]
+    
+    @method_decorator(cache_page(60 * 60))  # Cache GET requests for 60 minutes
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 # Category views
 
 
