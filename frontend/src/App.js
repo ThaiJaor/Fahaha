@@ -1,6 +1,6 @@
 import "./App.scss";
 import { connect } from "react-redux";
-import React, { Fragment, useEffect, useMemo } from "react";
+import React, { Fragment, useEffect, } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { routes } from "./routes";
 import DefaultComponent from "./components/Default/Default";

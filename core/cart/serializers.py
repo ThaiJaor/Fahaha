@@ -27,7 +27,6 @@ class CartItemDetailSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-        print(validated_data)
         book = validated_data.get('book')
         cart = self.context['request'].user.cart
         if cart.items.filter(book=book).exists():
