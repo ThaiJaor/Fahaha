@@ -1,7 +1,7 @@
 from .models import Book, Category, Publisher, Promotion
 from .serializers import BookSerializer, BookDetailSerializer
-from .serializers import CategorySerializer, CategoryDetailSerializer
-from .serializers import PublisherSerializer
+from .serializers import CategorySerializer, CategoryDetailSerializer, CategoryWithImageSerializer
+from .serializers import PublisherSerializer, PublisherWithImageSerializer
 from .serializers import PromotionSerializer, PromotionDetailSerializer
 from rest_framework import generics
 from core.permissions import IsAdminUserOrReadOnly
@@ -40,7 +40,7 @@ class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 class CategoryListCreateView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    serializer_class = CategoryWithImageSerializer
     permission_classes = [IsAdminUserOrReadOnly]
 
     def get_serializer_class(self):
@@ -59,7 +59,7 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 # Publisher views
 class PublisherListCreateView(generics.ListCreateAPIView):
     queryset = Publisher.objects.all()
-    serializer_class = PublisherSerializer
+    serializer_class = PublisherWithImageSerializer
     permission_classes = [IsAdminUserOrReadOnly]
 
 
