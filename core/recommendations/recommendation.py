@@ -5,7 +5,6 @@ from books.models import Book
 import pandas as pd
 import numpy as np
 
-
 class Recommendation:
     def __init__(self):
         self.model = None
@@ -26,7 +25,7 @@ class Recommendation:
 
         reader = Reader(rating_scale=(1, 5))
         self.data = Dataset.load_from_df(ratings_df, reader)
-
+        
     def train(self):
         trainset = self.data.build_full_trainset()
         self.model = SVD()
@@ -40,4 +39,4 @@ class Recommendation:
         testset = filter(lambda x: x[0] == user_id, testset)
         predictions = self.model.test(testset)
         predictions = sorted(predictions, key=lambda x: x.est, reverse=True)
-        return predictions[:n]
+        return predictions[:n] 
