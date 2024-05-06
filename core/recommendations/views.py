@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from .recommendation import Recommendation
+# from .recommendation import Recommendation
 from books.models import Book
 from ratings.models import Rating
 from books.serializers import BookSerializer

@@ -57,7 +57,7 @@ function Detail(props) {
   }, []);
   const fetchRatingList = async (currentCommentPage) => {
     if (!isNaN(id)) {
-      let response = await axios.get(`/ratings/?book=${id}&ordering="created_at"`);
+      let response = await axios.get(`/ratings/?book=${id}&ordering=${"-created_at"}`);
       setRatingList(response.data.results)
     }
   }
@@ -127,10 +127,20 @@ function Detail(props) {
           <img src={book.image} class="book-view-image" />
         </div>
         <div className="col-8 d-flex flex-column">
-          <div className="fs-1 fw-bold">{book.title}</div>
-          <div>Nhà cung cấp: {book.city_country}</div>
-          <div>Nhà xuất bản: {book.publisher?.name}</div>
+          <div className="fs-1 fw-bold mb-2">{book.title}</div>
+          <div className="mb-2">Nation: {book.city_country}</div>
+          <div className="mb-2">Publishing company: <span style={{ color: "#2489F4", cursor: "pointer" }} onClick={() => { navigate(`/filter/publisher/${book.publisher?.id}`) }}>{book.publisher?.name}</span></div>
+          <div className="d-flex mb-2 flex-wrap">
+            {
+              book.categories && book.categories.length > 0 && book.categories.map((item, index) => {
+                return (
+                  <Button style={{ fontSize: "14px" }} onClick={() => { navigate(`/filter/categories/${item.id}`) }} variant="danger" className="border border-1 rounded-pill p-1 me-2">{item.name}</Button>
+                )
 
+              })
+            }
+
+          </div>
           {book.promotion ? (
             <>
               <div
@@ -229,7 +239,7 @@ function Detail(props) {
         <table class="table table-borderless">
           <tbody>
             <tr>
-              <td>PLU:</td> <td>{book.isbn}</td>
+              <td>ISBN:</td> <td>{book.isbn}</td>
             </tr>
             <tr>
               <td>Supplier:</td> <td>{book.city_country}</td>
