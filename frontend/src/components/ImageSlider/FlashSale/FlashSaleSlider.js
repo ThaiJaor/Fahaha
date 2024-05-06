@@ -8,9 +8,15 @@ const FlashSaleSlider = ({ saleBooks }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const navigate = useNavigate();
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0 });
-
   useEffect(() => {
     if (saleBooks.length > 0) {
+      setDataLoaded(true);
+    }
+  }, [saleBooks]);
+
+
+  useEffect(() => {
+    if (dataLoaded) {
       $(document).ready(function () {
         $(" .product-carousel").owlCarousel({
           autoplay: true,
@@ -46,7 +52,7 @@ const FlashSaleSlider = ({ saleBooks }) => {
       });
       setDataLoaded(true);
     }
-  }, [saleBooks]);
+  }, [dataLoaded]);
 
   useEffect(() => {
     if (saleBooks.length > 0) {
