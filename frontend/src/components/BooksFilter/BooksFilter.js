@@ -19,6 +19,7 @@ const BooksFilter = () => {
   const [discounted, setDiscounted] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [isChecked, setIsChecked] = useState({});
+  const [publisher,setPublisher] = useState([]);
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
   const currentBooks = books.slice(indexOfFirstBook, indexOfLastBook);
@@ -46,6 +47,7 @@ const BooksFilter = () => {
     const params = new URLSearchParams(location.search);
     setSelectedCategories(params.getAll("categories"));
     setSelectedFormats(params.getAll("bformat"));
+    setPublisher(params.getAll("publisher"));
     setMinPrice(params.get("min_sale_price") || "");
     setMaxPrice(params.get("max_sale_price") || "");
     setMinYear(params.get("min_year") || 1900);
@@ -61,6 +63,7 @@ const BooksFilter = () => {
         selectedCategories.forEach((category) =>
           params.append("categories", category)
         );
+        publisher.forEach((publisher) => params.append("publisher", publisher));
         selectedFormats.forEach((format) => params.append("bformat", format));
         if (searchKeyword !== "") params.set("search", searchKeyword);
         if (minPrice !== "") params.set("min_sale_price", minPrice);
@@ -68,8 +71,9 @@ const BooksFilter = () => {
         if (minYear !== "") params.set("min_year", minYear);
         if (maxYear !== "") params.set("max_year", maxYear);
         if (discounted) params.set("is_discounted", true);
-
+        
         params.set("limit", 1000);
+        
         const response = await axios.get("/books", { params });
         setBooks(response.data.results);
       } catch (error) {
@@ -87,6 +91,7 @@ const BooksFilter = () => {
     maxYear,
     discounted,
     searchKeyword,
+    publisher,
   ]);
 
   const handlePrevPage = () => {
@@ -108,34 +113,30 @@ const BooksFilter = () => {
       setVisibleCategories(26);
     }
   };
-  useEffect(() => {
-    const initialCheckedState = {};
-    categories.forEach((category) => {
-      initialCheckedState[category.id] = selectedCategories.includes(category.id.toString()) || selectedCategories.some(c => c.split('_').includes(category.id.toString()));
-    });
-    setIsChecked(initialCheckedState);
-  }, [categories, selectedCategories]);
-  useEffect(() => {
-    const updatedCategories = Object.keys(isChecked).filter((id) => isChecked[id]);
-    const categoryString = updatedCategories.join("_");
-    nagivate(`/filter?categories=${categoryString}`);
-  }, [isChecked, nagivate]);
-
   const handleCategoryChange = (categoryId) => {
-    // Cập nhật state mới khi checkbox được click
     setIsChecked((prevState) => ({
       ...prevState,
       [categoryId]: !prevState[categoryId], // Đảo ngược trạng thái check/uncheck khi click
     }));
-
-    const updatedCategories = Object.keys(isChecked).filter((id) => isChecked[id]);
-
-    const categoryString = updatedCategories.join("_");
-
-    nagivate(`/filter?categories=${categoryString}`);
-  };
-
   
+    const updatedCategories = Object.keys(isChecked)
+      .filter((id) => isChecked[id] && id !== categoryId); // Lọc ra các category được check và không phải là categoryId
+  
+    // Tạo chuỗi query parameters mới từ updatedCategories
+    const categoryString = updatedCategories.join("_");
+  
+    // Cập nhật URL với các query parameters mới
+    const params = new URLSearchParams(location.search);
+    params.set("categories", categoryString);
+    nagivate(`/filter?${params.toString()}`);
+  };
+  useEffect(() => {
+  const updatedCategories = Object.keys(isChecked).filter((id) => isChecked[id]);
+  const categoryString = updatedCategories.join("_");
+  const params = new URLSearchParams(location.search);
+  params.set("categories", categoryString);
+  nagivate(`/filter?${params.toString()}`);
+}, [isChecked, nagivate]);
   const handleFormatChange = (format) => {
     setSelectedFormats([format]);
   };
@@ -301,7 +302,7 @@ const BooksFilter = () => {
               </label>
             </div>
             <hr />
-            <div className="year fs-1">YEAR: 1900 - {currentYear}</div>
+            <div className="year fs-1">YEAR: 1990 - {currentYear}</div>
 
             <div class="form-check year">
               <input

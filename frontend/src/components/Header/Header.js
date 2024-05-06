@@ -224,7 +224,7 @@ const Header = (props) => {
                     className="position-absolute bg-warning rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
                     style={{ top: "-10px", right: "-5px" }}
                   >
-                    {cartSize}
+                    {0}
                   </span>
                   <div className="wishlist text-center d-none d-md-block">
                     Favorites
