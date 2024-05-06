@@ -12,7 +12,6 @@ from rest_framework import filters
 
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from django.views.decorators.vary import vary_on_cookie
 # Book views
 
 
@@ -59,12 +58,19 @@ class CategoryListCreateView(generics.ListCreateAPIView):
             return CategoryDetailSerializer
         return super().get_serializer_class()
 
+    @method_decorator(cache_page(60 * 60))  # Cache GET requests for 60 minutes
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategoryDetailSerializer
     lookup_field = 'pk'
     permission_classes = [IsAdminUserOrReadOnly]
+    
+    @method_decorator(cache_page(60 * 30))  # Cache GET requests for 60 minutes
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 
 # Publisher views
@@ -72,6 +78,10 @@ class PublisherListCreateView(generics.ListCreateAPIView):
     queryset = Publisher.objects.all()
     serializer_class = PublisherWithImageSerializer
     permission_classes = [IsAdminUserOrReadOnly]
+    
+    @method_decorator(cache_page(60 * 60))  # Cache GET requests for 60 minutes
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 
 class PublisherDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -79,6 +89,10 @@ class PublisherDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PublisherSerializer
     lookup_field = 'pk'
     permission_classes = [IsAdminUserOrReadOnly]
+    
+    @method_decorator(cache_page(60 * 30))  # Cache GET requests for 60 minutes
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 
 class PromotionListCreateView(generics.ListCreateAPIView):
@@ -90,6 +104,10 @@ class PromotionListCreateView(generics.ListCreateAPIView):
         if self.request.method == 'POST':  # Create new promotion
             return PromotionDetailSerializer
         return super().get_serializer_class()
+    
+    @method_decorator(cache_page(60 * 60))  # Cache GET requests for 60 minutes
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 
 class PromotionDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -97,3 +115,7 @@ class PromotionDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PromotionDetailSerializer
     lookup_field = 'pk'
     permission_classes = [IsAdminUserOrReadOnly]
+    
+    @method_decorator(cache_page(60 * 30))  # Cache GET requests for 60 minutes
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
