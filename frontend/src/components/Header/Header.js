@@ -28,7 +28,7 @@ const Header = (props) => {
 
   const handleSearch = () => {
     const formattedKeyword = searchKeyword.trim().replace(/\s+/g, "+");
-    navigate(`/filter?search=${formattedKeyword}`);
+    window.location.href = `/filter?search=${formattedKeyword}` ;
   };
 
   const handleKeyPress = (e) => {

@@ -68,8 +68,9 @@ const BooksFilter = () => {
         if (minYear !== "") params.set("min_year", minYear);
         if (maxYear !== "") params.set("max_year", maxYear);
         if (discounted) params.set("is_discounted", true);
-        const response = await axios.get("/books", { params });
 
+        
+        const response = await axios.get("/books", { params });
         setBooks(response.data.results);
       } catch (error) {
         console.error("Error fetching filtered books:", error);
