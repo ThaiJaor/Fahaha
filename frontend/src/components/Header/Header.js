@@ -154,7 +154,7 @@ const Header = (props) => {
                             <ul class="list-unstyled border-primary">
                               {categories.slice(0, 7).map((category) => (
                                 <li key={category.id}>
-                                  <a href="#">{category.name}</a>
+                                  <a href={`/filter/categories/${category.id}`}>{category.name}</a>
                                 </li>
                               ))}
                             </ul>
@@ -164,7 +164,7 @@ const Header = (props) => {
                             <ul class="list-unstyled border-warning">
                               {publishers.slice(0, 7).map((publisher) => (
                                 <li key={publisher.id}>
-                                  <a href="#">{publisher.name}</a>
+                                  <a href={`/filter/publisher/${publisher.id}`}>{publisher.name}</a>
                                 </li>
                               ))}
                             </ul>
@@ -204,10 +204,22 @@ const Header = (props) => {
                   </button>
                 </div>
               </div>
-              <div
-                className="col-3 d-flex justify-content-md-evenly"
-                style={{ color: "gray" }}
-              >
+              <div className="col-lg-3 d-flex" style={{ color: "gray" }}>
+                <div className="position-relative my-auto mx-4">
+                  <i
+                    className="fa-solid fa-heart fs-3 d-flex justify-content-center"
+                    style={{ cursor: "pointer" }}
+                  ></i>
+                  <span
+                    className="position-absolute bg-warning rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
+                    style={{ top: "-10px", right: "-5px" }}
+                  >
+                    {cartSize}
+                  </span>
+                  <div className="wishlist text-center d-none d-md-block">
+                    Wishlist
+                  </div>
+                </div>
                 <div className="position-relative mx-4 my-auto">
                   <i
                     className="fa-solid fa-cart-shopping fs-3 d-flex justify-content-center"
