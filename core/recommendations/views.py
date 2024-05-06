@@ -28,6 +28,7 @@ class RecommendationForUserView(generics.GenericAPIView):
         serializer = self.serializer_class(
             top_books, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+        # pass
 
 
 class RecommendationForBookView(generics.GenericAPIView):
