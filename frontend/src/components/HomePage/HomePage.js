@@ -16,10 +16,15 @@ import Card from "../Card/Card.js";
 import Chatbot from "../Chatbot/Chatbot.js";
 import Recommend from "../Recommend/Recommend.js";
 import { Link } from "react-router-dom";
+import { fetchUser } from "../../redux/slices/userSlices.js";
 
 
 const HomePage = (props) => {
   const dispatch = useDispatch();
+  const isAuthenticated = useSelector(state => state.user.isAuthenticated);
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, []);
   const books = useSelector((state) => state.books.books);
   const categories = useSelector((state) => state.books.categories);
   const bookDetails = useSelector((state) => state.books.bookDetails);
@@ -123,8 +128,8 @@ const HomePage = (props) => {
   //Filter theo tab
 
   const tabs = [
-    { id: "rating", label: "Sách được đánh giá cao" },
-    { id: "sold", label: "Sách HOT trong ngày" },
+    { id: "rating", label: "Sách được HIGH RATING" },
+    { id: "sold", label: "Sách HOT" },
   ];
 
   const filterDataByTab = (tab) => {
@@ -243,6 +248,14 @@ const HomePage = (props) => {
             </div>
           </div>
         </div>
+        {!isAuthenticated ? (
+        <div className="container">
+        </div>
+        ):(
+        <div className="container">
+          <Recommend recommendedBooks={recommendedBooks} title={"RECOMEMNDATION"} />
+        </div>
+        )}
         <div>
           <FlashSaleSlider saleBooks={saleBooks} />
         </div>
@@ -252,16 +265,16 @@ const HomePage = (props) => {
         <section className="pt-md-9 category" id="service">
           <div className="container">
             <div className="mb-7 text-center">
-              <h5 className="fs-5 text-secondary">CATEGORIES </h5>
+              <h5 className="fs-5 text-secondary">PUBLISHERS </h5>
             </div>
             <div className="row">
-              {randomCategories.map((item, index) => (
+              {randomPublishers.map((item, index) => (
                 <div
                   className="col-lg-3 col-sm-6 mb-6"
                   style={{ zIndex: "1" }}
                   key={index}
                 >
-                  <Link to={`/filter/categories/${item.id}`}
+                  <Link to={`/filter?publisher=${item.id}`}
                     className="card service-card shadow-hover rounded-3 text-center align-items-center"
                     style={{ height: "15rem" }}
                   >
@@ -270,9 +283,9 @@ const HomePage = (props) => {
                         className="img-category"
                         width="75"
                         alt="Service"
-                        src={getRandomBookImage(item.id)}
+                        src={getRandomBookImagePublisher(item.id)}
                       />
-                      <div className="my-3 category-title fs-2">
+                      <div className="my-3 publishers-title fs-2">
                         {item.name}
                       </div>
                     </div>
@@ -282,6 +295,7 @@ const HomePage = (props) => {
             </div>
           </div>
         </section>
+
         <div className="product xuhuong container pb-5">
           <div
             className="title p-3 d-flex"
@@ -293,7 +307,7 @@ const HomePage = (props) => {
               style={{ width: "32px", height: "32px" }}
             />
             <div className="fs-4 fw-bold align-items-center">
-              Xu Hướng Mua Sắm
+              Shopping Trends
             </div>
           </div>
           <div
@@ -331,13 +345,13 @@ const HomePage = (props) => {
                 ))}
               </div>
               <div class="btn d-flex justify-content-center pb-4">
-                <Link to={`/filter/is_discounted/true`}>
+                <Link to={`/filter?is_discounted=true`}>
                   <button
                     type="button outline"
                     class="btn btn-outline-danger fw-bold fs-5"
                     style={{ width: "16rem" }}
                   >
-                    Xem Thêm
+                    See More
                   </button>
                 </Link>
               </div>
@@ -351,16 +365,16 @@ const HomePage = (props) => {
         <section className="pt-md-9 category" id="service">
           <div className="container">
             <div className="mb-7 text-center">
-              <h5 className="fs-5 text-secondary">PUBLISHERS </h5>
+              <h5 className="fs-5 text-secondary">CATEGORIES </h5>
             </div>
             <div className="row">
-              {randomPublishers.map((item, index) => (
+              {randomCategories.map((item, index) => (
                 <div
                   className="col-lg-3 col-sm-6 mb-6"
                   style={{ zIndex: "1" }}
                   key={index}
                 >
-                  <Link to={`/filter/publisher/${item.id}`}
+                  <Link to={`/filter?categories=${item.id}`}
                     className="card service-card shadow-hover rounded-3 text-center align-items-center"
                     style={{ height: "15rem" }}
                   >
@@ -369,9 +383,9 @@ const HomePage = (props) => {
                         className="img-category"
                         width="75"
                         alt="Service"
-                        src={getRandomBookImagePublisher(item.id)}
+                        src={getRandomBookImage(item.id)}
                       />
-                      <div className="my-3 publishers-title fs-2">
+                      <div className="my-3 category-title fs-2">
                         {item.name}
                       </div>
                     </div>
@@ -381,14 +395,13 @@ const HomePage = (props) => {
             </div>
           </div>
         </section>
-
         <div className="product rating xuhuong container pb-5">
           <div
             className="title p-3 d-flex"
             style={{ backgroundColor: "#333333", borderRadius: "8px 8px 0 0" }}
           >
             <div className="ms-2 fs-4 fw-bold text-white align-items-center">
-              Đánh giá cao
+              HIGH RATING
             </div>
           </div>
           <div
@@ -480,7 +493,7 @@ const HomePage = (props) => {
                           <div className="fs-4 fw-bold">
                             {selectedBook.title}
                           </div>
-                          <div className="fs-6">
+                          <div className="fs-6 book-description">
                             {selectedBook.description}
                           </div>
                         </div>
@@ -492,13 +505,13 @@ const HomePage = (props) => {
                 </div>
               </div>
               <div class="btn d-flex justify-content-center pb-4">
-                <Link to={`/filter/categories/${selectedTab}`}>
+                <Link to={`/filter?categories=${selectedTab}`}>
                   <button
                     type="button outline"
                     class="btn btn-outline-danger fw-bold fs-5"
                     style={{ width: "16rem" }}
                   >
-                    Xem Thêm
+                    See More
                   </button>
                 </Link>
               </div>
@@ -508,9 +521,8 @@ const HomePage = (props) => {
         {/* Phần publishers*/}
 
         <Chatbot />
-        <div className="container">
-          <Recommend recommendedBooks={recommendedBooks} />
-        </div>
+
+
       </div>
     </>
   );

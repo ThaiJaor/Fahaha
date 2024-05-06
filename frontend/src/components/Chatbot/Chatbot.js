@@ -122,7 +122,7 @@ const Chatbot = (props) => {
                   </div>
                 }
 
-                <div className="form-outline d-flex border border-2 rounded-2 sticky-bottom">
+                <div className="form-outline position-relative d-flex border border-2 rounded-2" style={{top: "325px"}}>
                   <textarea
                     className="form-control border-0"
                     id="textAreaExample"

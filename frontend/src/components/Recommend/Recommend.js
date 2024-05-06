@@ -1,15 +1,21 @@
+import { fetchUser } from "../../redux/slices/userSlices";
+import Spinner from 'react-bootstrap/Spinner';
+import Container from 'react-bootstrap/esm/Container';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import "./Recommend.scss";
-
-const Recommend = ({ recommendedBooks }) => {
+const Recommend = ({ recommendedBooks, title }) => {
+  const isAuthenticated = useSelector(state => state.user.isAuthenticated);
+  const dispatch = useDispatch()
   const numCarouselItems = Math.ceil(recommendedBooks.length / 3);
-
   return (
     <div className="image-slider p-5">
       <section className="pb-5 mx-5">
         <div className="">
           <div className="top d-flex pt-3 px-3">
             <div className="col-6">
-              <h2 className="mb-3">RECOMMEND</h2>
+              <h2 className="mb-3">{title}</h2>
             </div>
             <div className="col-6 text-right d-flex justify-content-end align-items-center">
               <a

@@ -60,7 +60,7 @@ export const routes = [
     isShowHeader: true,
   },
   {
-    path: "/filter/:filterType/:id",
+    path: "/filter",
     page: BooksFilter,
     isShowHeader: true,
   },
