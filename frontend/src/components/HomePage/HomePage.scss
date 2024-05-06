@@ -2,3 +2,47 @@
     border-right: 2px solid #C92127;
 }
 
+.image-slider {
+
+    .carousel-item>img,
+    .carousel-item :active>img {
+        height: 250px;
+    }
+
+    .carousel-item,
+    .carousel-item :active {
+        transition: transform 0.6s ease;
+    }
+
+    .top {
+        background-color: #162D5A;
+        border-top-right-radius: 15px;
+        border-top-left-radius: 15px;
+        color: white;
+    }
+
+    .top>.btn {
+        height: fit-content;
+    }
+
+
+    .bot {
+        background-color: #204387;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+
+    }
+
+    .card {
+        overflow: hidden;
+    }
+
+    .card:hover {
+        box-shadow: 0 4px 8px 0 rgba(6, 233, 195, 0.2), 0 6px 20px 0 rgba(6, 233, 195, 0.2);
+        box-sizing: border-box;
+    }
+
+    .img-fluid {
+        height: 15rem;
+    }
+}
