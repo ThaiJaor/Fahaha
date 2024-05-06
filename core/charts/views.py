@@ -14,7 +14,7 @@ def revenue_view(request):
     values_total_count_orders = []
     for i in range(7):
         date = datetime.now() - timedelta(days=i)
-        print(date.strftime('%Y-%m-%d'))
+        # print(date.strftime('%Y-%m-%d'))
         labels.append(date.strftime('%Y-%m-%d'))
         total = 0
         for order in orders:
