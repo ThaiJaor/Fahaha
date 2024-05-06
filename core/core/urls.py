@@ -32,7 +32,6 @@ urlpatterns = [
     path('api/', include('orders.urls')),
     path('api/', include('cart.urls')),
     path('api/', include('ratings.urls')),
-    # path('api/', include('recommendations.urls')),
     path('api/', include('recommendations.urls')),
     path('api/', include('favoritebooks.urls')),
     # YOUR PATTERNS

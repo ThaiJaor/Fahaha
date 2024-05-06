@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'cart',
     'ratings',
     'notifications',
-    # 'recommendations',
     'recommendations',
     'favoritebooks',
 ]
