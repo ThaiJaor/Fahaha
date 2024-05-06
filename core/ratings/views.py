@@ -19,15 +19,12 @@ class RatingListCreateView(generics.ListCreateAPIView):
         return Rating.objects.all()
 
     def get_serializer_class(self):
-        if not self.request.user.is_staff and self.request.method == 'POST':
+        if self.request.method == 'POST':
             return UserRatingSerializer
         return RatingSerializer
 
     def perform_create(self, serializer):
-        if self.request.user.is_staff:
-            serializer.save()
-        else:
-            serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user)
 
 
 class RatingDetailView(generics.RetrieveUpdateDestroyAPIView):
