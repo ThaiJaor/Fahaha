@@ -69,7 +69,7 @@ function OrderDetail(props) {
                                 <Nav.Link eventKey="first">Order detail</Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
-                                <Nav.Link eventKey="second">Orders</Nav.Link>
+                                <Nav.Link eventKey="second">Details</Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
                                 <Nav.Link eventKey="third" onClick={() => { navigate("/account") }} >Back</Nav.Link>

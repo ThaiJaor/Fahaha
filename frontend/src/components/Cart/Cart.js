@@ -81,7 +81,7 @@ function Cart(props) {
     }, [books, carts]);
 
     return (
-        <Container className='pt-5' style={{ height: "100%" }}>
+        <Container className='pt-5' style={{ height: "100vh" }}>
 
 
             <div className='row'>
@@ -154,23 +154,27 @@ function Cart(props) {
                     </div>
                 </div>
                 <div className='block-total-cart  col-4 '>
-                    <div className='total-cart-contain d-flex flex-column gap-2 border border-2 p-3 rounded-2'>
-                        <div className="total-cart-page d-flex  justify-content-between align-items-center ">
-                            <div className="title-cart-page-left ">Total price</div>
-                            <div className="number-cart-page-right ">
-                                <span className="price">{totalMoney.toFixed(2)}</span>
+                    {
+                        books.length > 0 &&
+                        <div className='total-cart-contain d-flex flex-column gap-2 border border-2 p-3 rounded-2'>
+                            <div className="total-cart-page d-flex  justify-content-between align-items-center ">
+                                <div className="title-cart-page-left ">Total price</div>
+                                <div className="number-cart-page-right ">
+                                    <span className="price">{totalMoney.toFixed(2)}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div className="total-cart-page title-final-total d-flex justify-content-between align-items-center">
-                            <div className="title-cart-page-left">Total price(included VAT)</div>
-                            <div className="number-cart-page-right">
-                                <span className="price">{totalMoney.toFixed(2)}</span>
+                            <div className="total-cart-page title-final-total d-flex justify-content-between align-items-center">
+                                <div className="title-cart-page-left">Total price(included VAT)</div>
+                                <div className="number-cart-page-right">
+                                    <span className="price">{totalMoney.toFixed(2)}</span>
+                                </div>
                             </div>
+
+                            <Button variant='danger' onClick={() => { OneStepCheckOut() }}>Checkout</Button>
+
                         </div>
+                    }
 
-                        <Button variant='danger' onClick={() => { OneStepCheckOut() }}>Checkout</Button>
-
-                    </div>
                 </div>
             </div>
 
