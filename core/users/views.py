@@ -67,7 +67,7 @@ def register_view(request):
         serializer = serializers.RegisterUserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({'detail': 'Register User Successfully', 'data': serializer.data}, status=status.HTTP_200_OK)
+        return Response({'detail': 'Register User Successfully', 'data': serializer.data}, status=status.HTTP_201_CREATED)
 
 
 @api_view(['POST'])
@@ -90,7 +90,7 @@ def user_view(request):
 
     if request.method == 'PUT':
         serializer = serializers.UpdateUserSerializer(
-            request.user, data=request.data, partial=True)
+            request.user, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({'detail': 'Update User Successfully', 'data': serializer.data}, status=status.HTTP_200_OK)
