@@ -3,31 +3,39 @@
 
 {% block content %}
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<canvas id="chart" width="500" height="500"></canvas>
+<!-- HTML Canvas Element -->
+<div style="width: 50%; height: 400px;">
+    <canvas id="myChart"></canvas>
 </div>
 
 <script>
-    let ctx = document.getElementById("chart").getContext("2d");
+    const labels = {{ labels| safe }};
+    const values = {{ values| safe }};
 
-    let chart = new Chart(ctx, {
-        type: "bar",
+    // Render chart using Chart.js
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'bar',
         data: {
-            labels: ["2020/Q1", "2020/Q2", "2020/Q3", "2020/Q4"],
-            datasets: [
-                {
-                    label: "Gross volume ($)",
-                    backgroundColor: "#79AEC8",
-                    borderColor: "#417690",
-                    data: [26900, 28700, 27300, 29200]
-                }
-            ]
+            labels: labels,
+            datasets: [{
+                label: 'Data',
+                data: values,
+                backgroundColor: '#417893',
+                borderColor: '#417893',
+                borderWidth: 1
+            }]
         },
         options: {
-            title: {
-                text: "Gross Volume in 2020",
-                display: true
+            responsive: true,
+            maintainAspectRatio: false, // Set to false to allow the canvas to dynamically resize
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
             }
         }
     });
