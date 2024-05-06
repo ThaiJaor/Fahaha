@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'ratings',
     'notifications',
     'recommendations',
+    'favoritebooks',
 ]
 
 REST_FRAMEWORK = {
