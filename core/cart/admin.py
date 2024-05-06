@@ -27,7 +27,7 @@ class CartAdmin(admin.ModelAdmin):
     search_fields = ['user__email', 'user__username', 'id']
     ordering = ['created_at', 'updated_at']
 
-    readonly_fields = ['created_at', 'updated_at']
+    readonly_fields = ['created_at', 'updated_at', 'total_price']
 
     actions = ['reset_cart']
 

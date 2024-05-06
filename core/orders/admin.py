@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models import Order
 from django.utils.safestring import mark_safe
+# from plotly.offline import plot
+# import plotly.graph_objs as go
 
 
 class OrderAdmin(admin.ModelAdmin):
@@ -74,6 +76,32 @@ class OrderAdmin(admin.ModelAdmin):
         return mark_safe(formatted_items)
 
     display_items.short_description = 'Items'
+
+    # def order_total_price_graph(self, request):
+    #     # Query all orders and their total prices
+    #     orders = Order.objects.all()
+
+    #     # Extract dates and total prices
+    #     dates = [order.created_at for order in orders]
+    #     total_prices = [order.total_price for order in orders]
+
+    #     # Create a scatter plot
+    #     data = go.Scatter(x=dates, y=total_prices,
+    #                       mode='lines+markers', name='Total Price')
+
+    #     # Create layout
+    #     layout = go.Layout(title='Total Price of Orders Over Time', xaxis=dict(
+    #         title='Date'), yaxis=dict(title='Total Price'))
+
+    #     # Create figure
+    #     fig = go.Figure(data=[data], layout=layout)
+
+    #     # Generate HTML for the plot
+    #     graph_html = plot(fig, output_type='div', include_plotlyjs=False)
+
+    #     return graph_html
+
+    # order_total_price_graph.short_description = 'Order Total Price Graph'
 
 
 admin.site.register(Order, OrderAdmin)
