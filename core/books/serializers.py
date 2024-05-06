@@ -12,6 +12,27 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['url', 'id', 'name']
 
 
+class CategoryWithImageSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='category-detail', read_only=True)
+
+    image = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Category
+        fields = ['url', 'id', 'name', 'image']
+
+    def get_image(self, obj):
+        request = self.context.get('request')
+        if obj.books.exists():
+            books = obj.books.filter(image__isnull=False)
+            if books.exists():
+                photo_url = books.first().image.url
+                return request.build_absolute_uri(photo_url)
+            return None
+        return None
+
+
 class CategoryDetailSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(
         'category-detail', read_only=True)
@@ -28,6 +49,27 @@ class PublisherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Publisher
         fields = ['url', 'id', 'name']
+
+
+class PublisherWithImageSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='publisher-detail', read_only=True)
+
+    image = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Publisher
+        fields = ['url', 'id', 'name', 'image']
+
+    def get_image(self, obj):
+        request = self.context.get('request')
+        if obj.books.exists():
+            books = obj.books.filter(image__isnull=False)
+            if books.exists():
+                photo_url = books.first().image.url
+                return request.build_absolute_uri(photo_url)
+            return None
+        return None
 
 
 class PromotionDetailSerializer(serializers.ModelSerializer):

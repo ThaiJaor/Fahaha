@@ -16,9 +16,16 @@ def custom_upload_to(instance, filename):
 
 
 class Book(models.Model):
+
+    FORMAT_CHOICES = (
+        ('Paperback', 'Paperback'),
+        ('Hardback', 'Hardback'),
+    )
+
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255, blank=True, null=True)
-    format = models.CharField(max_length=255, blank=True, null=True)
+    format = models.CharField(
+        max_length=255, choices=FORMAT_CHOICES, blank=True, null=True)
     rating = models.FloatField(validators=[MinValueValidator(
         0), MaxValueValidator(5)], blank=True, null=True)
     rating_count = models.PositiveIntegerField(

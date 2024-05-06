@@ -1,24 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import axios from "./../../setup/axios";
 import Card from "../Card/Card";
 
 const BooksFilter = () => {
-  const { filterType, id } = useParams();
   const [books, setBooks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [booksPerPage] = useState(12); // Số lượng cuốn sách trên mỗi trang
+  const [categories, setCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [isDiscounted, setIsDiscounted] = useState(false);
+  const [bformats, setBFormats] = useState([]);
+  const [selectedBFormats, setSelectedBFormats] = useState([]);
+  const [minSalePrice, setMinSalePrice] = useState("");
+  const [maxSalePrice, setMaxSalePrice] = useState("");
+  const [minYear, setMinYear] = useState("");
+  const [maxYear, setMaxYear] = useState("");
+  const location = useLocation();
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
   const currentBooks = books.slice(indexOfFirstBook, indexOfLastBook);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-
   useEffect(() => {
     const fetchFilteredBooks = async () => {
       try {
-        const response = await axios.get(`/books/?${filterType}=${id}`);
-        console.log(response.data.results); 
+        const params = new URLSearchParams(location.search);
+        const filters = Object.fromEntries(params.entries());
+
+        const response = await axios.get("/books", { params: filters });
         setBooks(response.data.results);
       } catch (error) {
         console.error("Error fetching filtered books:", error);
@@ -26,7 +36,8 @@ const BooksFilter = () => {
     };
 
     fetchFilteredBooks();
-  }, [filterType, id, currentPage]);
+  }, [location.search, currentPage]);
+
   const handlePrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
@@ -37,6 +48,45 @@ const BooksFilter = () => {
     if (currentPage < Math.ceil(books.length / booksPerPage)) {
       setCurrentPage(currentPage + 1);
     }
+  };
+
+  const handleCategorySelect = (category) => {
+    const index = selectedCategories.indexOf(category);
+    if (index === -1) {
+      setSelectedCategories([...selectedCategories, category]);
+    } else {
+      const updatedCategories = [...selectedCategories];
+      updatedCategories.splice(index, 1);
+      setSelectedCategories(updatedCategories);
+    }
+  };
+
+  // Function to handle B format selection
+  const handleBFormatSelect = (bformat) => {
+    const index = selectedBFormats.indexOf(bformat);
+    if (index === -1) {
+      setSelectedBFormats([...selectedBFormats, bformat]);
+    } else {
+      const updatedBFormats = [...selectedBFormats];
+      updatedBFormats.splice(index, 1);
+      setSelectedBFormats(updatedBFormats);
+    }
+  };
+
+  // Function to apply filters
+  const applyFilters = () => {
+    const filters = {
+      categories: selectedCategories.join(","),
+      is_discounted: isDiscounted ? "true" : "",
+      bformat: selectedBFormats.join(","),
+      min_sale_price: minSalePrice,
+      max_sale_price: maxSalePrice,
+      min_year: minYear,
+      max_year: maxYear,
+    };
+
+    // You can now use the filters object to update the query string or fetch data
+    console.log("Applied filters:", filters);
   };
   return (
     <div className="container py-3">
@@ -65,21 +115,45 @@ const BooksFilter = () => {
             <div className="d-flex justify-content-center align-items-center">
               <nav aria-label="Page navigation example">
                 <ul className="pagination">
-                  <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                    <a className="page-link" href="javascript:;" onClick={handlePrevPage}>
-                    <i className="fa-solid fa-angle-left"></i>
+                  <li
+                    className={`page-item ${
+                      currentPage === 1 ? "disabled" : ""
+                    }`}
+                  >
+                    <a
+                      className="page-link"
+                      href="javascript:;"
+                      onClick={handlePrevPage}
+                    >
+                      <i className="fa-solid fa-angle-left"></i>
                     </a>
                   </li>
-                  {Array.from({ length: Math.ceil(books.length / booksPerPage) }).map((_, index) => (
-                    <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                      <a className="page-link" onClick={() => paginate(index + 1)}>
+                  {Array.from({
+                    length: Math.ceil(books.length / booksPerPage),
+                  }).map((_, index) => (
+                    <li
+                      key={index}
+                      className={`page-item ${
+                        currentPage === index + 1 ? "active" : ""
+                      }`}
+                    >
+                      <a
+                        className="page-link"
+                        onClick={() => paginate(index + 1)}
+                      >
                         {index + 1}
                       </a>
                     </li>
                   ))}
-                  <li className={`page-item ${currentPage === Math.ceil(books.length / booksPerPage) ? 'disabled' : ''}`}>
+                  <li
+                    className={`page-item ${
+                      currentPage === Math.ceil(books.length / booksPerPage)
+                        ? "disabled"
+                        : ""
+                    }`}
+                  >
                     <a className="page-link" onClick={handleNextPage}>
-                    <i className="fa-solid fa-angle-right"></i>
+                      <i className="fa-solid fa-angle-right"></i>
                     </a>
                   </li>
                 </ul>

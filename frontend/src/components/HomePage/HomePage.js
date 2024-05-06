@@ -124,7 +124,7 @@ const HomePage = (props) => {
 
   const tabs = [
     { id: "rating", label: "Sách được đánh giá cao" },
-    { id: "sold", label: "Sách HOT trong ngày" },
+    { id: "sold", label: "Sách HOT" },
   ];
 
   const filterDataByTab = (tab) => {
@@ -261,7 +261,7 @@ const HomePage = (props) => {
                   style={{ zIndex: "1" }}
                   key={index}
                 >
-                  <Link to={`/filter/categories/${item.id}`}
+                  <Link to={`/filter?categories=${item.id}`}
                     className="card service-card shadow-hover rounded-3 text-center align-items-center"
                     style={{ height: "15rem" }}
                   >
@@ -331,7 +331,7 @@ const HomePage = (props) => {
                 ))}
               </div>
               <div class="btn d-flex justify-content-center pb-4">
-                <Link to={`/filter/is_discounted/true`}>
+                <Link to={`/filter?is_discounted=true`}>
                   <button
                     type="button outline"
                     class="btn btn-outline-danger fw-bold fs-5"
@@ -360,7 +360,7 @@ const HomePage = (props) => {
                   style={{ zIndex: "1" }}
                   key={index}
                 >
-                  <Link to={`/filter/publisher/${item.id}`}
+                  <Link to={`/filter?publisher=${item.id}`}
                     className="card service-card shadow-hover rounded-3 text-center align-items-center"
                     style={{ height: "15rem" }}
                   >
@@ -511,6 +511,7 @@ const HomePage = (props) => {
         <div className="container">
           <Recommend recommendedBooks={recommendedBooks} />
         </div>
+
       </div>
     </>
   );
