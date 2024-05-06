@@ -185,7 +185,7 @@
       padding-top: 0;
       padding-bottom: 0;
       padding: 10px;
-      //opacity: 0;
+      opacity: 0;
       top: 100% !important;
       left: 50% !important;
       -webkit-transform: translate(-50%, 0) !important;
@@ -200,7 +200,7 @@
     }
   
     .custom-dropdown .dropdown-menu.active {
-      //opacity: 1;
+      opacity: 1;
       visibility: visible;
       margin-top: 10px !important;
     }
