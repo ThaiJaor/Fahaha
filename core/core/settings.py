@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'notifications',
     'recommendations',
     'favoritebooks',
+    'charts',
 ]
 
 REST_FRAMEWORK = {

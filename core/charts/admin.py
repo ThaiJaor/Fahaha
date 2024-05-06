@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from .models import AnalyticsRevenue
+from .views import custom_view
 
 
 class RevenueAnalyticsViewAdmin(admin.ModelAdmin):
