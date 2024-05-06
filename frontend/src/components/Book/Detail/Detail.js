@@ -60,13 +60,11 @@ function Detail(props) {
   };
   return (
     <div className="container">
-      <div
-        className="d-flex justify-content-center px-0 py-5"
-        style={{ backgroundColor: "white", borderRadius: "8px" }}
-      >
+      <div className="d-flex justify-content-center px-0 py-5" style={{ backgroundColor: "white", borderRadius: "8px"}}>
+
         <div className="col-4  d-flex justify-content-center">
-          <img src={book.image} class="book-view-image" />
-        </div>
+            <img src={book.image} class="book-view-image" />
+          </div>
         <div className="col-8 d-flex flex-column">
           <div className="fs-1 fw-bold">{book.title}</div>
           <div>Nhà cung cấp: {book.city_country}</div>
@@ -161,35 +159,18 @@ function Detail(props) {
           </div>
         </div>
       </div>
-
-      <div
-        className="mt-3 p-3"
-        style={{ backgroundColor: "white", borderRadius: "8px" }}
-      >
-        <div className="fs-3 fw-bold mb-3">Book information</div>
-        <table class="table table-borderless">
-          <tbody>
-            <tr>
-              <td>PLU:</td> <td>{book.isbn}</td>
-            </tr>
-            <tr>
-              <td>Supplier:</td> <td>{book.city_country}</td>
-            </tr>
-            <tr>
-              <td>Author:</td> <td>{book.author}</td>
-            </tr>
-            <tr>
-              <td>Publisher:</td> <td>{book.publisher?.name}</td>
-            </tr>
-            <tr>
-              <td>Year:</td> <td>{book.year}</td>
-            </tr>
-            <tr>
-              <td>Form:</td> <td>{book.format}</td>
-            </tr>
-          </tbody>
-        </table>
-        <hr /> <h6>{book.title}</h6> <p>{book.description}</p>
+      
+      <div className="mt-3 p-3">
+        <div>Book information</div>
+        <p>PLU: {book.isbn}</p>
+        <p>Supplier: {book.city_country}</p>
+        <p>Author: {book.author}</p>
+        <p>Publisher: {book.publisher?.name}</p>
+        <p>Year: {book.year}</p>
+        <p>Form: {book.format}</p>
+        <hr />
+        <h6>{book.title}</h6>
+        <p>{book.description}</p>
       </div>
       <Recommend recommendedBooks={recommendedBooks} />
     </div>
