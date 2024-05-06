@@ -14,4 +14,4 @@ class CodeExplainView(views.APIView):
         # Send code to API and get output
         _output = send_code_to_api(_input)
         
-        return Response({"_output": _output}, status=status.HTTP_201_CREATED)
+        return Response({"_input":_input,"_output": _output}, status=status.HTTP_201_CREATED)

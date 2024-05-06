@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 const baseURL = "http://127.0.0.1:8000/api/"
 const instance = axios.create({
     baseURL: baseURL,
-    timeout: 10000,
+    timeout: 60000,
 });
 
 instance.interceptors.request.use(function (config) {
@@ -46,6 +46,11 @@ instance.interceptors.response.use(function (response) {
         }
         // forbidden (permission related issues)
         case 403: {
+            break;
+        }
+
+        case 504: {
+            toast.error("Request timeout occurred, please try again later.");
             break;
         }
         // Other error cases can be handled similarly
