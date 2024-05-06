@@ -83,7 +83,9 @@ function Login(props) {
               >
                 <div className="row g-0">
                   <div className="col-md-6 col-lg-5 d-none d-md-block">
-                    <img src={Logo} className="img-fluid" alt="Logo" />
+                    <a href="http://localhost:3000">
+                      <img src={Logo} className="img-fluid" alt="Logo" />
+                    </a>
                     <img
                       src={Book}
                       className="img-fluid"
