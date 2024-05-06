@@ -27,7 +27,7 @@ const Header = (props) => {
   };
   const handleSearch = () => {
     const formattedKeyword = searchKeyword.trim().replace(/\s+/g, "+");
-    window.location.href = `/filter?search=${formattedKeyword}` ;
+    window.location.href = `/filter?search=${formattedKeyword}`;
   };
 
   const handleKeyPress = (e) => {
@@ -67,7 +67,6 @@ const Header = (props) => {
 
     fetchData();
   }, [dispatch]);
-
 
   return (
     <>
@@ -141,13 +140,14 @@ const Header = (props) => {
                         aria-expanded="false"
                         className="d-flex"
                         onClick={() => setShowDropdown(!showDropdown)}
+                        style={{ cursor: "pointer" }}
                       >
                         <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_menu.svg" />
                         <i className="fa-solid fa-chevron-down d-flex justify-content-center align-items-center"></i>
                       </div>
 
                       <div
-                        className={`dropdown-menu check ${ showDropdown ? "active" : "" } `}
+                        className={`dropdown-menu check active`}
                         aria-labelledby="dropdownMenuButton"
                       >
                         <div class="mega-menu d-flex">
@@ -210,7 +210,7 @@ const Header = (props) => {
                     style={{ top: "0", right: "0" }}
                     onClick={handleSearch}
                   >
-                    <i className="fa-solid fa-magnifying-glass" ></i>
+                    <i className="fa-solid fa-magnifying-glass"></i>
                   </button>
                 </div>
               </div>
