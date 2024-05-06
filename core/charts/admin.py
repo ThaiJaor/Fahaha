@@ -1,21 +1,31 @@
 from django.contrib import admin
+from django.http import HttpRequest
 from django.urls import path
-from .models import AnalyticsRevenue
-from .views import custom_view
+from .models import AnalyticsRevenue, AnalyticsLoginHistory
+from .views import revenue_view, login_history_view
 
 
-class RevenueAnalyticsViewAdmin(admin.ModelAdmin):
+class ChartView:
+    def has_add_permission(self, request: HttpRequest):
+        return False
+
+    def has_change_permission(self, request: HttpRequest, obj=None):
+        return False
+
+
+class AnalyticsRevenueViewAdmin(ChartView, admin.ModelAdmin):
     model = AnalyticsRevenue
 
-    # def get_urls(self):
-    #     view_name = '{}_{}_changelist'.format(
-    #         self.model._meta.app_label, self.model._meta.model_name)
-    #     return [
-    #         path('revenue_analytics/', custom_view, name=view_name),
-    #     ]
+    def changelist_view(self, request, extra_context=None):
+        return revenue_view(request)
+
+
+class AnalyticsLoginHistoryViewAdmin(ChartView, admin.ModelAdmin):
+    model = AnalyticsLoginHistory
 
     def changelist_view(self, request, extra_context=None):
-        return custom_view(request)
+        return login_history_view(request)
 
 
-admin.site.register(AnalyticsRevenue, RevenueAnalyticsViewAdmin)
+admin.site.register(AnalyticsRevenue, AnalyticsRevenueViewAdmin)
+admin.site.register(AnalyticsLoginHistory, AnalyticsLoginHistoryViewAdmin)

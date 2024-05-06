@@ -19,13 +19,16 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
-# from django.contrib.auth.models import Group
+from django.shortcuts import redirect
+
 
 admin.site.site_header = 'Fahaha Admininstration'
 admin.site.site_title = 'Fahaha Admininstration'
 
 
 urlpatterns = [
+    # view site will redirect to localhost:3000
+    path('', lambda request: redirect('http://localhost:3000/'), name='home'),
     path('admin/', admin.site.urls),
     path('api/user/', include('users.urls')),
     path('api/', include('books.urls')),
@@ -41,4 +44,5 @@ urlpatterns = [
          SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/',
          SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    path('login-history/', include('login_history.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
