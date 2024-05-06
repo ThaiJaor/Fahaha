@@ -44,4 +44,6 @@ class BookFilter(filters.FilterSet):
             category_ids = [int(category_id) for category_id in values]
         except ValueError:
             return queryset.none()
-        return queryset.filter(categories__id__in=category_ids)
+        for category_id in category_ids:
+            queryset = queryset.filter(categories__id=category_id)
+        return queryset

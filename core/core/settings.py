@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_spectacular',
     'django_filters',
+    'login_history',
     # INTERNAL APPS
     'users',
     'books',
@@ -55,6 +56,7 @@ INSTALLED_APPS = [
     'notifications',
     'recommendations',
     'favoritebooks',
+    'charts',
     'chatbox',
 ]
 
