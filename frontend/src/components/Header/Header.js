@@ -21,6 +21,21 @@ const Header = (props) => {
   const categories = useSelector((state) => state.books.categories);
   const promotions = useSelector((state) => state.books.promotions);
   const publishers = useSelector((state) => state.books.publishers);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const handleSearchChange = (e) => {
+    setSearchKeyword(e.target.value);
+  };
+
+  const handleSearch = () => {
+    const formattedKeyword = searchKeyword.trim().replace(/\s+/g, "+");
+    navigate(`/filter?search=${formattedKeyword}`);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
   const Login = () => {
     navigate("/sign_in");
   };
@@ -154,7 +169,9 @@ const Header = (props) => {
                             <ul class="list-unstyled border-primary">
                               {categories.slice(0, 7).map((category) => (
                                 <li key={category.id}>
-                                  <a href={`/filter/categories/${category.id}`}>{category.name}</a>
+                                  <a href={`/filter?categories=${category.id}`}>
+                                    {category.name}
+                                  </a>
                                 </li>
                               ))}
                             </ul>
@@ -164,7 +181,9 @@ const Header = (props) => {
                             <ul class="list-unstyled border-warning">
                               {publishers.slice(0, 7).map((publisher) => (
                                 <li key={publisher.id}>
-                                  <a href={`/filter/publisher/${publisher.id}`}>{publisher.name}</a>
+                                  <a href={`/filter?publisher=${publisher.id}`}>
+                                    {publisher.name}
+                                  </a>
                                 </li>
                               ))}
                             </ul>
@@ -192,15 +211,19 @@ const Header = (props) => {
                 >
                   <input
                     className="form-control border-2 border-secondary px-4 rounded-pill"
-                    type="number"
+                    type="text"
                     placeholder="Search"
+                    value={searchKeyword}
+                    onChange={handleSearchChange}
+                    onKeyPress={handleKeyPress}
                   />
                   <button
                     type="submit"
                     className="btn btn-danger border-2 border-secondary px-4 position-absolute rounded-pill text-white h-100"
                     style={{ top: "0", right: "0" }}
+                    onClick={handleSearch}
                   >
-                    <i className="fa-solid fa-magnifying-glass"></i>
+                    <i className="fa-solid fa-magnifying-glass" ></i>
                   </button>
                 </div>
               </div>

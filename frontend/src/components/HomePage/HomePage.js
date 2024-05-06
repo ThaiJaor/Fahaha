@@ -492,7 +492,7 @@ const HomePage = (props) => {
                 </div>
               </div>
               <div class="btn d-flex justify-content-center pb-4">
-                <Link to={`/filter/categories/${selectedTab}`}>
+                <Link to={`/filter?categories=${selectedTab}`}>
                   <button
                     type="button outline"
                     class="btn btn-outline-danger fw-bold fs-5"
@@ -512,6 +512,7 @@ const HomePage = (props) => {
           <Recommend recommendedBooks={recommendedBooks} />
         </div>
 
+        
       </div>
     </>
   );
