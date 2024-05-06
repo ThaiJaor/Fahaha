@@ -27,3 +27,4 @@ sqlparse==0.4.4
 tzdata==2024.1
 uritemplate==4.1.1
 Faker==25.0.1
+openai==0.28
