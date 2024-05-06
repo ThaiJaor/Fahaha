@@ -81,7 +81,7 @@ function Cart(props) {
     }, [books, carts]);
 
     return (
-        <Container className='pt-5' style={{ height: "100%" }}>
+        <Container className='pt-5' style={{ height: "100vh" }}>
 
 
             <div className='row'>
@@ -154,6 +154,8 @@ function Cart(props) {
                     </div>
                 </div>
                 <div className='block-total-cart  col-4 '>
+
+
                     <div className='total-cart-contain d-flex flex-column gap-2 border border-2 p-3 rounded-2'>
                         <div className="total-cart-page d-flex  justify-content-between align-items-center ">
                             <div className="title-cart-page-left ">Total price</div>
@@ -168,9 +170,11 @@ function Cart(props) {
                             </div>
                         </div>
 
-                        <Button variant='danger' onClick={() => { OneStepCheckOut() }}>Checkout</Button>
+                        <Button variant='danger' onClick={() => { OneStepCheckOut() }} disabled={books.length <= 0}>Checkout</Button>
 
                     </div>
+
+
                 </div>
             </div>
 
