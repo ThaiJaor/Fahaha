@@ -15,6 +15,8 @@ import "../../assets/css/theme.scss";
 import Card from "../Card/Card.js";
 import Chatbot from "../Chatbot/Chatbot.js";
 import Recommend from "../Recommend/Recommend.js";
+import { Link } from "react-router-dom";
+
 
 const HomePage = (props) => {
   const dispatch = useDispatch();
@@ -189,7 +191,6 @@ const HomePage = (props) => {
   const handleTabChange = (tabId) => {
     setSelectedTab(tabId);
   };
-
   return (
     <>
       <div className="content" style={{ backgroundColor: "#f0f0f0" }}>
@@ -260,7 +261,7 @@ const HomePage = (props) => {
                   style={{ zIndex: "1" }}
                   key={index}
                 >
-                  <div
+                  <Link to={`/filter/categories/${item.id}`}
                     className="card service-card shadow-hover rounded-3 text-center align-items-center"
                     style={{ height: "15rem" }}
                   >
@@ -275,7 +276,7 @@ const HomePage = (props) => {
                         {item.name}
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </div>
               ))}
             </div>
@@ -304,9 +305,8 @@ const HomePage = (props) => {
                 {tabs.map((tab) => (
                   <li className="nav-item" key={tab.id}>
                     <button
-                      className={`nav-link ${
-                        activeTab === tab.id ? "active" : ""
-                      }`}
+                      className={`nav-link ${activeTab === tab.id ? "active" : ""
+                        }`}
                       onClick={() => handleActiveTab(tab.id)}
                       aria-selected="true"
                       type="button"
@@ -331,13 +331,15 @@ const HomePage = (props) => {
                 ))}
               </div>
               <div class="btn d-flex justify-content-center pb-4">
-                <button
-                  type="button outline"
-                  class="btn btn-outline-danger fw-bold fs-5"
-                  style={{ width: "16rem" }}
-                >
-                  Xem Thêm
-                </button>
+                <Link to={`/filter/is_discounted/true`}>
+                  <button
+                    type="button outline"
+                    class="btn btn-outline-danger fw-bold fs-5"
+                    style={{ width: "16rem" }}
+                  >
+                    Xem Thêm
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -358,7 +360,7 @@ const HomePage = (props) => {
                   style={{ zIndex: "1" }}
                   key={index}
                 >
-                  <div
+                  <Link to={`/filter/publisher/${item.id}`}
                     className="card service-card shadow-hover rounded-3 text-center align-items-center"
                     style={{ height: "15rem" }}
                   >
@@ -373,7 +375,7 @@ const HomePage = (props) => {
                         {item.name}
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </div>
               ))}
             </div>
@@ -398,9 +400,8 @@ const HomePage = (props) => {
                 {tabs2.map((tab) => (
                   <li className="nav-item" key={tab.id}>
                     <button
-                      className={`nav-link ${
-                        selectedTab === tab.id ? "active" : ""
-                      }`}
+                      className={`nav-link ${selectedTab === tab.id ? "active" : ""
+                        }`}
                       onClick={() => handleTabChange(tab.id)}
                       aria-selected="true"
                       type="button"
@@ -473,16 +474,13 @@ const HomePage = (props) => {
                             Tác giả: {selectedBook.author}
                           </div>
                           <div>Nhà xuất bản: {selectedBook.publisher.name}</div>
-
                           <div className="text-danger fw-bold my-3">
-                            {" "}
                             {selectedBook.sale_price}$
                           </div>
                           <div className="fs-4 fw-bold">
                             {selectedBook.title}
                           </div>
                           <div className="fs-6">
-                            {" "}
                             {selectedBook.description}
                           </div>
                         </div>
@@ -494,13 +492,15 @@ const HomePage = (props) => {
                 </div>
               </div>
               <div class="btn d-flex justify-content-center pb-4">
-                <button
-                  type="button outline"
-                  class="btn btn-outline-danger fw-bold fs-5"
-                  style={{ width: "16rem" }}
-                >
-                  Xem Thêm
-                </button>
+                <Link to={`/filter/categories/${selectedTab}`}>
+                  <button
+                    type="button outline"
+                    class="btn btn-outline-danger fw-bold fs-5"
+                    style={{ width: "16rem" }}
+                  >
+                    Xem Thêm
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

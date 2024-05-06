@@ -136,7 +136,7 @@ const Footer = (props) => {
                 <p>Email: Example@gmail.com</p>
                 <p>Phone: +0123 4567 8910</p>
                 <p>Payment Accepted</p>
-                <img src="img/payment.png" className="img-fluid" alt="" />
+                <img src="https://cdn0.fahasa.com/media//wysiwyg/Logo-NCC/vnpay_logo.png" className="img-fluid" style={{maxWidth: "120px"}} />
               </div>
             </div>
           </div>
