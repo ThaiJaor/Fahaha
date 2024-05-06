@@ -460,10 +460,10 @@ const HomePage = (props) => {
                           <div className="title fs-6"> {book.title} </div>
                           <div className="title fs-6">
                             {" "}
-                            Lượt bán: {book.sold}{" "}
+                            Sold: {book.sold}{" "}
                           </div>
                           <div className="rating fw-bold text-danger">
-                            Đánh giá: {book.rating}{" "}
+                           Rating grade: {book.rating}{" "}
                           </div>
                         </div>
                       </div>
@@ -484,9 +484,9 @@ const HomePage = (props) => {
                             {selectedBook.title}
                           </div>
                           <div className="fs-6">
-                            Tác giả: {selectedBook.author}
+                            Author: {selectedBook.author}
                           </div>
-                          <div>Nhà xuất bản: {selectedBook.publisher.name}</div>
+                          <div>Publisher: {selectedBook.publisher.name}</div>
                           <div className="text-danger fw-bold my-3">
                             {selectedBook.sale_price}$
                           </div>

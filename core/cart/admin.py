@@ -31,6 +31,9 @@ class CartAdmin(admin.ModelAdmin):
 
     actions = ['reset_cart']
 
+    def has_add_permission(self, request):
+        return False
+
     def reset_cart(self, request, queryset):
         for cart in queryset:
             cart.items.all().delete()
