@@ -13,6 +13,10 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         }
 
     def save(self):
+        if get_user_model().objects.filter(email=self.validated_data['email']).exists():
+            raise serializers.ValidationError(
+                {'email': 'Email already exists!'})
+
         user = get_user_model()(
             email=self.validated_data['email'],
             username=self.validated_data['username'],
