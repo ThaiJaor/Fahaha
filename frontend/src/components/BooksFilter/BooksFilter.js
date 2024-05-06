@@ -18,7 +18,7 @@ const BooksFilter = () => {
   const [selectedPriceScale, setSelectedPriceScale] = useState("");
   const [discounted, setDiscounted] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
-
+  const [isChecked, setIsChecked] = useState({});
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
   const currentBooks = books.slice(indexOfFirstBook, indexOfLastBook);
@@ -69,7 +69,7 @@ const BooksFilter = () => {
         if (maxYear !== "") params.set("max_year", maxYear);
         if (discounted) params.set("is_discounted", true);
 
-        
+        params.set("limit", 1000);
         const response = await axios.get("/books", { params });
         setBooks(response.data.results);
       } catch (error) {
@@ -108,17 +108,34 @@ const BooksFilter = () => {
       setVisibleCategories(26);
     }
   };
+  useEffect(() => {
+    const initialCheckedState = {};
+    categories.forEach((category) => {
+      initialCheckedState[category.id] = selectedCategories.includes(category.id.toString()) || selectedCategories.some(c => c.split('_').includes(category.id.toString()));
+    });
+    setIsChecked(initialCheckedState);
+  }, [categories, selectedCategories]);
+  useEffect(() => {
+    const updatedCategories = Object.keys(isChecked).filter((id) => isChecked[id]);
+    const categoryString = updatedCategories.join("_");
+    nagivate(`/filter?categories=${categoryString}`);
+  }, [isChecked, nagivate]);
+
   const handleCategoryChange = (categoryId) => {
-    const isSelected = selectedCategories.includes(categoryId);
-    let updatedCategories = [];
-    if (isSelected) {
-      updatedCategories = selectedCategories.filter((id) => id !== categoryId);
-    } else {
-      updatedCategories = [...selectedCategories, categoryId];
-    }
-    setSelectedCategories(updatedCategories);
+    // Cập nhật state mới khi checkbox được click
+    setIsChecked((prevState) => ({
+      ...prevState,
+      [categoryId]: !prevState[categoryId], // Đảo ngược trạng thái check/uncheck khi click
+    }));
+
+    const updatedCategories = Object.keys(isChecked).filter((id) => isChecked[id]);
+
+    const categoryString = updatedCategories.join("_");
+
+    nagivate(`/filter?categories=${categoryString}`);
   };
 
+  
   const handleFormatChange = (format) => {
     setSelectedFormats([format]);
   };
@@ -170,7 +187,7 @@ const BooksFilter = () => {
                   type="checkbox"
                   value={category.name}
                   id={category.id}
-                  checked={selectedCategories.includes(category.id)}
+                  checked={isChecked[category.id]}
                   onChange={() => handleCategoryChange(category.id)}
                 />
                 <label className="form-check-label" htmlFor={category.id}>
@@ -284,7 +301,7 @@ const BooksFilter = () => {
               </label>
             </div>
             <hr />
-            <div className="year fs-1">YEAR: 1990 - {currentYear}</div>
+            <div className="year fs-1">YEAR: 1900 - {currentYear}</div>
 
             <div class="form-check year">
               <input

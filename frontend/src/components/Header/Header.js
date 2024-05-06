@@ -25,7 +25,6 @@ const Header = (props) => {
   const handleSearchChange = (e) => {
     setSearchKeyword(e.target.value);
   };
-
   const handleSearch = () => {
     const formattedKeyword = searchKeyword.trim().replace(/\s+/g, "+");
     window.location.href = `/filter?search=${formattedKeyword}` ;
@@ -68,6 +67,8 @@ const Header = (props) => {
 
     fetchData();
   }, [dispatch]);
+
+
   return (
     <>
       <div className="header d-flex">
@@ -130,23 +131,11 @@ const Header = (props) => {
                   />
                 </a>
               </div>
-              <button
-                className="navbar-toggler py-2 px-3"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarCollapse"
-              >
-                <span
-                  className="fa fa-bars"
-                  style={{ color: "#81c408" }}
-                ></span>
-              </button>
-              <div class="content col-1">
+              <div class="content col-1 d-none d-xl-block">
                 <div class="row justify-content-center text-center">
                   <div class="">
                     <div class="dropdown custom-dropdown">
                       <div
-                        data-bs-toggle="dropdown"
                         class="dropdown-link"
                         aria-haspopup="true"
                         aria-expanded="false"
@@ -154,20 +143,18 @@ const Header = (props) => {
                         onClick={() => setShowDropdown(!showDropdown)}
                       >
                         <img src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_menu.svg" />
-                        <i className="fa-solid fa-chevron-down d-flex justify-content-center align-items-center"></i>{" "}
+                        <i className="fa-solid fa-chevron-down d-flex justify-content-center align-items-center"></i>
                       </div>
 
                       <div
-                        className={`dropdown-menu ${
-                          showDropdown ? "active" : ""
-                        }`}
+                        className={`dropdown-menu check ${ showDropdown ? "active" : "" } `}
                         aria-labelledby="dropdownMenuButton"
                       >
                         <div class="mega-menu d-flex">
                           <div>
                             <h3 class="text-primary">Categories</h3>
                             <ul class="list-unstyled border-primary">
-                              {categories.slice(0, 7).map((category) => (
+                              {categories.map((category) => (
                                 <li key={category.id}>
                                   <a href={`/filter?categories=${category.id}`}>
                                     {category.name}
@@ -179,7 +166,7 @@ const Header = (props) => {
                           <div>
                             <h3 class="text-warning">Publisher</h3>
                             <ul class="list-unstyled border-warning">
-                              {publishers.slice(0, 7).map((publisher) => (
+                              {publishers.map((publisher) => (
                                 <li key={publisher.id}>
                                   <a href={`/filter?publisher=${publisher.id}`}>
                                     {publisher.name}
@@ -191,7 +178,7 @@ const Header = (props) => {
                           <div>
                             <h3 class="text-danger">Promotions</h3>
                             <ul class="list-unstyled border-danger">
-                              {promotions.slice(0, 7).map((promotion) => (
+                              {promotions.map((promotion) => (
                                 <li key={promotion.id}>
                                   <a href="#">{promotion.name}</a>
                                 </li>
@@ -227,7 +214,7 @@ const Header = (props) => {
                   </button>
                 </div>
               </div>
-              <div className="col-lg-3 d-flex" style={{ color: "gray" }}>
+              <div className="col-3 d-flex" style={{ color: "gray" }}>
                 <div className="position-relative my-auto mx-4">
                   <i
                     className="fa-solid fa-heart fs-3 d-flex justify-content-center"
@@ -240,7 +227,7 @@ const Header = (props) => {
                     {cartSize}
                   </span>
                   <div className="wishlist text-center d-none d-md-block">
-                    Wishlist
+                    Favorites
                   </div>
                 </div>
                 <div className="position-relative mx-4 my-auto">

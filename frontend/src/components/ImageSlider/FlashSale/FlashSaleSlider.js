@@ -83,12 +83,6 @@ const FlashSaleSlider = ({ saleBooks }) => {
     <>
       {!dataLoaded && (
         <div className="container d-flex justify-content-center ">
-          <div
-            className="spinner-border text-danger text-center mt-3"
-            role="status"
-          >
-            <span className="visually-hidden">Loading...</span>
-          </div>
         </div>
       )}
       {dataLoaded && (

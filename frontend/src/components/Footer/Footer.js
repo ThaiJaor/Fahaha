@@ -21,7 +21,7 @@ const Footer = (props) => {
                 <div className="d-flex align-items-center ">
                   <i className="fs-4 fa-solid fa-envelope mx-3"></i>
                   <div className="fs-4 fw-bold text-dark mb-0">
-                    ĐĂNG KÝ NHẬN BẢN TIN
+                    SIGN UP FOR THE NEWSLETTER
                   </div>
                 </div>
               </div>
@@ -37,7 +37,7 @@ const Footer = (props) => {
                     className="btn btn-danger border border-secondary py-3 px-4 position-absolute rounded-pill text-white"
                     style={{ top: "0", right: "0" }}
                   >
-                    Đăng ký
+                    Apply
                   </button>
                 </div>
               </div>
@@ -79,13 +79,13 @@ const Footer = (props) => {
                   <div className="text-secondary mb-0">Bookstore</div>
                 </div>
                 <div className="mb-4">
-                  Công Ty Cổ Phần Phát Hành Sách TP HCM - FAHASA
+                  Công Ty Cổ Phần Phát Hành Sách TP HCM - FAHAHA
                 </div>
               </div>
             </div>
             <div className="col-lg-3 col-md-6">
               <div className="d-flex flex-column text-start footer-item">
-                <h4 className="text-dark mb-3">DỊCH VỤ</h4>
+                <h4 className="text-dark mb-3">SERVICES</h4>
                 <a className="btn-link" href="">
                   About Us
                 </a>
@@ -108,7 +108,7 @@ const Footer = (props) => {
             </div>
             <div className="col-lg-3 col-md-6">
               <div className="d-flex flex-column text-start footer-item">
-                <h4 className="text-dark mb-3">TÀI KHOẢN CỦA TÔI</h4>
+                <h4 className="text-dark mb-3">ACCOUNT</h4>
                 <a className="btn-link" href="">
                   My Account
                 </a>
@@ -131,12 +131,16 @@ const Footer = (props) => {
             </div>
             <div className="col-lg-3 col-md-6">
               <div className="footer-item">
-                <h4 className="text-dark mb-3">LIÊN HỆ</h4>
+                <h4 className="text-dark mb-3">CONTACT</h4>
                 <p>Address: 1429 Netus Rd, NY 48247</p>
                 <p>Email: Example@gmail.com</p>
                 <p>Phone: +0123 4567 8910</p>
                 <p>Payment Accepted</p>
-                <img src="https://cdn0.fahasa.com/media//wysiwyg/Logo-NCC/vnpay_logo.png" className="img-fluid" style={{maxWidth: "120px"}} />
+                <img
+                  src="https://cdn0.fahasa.com/media//wysiwyg/Logo-NCC/vnpay_logo.png"
+                  className="img-fluid"
+                  style={{ maxWidth: "120px" }}
+                />
               </div>
             </div>
           </div>
