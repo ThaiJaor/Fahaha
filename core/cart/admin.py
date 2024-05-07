@@ -31,6 +31,9 @@ class CartAdmin(admin.ModelAdmin):
 
     actions = ['reset_cart']
 
+    def has_add_permission(self, request):
+        return False
+
     def reset_cart(self, request, queryset):
         for cart in queryset:
             cart.items.all().delete()
@@ -47,6 +50,22 @@ class CartAdmin(admin.ModelAdmin):
     def delete_model(self, request, obj):
         if not obj.user:
             obj.delete()
+        return
+
+    def delete_queryset(self, request, queryset):
+        for cart in queryset:
+            if cart.user:
+                self.message_user(
+                    request, f'Cart {cart.user} was not deleted because it is associated with a user.', level=messages.ERROR)
+                queryset = queryset.exclude(id=cart.id)
+        return super().delete_queryset(request, queryset)
+
+    # exclude the delete action for carts associated with a user
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions
 
 
 admin.site.register(Cart, CartAdmin)

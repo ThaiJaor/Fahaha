@@ -202,7 +202,7 @@
     .custom-dropdown .dropdown-menu.active {
       opacity: 1;
       visibility: visible;
-      margin-top: 10px !important;
+      // margin-top: 10px !important;
     }
   
     .custom-dropdown .dropdown-menu .mega-menu {
@@ -213,7 +213,6 @@
       font-size: 14px;
       text-transform: uppercase;
     }
-  
     .custom-dropdown .dropdown-menu .mega-menu .border-primary {
       border-left: 2px solid #007bff;
       padding-left: 20px;
@@ -254,4 +253,10 @@
       padding: 0;
     }
   }
-  
+  .list-unstyled{
+    max-height: 400px;
+    overflow-y: auto;
+    ::-webkit-scrollbar {
+      width: 20px;
+    }
+  }

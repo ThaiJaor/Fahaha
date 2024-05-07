@@ -46,7 +46,7 @@ class ImportBookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
-        fields = ['title', 'author', 'format', 'rating', 'price', 'isbn', 'length',
+        fields = ['title', 'author', 'format', 'rating', 'price', 'sold', 'isbn', 'length',
                   'year', 'city_country', 'description', 'categories', 'publisher', 'image']
 
     def save(self, validated_data):

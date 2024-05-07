@@ -1,0 +1,83 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n admin_urls static admin_list %}
+
+{% block content %}
+
+
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- HTML Canvas Element -->
+<div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+    <div style="width: 50%; height: 800px; display: flex; justify-content: center; align-items: center;">
+        <canvas id="myChart"></canvas>
+        <canvas id="myChart2"></canvas>
+    </div>
+</div>
+<script>
+
+    const content = document.getElementById('content');
+    content.style.height = '80%';
+    content.style.width = '70%';
+    content.style.margin = 'auto';
+
+    const labels = {{ labels| safe }};
+    const values_total_revenue = {{ values_total_revenue| safe }};
+    const values_total_count_orders = {{ values_total_count_orders | safe }};
+
+    // Render chart using Chart.js
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+
+        data: {
+            labels: labels,
+            datasets: [{
+                type: 'bar',
+                label: 'Revenue in the last 7 days',
+                data: values_total_revenue,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgb(255, 99, 132)',
+                borderWidth: 1,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, // Set to false to allow the canvas to dynamically resize
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    const ctx2 = document.getElementById('myChart2').getContext('2d');
+    const myChart2 = new Chart(ctx2, {
+
+        data: {
+            labels: labels,
+            datasets: [{
+                type: 'bar',
+                label: 'Total Orders in the last 7 days',
+                data: values_total_count_orders,
+                backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                borderColor: 'rgb(255, 159, 64)',
+                borderWidth: 1,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, // Set to false to allow the canvas to dynamically resize
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+
+
+
+{% endblock %}

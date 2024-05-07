@@ -34,7 +34,7 @@ def login_view(request):
             user.last_login = timezone.now()
             user.save()
             tokens = get_user_tokens(user)
-            login(request, user)
+            # login(request, user)
             res = response.Response()
             serializer = serializers.UserSerializer(user)
             res.data = {
@@ -90,7 +90,7 @@ def user_view(request):
 
     if request.method == 'PUT':
         serializer = serializers.UpdateUserSerializer(
-            request.user, data=request.data)
+            request.user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({'detail': 'Update User Successfully', 'data': serializer.data}, status=status.HTTP_200_OK)

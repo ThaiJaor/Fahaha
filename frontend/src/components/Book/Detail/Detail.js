@@ -118,14 +118,12 @@ function Detail(props) {
     return iconMap[lowercaseLetter];
   };
   return (
-    <div className="container">
-      <div
-        className="d-flex justify-content-center px-0 py-5"
-        style={{ backgroundColor: "white", borderRadius: "8px" }}
-      >
+    <div className="container pt-3">
+      <div className="d-flex justify-content-center px-0 py-5" style={{ backgroundColor: "white", borderRadius: "8px"}}>
+
         <div className="col-4  d-flex justify-content-center">
-          <img src={book.image} class="book-view-image" />
-        </div>
+            <img src={book.image} class="book-view-image" />
+          </div>
         <div className="col-8 d-flex flex-column">
           <div className="fs-1 fw-bold mb-2">{book.title}</div>
           <div className="mb-2">Nation: {book.city_country}</div>
@@ -261,7 +259,8 @@ function Detail(props) {
         <hr /> <h6>{book.title}</h6> <p>{book.description}</p>
 
       </div>
-      <div className='mt-3 p-3'>
+      <div className='mt-3 p-3'
+      style={{ backgroundColor: "white", borderRadius: "8px" }}>
         <hr />
         <h4>Book reviews</h4>
         <div className='d-flex justify-content-around'>
@@ -341,7 +340,7 @@ function Detail(props) {
         onHide={onHideModalBookRating}
         book_id={id}
       />
-      <Recommend recommendedBooks={recommendedBooks} />
+      <Recommend recommendedBooks={recommendedBooks} title={"RELEATED BOOKS"}/>
     </div>
   );
 }

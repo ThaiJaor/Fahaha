@@ -13,6 +13,10 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         }
 
     def save(self):
+        if get_user_model().objects.filter(email=self.validated_data['email']).exists():
+            raise serializers.ValidationError(
+                {'email': 'Email already exists!'})
+
         user = get_user_model()(
             email=self.validated_data['email'],
             username=self.validated_data['username'],
@@ -41,13 +45,20 @@ class LoginUserSerializer(serializers.ModelSerializer):
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):
-    first_name = serializers.CharField(required=True)
-    last_name = serializers.CharField(required=True)
-    phone_number = serializers.CharField(required=True)
+
     class Meta:
         model = get_user_model()
         fields = ['email', 'username', 'last_login',
                   'first_name', 'last_name', 'phone_number']
+
+    def validate_phone_number(self, value):
+        if not value.isdigit():
+            raise serializers.ValidationError(
+                'Phone number must be a number')
+        if len(value) < 10 or len(value) > 15:
+            raise serializers.ValidationError(
+                'Phone number must be between 10 and 15 digits')
+        return value
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
@@ -67,6 +78,17 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         if attrs['new_password'] != attrs['confirm_new_password']:
             raise serializers.ValidationError(
                 {'confirm_new_password': 'Confirm new password wrong'})
+
+        # add contraints of admin django password field
+        # if len(attrs['new_password']) < 8:
+        #     raise serializers.ValidationError(
+        #         {'new_password': 'Password must be at least 8 characters long.'})
+        # if attrs['new_password'].isdigit():
+        #     raise serializers.ValidationError(
+        #         {'new_password': 'Password must contain at least 1 letter.'})
+        # if attrs['new_password'].isalpha():
+        #     raise serializers.ValidationError(
+        #         {'new_password': 'Password must contain at least 1 digit.'})
 
         return attrs
 

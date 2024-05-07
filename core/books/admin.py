@@ -4,12 +4,12 @@ from .models import Book, Category, Publisher, Promotion
 
 class BookAdmin(admin.ModelAdmin):
 
-    list_display = ['title', 'id', 'author', 'publisher_name', 'price', 'sale_price',
+    list_display = ['title', 'id', 'author', 'publisher_name', 'sold', 'price', 'sale_price',
                     'created_at', 'promotion']
 
-    list_filter = ['created_at', 'promotion', 'categories']
-    search_fields = ['title', 'author', 'publisher_name']
-    ordering = ['created_at', 'price', 'sale_price']
+    list_filter = ['created_at', 'promotion', 'categories', 'publisher']
+    search_fields = ['title', 'author', 'publisher_name', 'categories__name']
+    ordering = ['created_at', 'sold', 'price', 'sale_price']
 
     readonly_fields = ['sale_price']
 
@@ -66,6 +66,7 @@ class CategoryAdmin(admin.ModelAdmin):
     list_filter = ['created_at']
     search_fields = ['name']
     ordering = ['created_at']
+    readonly_fields = ['created_at', 'updated_at']
 
 
 admin.site.register(Book, BookAdmin)

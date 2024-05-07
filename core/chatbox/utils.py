@@ -1,7 +1,7 @@
 import openai
 from django.conf import settings
 
-openai.api_key = settings.APIKEY
+openai.api_key = settings.OPENAI_API_KEY
 
 def send_code_to_api(code):
     res = openai.ChatCompletion.create(

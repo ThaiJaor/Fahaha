@@ -23,6 +23,8 @@ function Register(props) {
 
   const handleRegister = (e) => {
     e.preventDefault();
+    // Minimum eight characters, at least one uppercase letter, one lowercase letter and one number
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,32}$/;
 
     // Kiểm tra mật khẩu nhập lại
     if (password !== confirmPassword) {
@@ -55,6 +57,14 @@ function Register(props) {
     if (!password) {
       setIsValidPassword(false);
       toast.error("Password is required");
+      return;
+    }
+
+    if (!passwordRegex.test(password)) {
+      setIsValidPassword(false);
+      toast.error(
+        "Password must have at least eight characters, at most 32 characters, at least one uppercase letter, one lowercase letter and one number"
+      );
       return;
     }
     const registerData = {
@@ -106,7 +116,9 @@ function Register(props) {
               >
                 <div className="row g-0">
                   <div className="col-md-6 col-lg-5 d-none d-md-block">
-                    <img src={Logo} className="img-fluid" alt="Logo" />
+                    <a href="http://localhost:3000">
+                      <img src={Logo} className="img-fluid" alt="Logo" />
+                    </a>
                     <img
                       src={Book}
                       className="img-fluid"

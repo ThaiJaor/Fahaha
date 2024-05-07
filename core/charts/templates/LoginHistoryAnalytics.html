@@ -1,0 +1,54 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n admin_urls static admin_list %}
+
+{% block content %}
+
+
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- HTML Canvas Element -->
+<div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+    <div style="width: 80%; height: 800px;">
+        <canvas id="myChart"></canvas>
+    </div>
+</div>
+<script>
+
+    const content = document.getElementById('content');
+    content.style.height = '80%';
+    content.style.width = '70%';
+
+    const labels = {{ labels | safe }};
+    const values = {{ values | safe }};
+
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Login Histories in the last 7 days',
+                data: values,
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, // Set to false to allow the canvas to dynamically resize
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+
+
+
+{% endblock %}

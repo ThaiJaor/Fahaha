@@ -111,7 +111,7 @@ function OneStepCheckOut(props) {
         setTotalMoney(sum);
     }, [books, cart]);
     return (
-        <Container style={{ height: "100%" }} className='pt-4' >
+        <Container style={{ height: "100%" }} className='py-4' >
             <div className='row mb-3' style={{ backgroundColor: "white" }}>
                 <div className='col-12 py-2'>
                     <Form noValidate onSubmit={handleSubmit} >
