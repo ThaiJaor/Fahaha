@@ -41,7 +41,7 @@ class RecommendationForBookView(generics.GenericAPIView):
     def get(self, request, pk):
         book = Book.objects.get(id=pk)
         related_books = Book.objects.filter(
-            categories__in=book.categories.all()).exclude(id=pk)[:10]
+            categories__in=book.categories.all()).distinct().exclude(id=pk)[:10]
         serializer = self.serializer_class(
             related_books, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
