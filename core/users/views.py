@@ -34,7 +34,7 @@ def login_view(request):
             user.last_login = timezone.now()
             user.save()
             tokens = get_user_tokens(user)
-            # login(request, user)
+            login(request, user)
             res = response.Response()
             serializer = serializers.UserSerializer(user)
             res.data = {

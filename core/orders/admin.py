@@ -10,7 +10,8 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ['user__email', 'user__username',
                      'id', 'status', 'payment_method']
     ordering = ['created_at', 'status', 'total_price']
-    actions = ['mark_as_delivered', 'mark_as_cancelled', 'mark_as_processing']
+    actions = ['mark_as_processing', 'mark_as_shipping',
+               'mark_as_delivered', 'mark_as_cancelled']
 
     def mark_as_processing(self, request, queryset):
         queryset.update(status='processing')
@@ -74,7 +75,6 @@ class OrderAdmin(admin.ModelAdmin):
         return mark_safe(formatted_items)
 
     display_items.short_description = 'Items'
-
 
 
 admin.site.register(Order, OrderAdmin)
