@@ -90,7 +90,7 @@ def user_view(request):
 
     if request.method == 'PUT':
         serializer = serializers.UpdateUserSerializer(
-            request.user, data=request.data)
+            request.user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({'detail': 'Update User Successfully', 'data': serializer.data}, status=status.HTTP_200_OK)
