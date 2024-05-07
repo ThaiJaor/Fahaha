@@ -4,7 +4,7 @@ import Logo from "../../assets/Logo.png";
 import Book from "../../assets/Book.png";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation, Navigate } from "react-router-dom";
-import { login } from "../../redux/slices/userSlices";
+import { login, fetchUser } from "../../redux/slices/userSlices";
 import { toast } from "react-toastify";
 
 function Login(props) {
@@ -17,7 +17,6 @@ function Login(props) {
   const isLoading = useSelector((state) => state.user.isLoading);
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [isValidPassword, setIsValidPassword] = useState(true);
-
   const Register = () => {
     navigate("/sign_up");
   };
