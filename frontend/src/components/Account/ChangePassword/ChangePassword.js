@@ -27,7 +27,10 @@ function ChangePassword(props) {
                             Password
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control type="password" placeholder="Password" value={old_password} onChange={(e) => { set_old_password(e.target.value) }} />
+                            <Form.Control type="password" placeholder="Password" value={old_password} onChange={(e) => { set_old_password(e.target.value) }} isInvalid={old_password.length <= 0} />
+                            <Form.Control.Feedback type="invalid">
+                                Password can not be null
+                            </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
 
@@ -44,11 +47,14 @@ function ChangePassword(props) {
                             Confirm password
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control type="password" placeholder="Confirm password" value={confirm_new_password} onChange={(e) => { set_confirm_new_password(e.target.value) }} />
+                            <Form.Control type="password" placeholder="Confirm password" value={confirm_new_password} onChange={(e) => { set_confirm_new_password(e.target.value) }} isInvalid={new_password != confirm_new_password} />
+                            <Form.Control.Feedback type="invalid">
+                                New password and confirmed password are not the same
+                            </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
                     <Button variant="danger mb-2 " onClick={() => { handleUpdatePassword() }}
-                        disabled={isLoading ? true : ""}>{isLoading ? "Updating password ..." : "Save"}</Button>
+                        disabled={(isLoading ? true : "") || (!new_password || !confirm_new_password || !old_password)}>{isLoading ? "Updating password ..." : "Save"}</Button>
                 </Form>
             </div>
         </Container>

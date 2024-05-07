@@ -18,6 +18,17 @@ function AccountDetail(props) {
     const [last_name, setLastName] = useState(user ? user.last_name : "");
     const [phone_number, setPhoneNumber] = useState(user ? user.phone_number : "");
     const [email, setEmail] = useState(user ? user.email : "")
+    function isValidPhoneNumber(phoneNumber) {
+        // Loại bỏ khoảng trắng và dấu gạch nếu có
+        phoneNumber = phoneNumber.replace(/\s|-/g, '');
+
+        // Kiểm tra xem chuỗi có phải là một số từ 10 đến 15 chữ số không
+        if (/^\d{10,15}$/.test(phoneNumber)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     const updateUser = async (e) => {
         try {
             e.preventDefault();
@@ -78,7 +89,10 @@ function AccountDetail(props) {
                             Phone number
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control type="text" placeholder="Phone number" value={phone_number} onChange={(e) => { setPhoneNumber(e.target.value) }} />
+                            <Form.Control type="text" placeholder="Phone number" value={phone_number} onChange={(e) => { setPhoneNumber(e.target.value) }} isInvalid={isValidPhoneNumber(phone_number) === false} />
+                            <Form.Control.Feedback type="invalid">
+                                Phone number must be between 10 and 15 digits.
+                            </Form.Control.Feedback>
                         </Col>
                     </Form.Group>
 
