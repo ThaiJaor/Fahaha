@@ -35,8 +35,6 @@ function AccountDetail(props) {
             console.log(error);
             setIsLoading(false);
         }
-
-
     }
     return (
         <Container>
