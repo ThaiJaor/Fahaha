@@ -42,19 +42,25 @@ export const login = createAsyncThunk("user/loginStatus", async (loginData) => {
 export const update = createAsyncThunk(
     "user/updateStatus",
     async (updateData) => {
-        const response = await axios.put("user/info/", {
-            email: updateData.email,
-            username: updateData.username,
-            first_name: updateData.first_name,
-            last_name: updateData.last_name,
-            phone_number: updateData.phone_number,
-        });
-        if (response.status !== 200) {
-            toast.error(response.data.detail);
-        } else {
-            toast.success(response.data.detail);
+        try {
+            const response = await axios.put("user/info/", {
+                email: updateData.email,
+                username: updateData.username,
+                first_name: updateData.first_name,
+                last_name: updateData.last_name,
+                phone_number: updateData.phone_number,
+            });
+            if (response.status !== 200) {
+                toast.error(response.data.detail);
+            } else {
+                toast.success(response.data.detail);
+            }
+            return response.data;
+        } catch (error) {
+            toast.error("update information unsuccessfully")
         }
-        return response.data;
+
+
     }
 );
 
@@ -123,13 +129,11 @@ export const userSlice = createSlice({
                 state.isLoading = false;
                 state.isError = false;
                 state.user = action.payload.data;
-                state.isAuthenticated = true;
+                toast.success("update user successfully")
             })
             .addCase(update.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
-                state.isAuthenticated = false;
-                state.access_token = "";
             });
 
         builder
@@ -163,9 +167,6 @@ export const userSlice = createSlice({
             })
             .addCase(updatePassword.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.isAuthenticated = false;
-                state.access_token = "";
-                state.user = {};
                 state.isError = false;
                 toast.success(action.payload.detail);
             })

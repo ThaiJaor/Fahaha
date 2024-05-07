@@ -17,7 +17,6 @@ function ChangePassword(props) {
     const dispatch = useDispatch()
     const handleUpdatePassword = async () => {
         const res = await dispatch(updatePassword({ old_password, new_password, confirm_new_password }));
-
     }
     return (
         <Container>

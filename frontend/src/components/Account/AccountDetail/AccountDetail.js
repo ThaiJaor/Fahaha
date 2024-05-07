@@ -7,10 +7,11 @@ import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { update } from '../../../redux/slices/userSlices';
 import { toast } from 'react-toastify';
+import { faL } from '@fortawesome/free-solid-svg-icons';
 function AccountDetail(props) {
     const dispatch = useDispatch()
     const user = useSelector(state => state.user.user)
-    const isLoading = useSelector(state => state.user.isLoading);
+    const [isLoading, setIsLoading] = useState(false)
     const isError = useSelector(state => state.user.isError);
     const [username, setUsername] = useState(user ? user.username : "");
     const [first_name, setFirstName] = useState(user ? user.first_name : "");
@@ -18,15 +19,24 @@ function AccountDetail(props) {
     const [phone_number, setPhoneNumber] = useState(user ? user.phone_number : "");
     const [email, setEmail] = useState(user ? user.email : "")
     const updateUser = async (e) => {
-        e.preventDefault();
-        const updateData = {
-            username: username,
-            first_name: first_name,
-            last_name: last_name,
-            phone_number: phone_number,
-            email: email
+        try {
+            e.preventDefault();
+            setIsLoading(true);
+            const updateData = {
+                username: username,
+                first_name: first_name,
+                last_name: last_name,
+                phone_number: phone_number,
+                email: email
+            }
+            const res = await dispatch(update(updateData));
+            setIsLoading(false);
+        } catch (error) {
+            console.log(error);
+            setIsLoading(false);
         }
-        const res = await dispatch(update(updateData));
+
+
     }
     return (
         <Container>
